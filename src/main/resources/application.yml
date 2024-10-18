@@ -4,6 +4,7 @@ spring:
       enabled: ALWAYS
   profiles:
     default: local
+    include: aws
 
 ---
 spring:

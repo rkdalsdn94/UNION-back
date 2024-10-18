@@ -78,5 +78,11 @@ public class ErrorHandlingController {
         return buildError(ErrorCode.DUPLICATE_NICKNAME);
     }
 
-
+    @ExceptionHandler(UnsupportedFileFormatException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleUnsupportedFileFormatException(UnsupportedFileFormatException e) {
+        log.error("지원하지 않는 파일 형식입니다.");
+        log.error("extension: {}", e.getExtension());
+        return buildError(ErrorCode.UNSUPPORTED_FILE_FORMAT);
+    }
 }
