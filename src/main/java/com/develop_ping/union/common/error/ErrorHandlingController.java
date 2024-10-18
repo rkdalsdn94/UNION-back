@@ -1,6 +1,7 @@
 package com.develop_ping.union.common.error;
 
 import com.develop_ping.union.common.exception.*;
+import com.develop_ping.union.common.exception.gathering.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
