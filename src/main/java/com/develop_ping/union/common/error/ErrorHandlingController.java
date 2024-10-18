@@ -2,6 +2,7 @@ package com.develop_ping.union.common.error;
 
 import com.develop_ping.union.common.exception.*;
 import com.develop_ping.union.common.exception.gathering.*;
+import com.develop_ping.union.image.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -85,5 +86,13 @@ public class ErrorHandlingController {
         log.error("지원하지 않는 파일 형식입니다.");
         log.error("extension: {}", e.getExtension());
         return buildError(ErrorCode.UNSUPPORTED_FILE_FORMAT);
+    }
+
+    @ExceptionHandler(ImageUploadFailedException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    protected ErrorResponse handleImageUploadFailedException(ImageUploadFailedException e) {
+        log.error("이미지 업로드에 실패하였습니다.");
+        log.error("file name: {}", e.getFileName());
+        return buildError(ErrorCode.IMAGE_UPLOAD_FAILED);
     }
 }

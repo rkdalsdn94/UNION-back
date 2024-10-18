@@ -19,6 +19,9 @@ public enum ErrorCode {
 
     // 409 Conflict
     DUPLICATE_NICKNAME("DUPLICATE_NICKNAME", "이미 존재하는 닉네임입니다.", 409),
+
+    // 422 Unprocessable Entity
+    IMAGE_UPLOAD_FAILED("IMAGE_UPLOAD_FAILED", "이미지 업로드에 실패하였습니다.", 422),
     ;
 
     private final String code;
