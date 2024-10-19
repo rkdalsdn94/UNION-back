@@ -1,8 +1,14 @@
 package com.develop_ping.union.common.error;
 
+
 import com.develop_ping.union.common.exception.*;
+import com.develop_ping.union.common.exception.UnsupportedFileFormatException;
 import com.develop_ping.union.common.exception.gathering.*;
 import com.develop_ping.union.image.exception.*;
+import com.develop_ping.union.auth.exception.InvalidTokenException;
+import com.develop_ping.union.common.exception.*;
+import com.develop_ping.union.common.exception.gathering.*;
+import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,18 +47,11 @@ public class ErrorHandlingController {
         return buildError(ErrorCode.INVALID_TOKEN);
     }
 
-    @ExceptionHandler(InvalidRefreshTokenException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponse handleInvalidRefreshTokenException(InvalidRefreshTokenException e) {
-        log.warn("유효하지 않은 리프레시 토큰입니다.");
-        return buildError(ErrorCode.INVALID_REFRESH_TOKEN);
-    }
-
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ErrorResponse handleUserNotFoundException(UserNotFoundException e) {
         log.error("해당 유저를 찾을 수 없습니다.");
-        log.error("user id: {}", e.getUserId());
+        log.error("user 정보: {}", e.getUser());
         return buildError(ErrorCode.USER_NOT_FOUND);
     }
 
