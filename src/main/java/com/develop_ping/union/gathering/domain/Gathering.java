@@ -61,7 +61,7 @@ public class Gathering extends AuditingFields {
     }
 
     private void validateGatheringDateTime(ZonedDateTime gatheringDateTime) {
-        if (gatheringDateTime.isBefore(ZonedDateTime.now().plusMinutes(30))) {
+        if (gatheringDateTime.isBefore(ZonedDateTime.now().plusMinutes(29))) {
             throw new IllegalArgumentException("모임 일시는 현재 시간에서 30분 이후로 설정해주세요.");
         }
     }
