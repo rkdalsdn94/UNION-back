@@ -5,6 +5,7 @@ import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import com.develop_ping.union.common.exception.*;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
+import com.develop_ping.union.post.exception.*;
 import com.develop_ping.union.photo.exception.*;
 import com.develop_ping.union.s3.exception.*;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
