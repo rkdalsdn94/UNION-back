@@ -50,6 +50,8 @@ spring:
     console:
       enabled: true
 
+  SECRET_KEY: {secret-key}
+
 ---
 spring:
   config:

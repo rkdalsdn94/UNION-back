@@ -3,15 +3,16 @@ package com.develop_ping.union.auth.infra;
 import com.develop_ping.union.auth.domain.TokenManager;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.user.domain.User;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.time.Duration;
@@ -19,15 +20,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 
-import static java.lang.System.getenv;
-
 @Slf4j
 @Component
 public class TokenManagerImpl implements TokenManager {
 
     private final String issuer = "union";
-    private final String secretKey = getenv().get("SECRET_KEY");
-    private final Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    private final Key key;
+
+    public TokenManagerImpl(@Value("${SECRET_KEY}") String secretKey) {
+        this.key= Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
 
     // JWT 토큰 생성 메서드
     @Override
