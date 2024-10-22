@@ -24,6 +24,12 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String email;
+
+    // Spring Security 관련 필드
+    private String password;
+
     // UUID 기반의 고유 토큰
     @Column(nullable = false, unique = true, updatable = false)
     private String token;
@@ -34,20 +40,11 @@ public class User implements UserDetails {
     @Column(length = 50)
     private String description;
 
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String profileImage;
 
     @Column(nullable = false, length = 50)
     private String univName;
-
-    @Column(nullable = false, length = 50)
-    private String department;
-
-    @Column(nullable = false)
-    private int studentNumber;
-
-    @Column(nullable = false)
-    private boolean isGraduated;
 
     // 자동으로 생성 시간 설정
     @CreationTimestamp
@@ -58,24 +55,6 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(nullable = false)
     private ZonedDateTime updatedAt;
-
-    // OAuth 관련 필드
-    @Column(length = 30)
-    private String oauthProvider;
-
-    @Column(unique = true)
-    private String oauthId;
-
-    // Spring Security 관련 필드
-    private String password;
-
-    // 사용자 정보 업데이트 메서드 (OAuth용)
-    public void updateOAuthUserInfo(String nickname, String profileImage, String oauthProvider, String oauthId) {
-        this.nickname = nickname;
-        this.profileImage = profileImage;
-        this.oauthProvider = oauthProvider;
-        this.oauthId = oauthId;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

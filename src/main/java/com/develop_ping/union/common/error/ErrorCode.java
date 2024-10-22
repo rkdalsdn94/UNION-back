@@ -10,6 +10,7 @@ public enum ErrorCode {
 
     // 401 Unauthorized
     INVALID_TOKEN("INVALID_TOKEN", "유효하지 않은 JWT 토큰입니다.", 401),
+    OAUTH_NOT_PREPARED("OAUTH_NOT_PREPARED", "Oauth가 수행되지 않았습니다.", 401),
 
     // 404 Not Found
     USER_NOT_FOUND("USER_NOT_FOUND", "해당 유저를 찾을 수 없습니다.", 404),

@@ -1,6 +1,7 @@
 package com.develop_ping.union.config.auth;
 
 import com.develop_ping.union.auth.domain.TokenManager;
+import com.develop_ping.union.auth.application.CustomOAuth2UserService;
 import com.develop_ping.union.user.application.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,8 @@ public class WebSecurityConfig {
 
     private final TokenManager tokenManager;
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuth2UserService oAuth2UserService;
+    private final OAuth2SuccessHandler successHandler;
 
     // 스프링 시큐리티 기능 비활성화
     @Bean
@@ -45,7 +48,11 @@ public class WebSecurityConfig {
                         .requestMatchers("/user/signup", "/user/signin", "/user/token", "/ws/**", "ws").permitAll() // 로그인, 회원가입은 허용
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
-                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // JWT 필터 추가
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(successHandler) // OAuth2 로그인 성공 핸들러
+                        .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService)) // 사용자 정보 서비스 설정
+                )
                 .build();
     }
 

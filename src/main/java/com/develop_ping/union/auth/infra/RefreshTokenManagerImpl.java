@@ -40,7 +40,7 @@ public class RefreshTokenManagerImpl implements RefreshTokenManager {
     @Transactional
     public void saveRefreshToken(Long userId, String refreshToken) {
         log.info("Saving refresh token for user ID: {}", userId);
-        RefreshToken tokenEntity = refreshTokenRepository.findByUserId(userId)
+        RefreshToken tokenEntity = refreshTokenRepository.findById(userId)
                 .orElseGet(() -> {
                     log.info("No existing refresh token found for user ID: {}, creating a new one", userId);
                     return new RefreshToken(userId, refreshToken);

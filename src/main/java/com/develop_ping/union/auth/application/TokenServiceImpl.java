@@ -1,6 +1,5 @@
 package com.develop_ping.union.auth.application;
 
-import com.develop_ping.union.auth.domain.RefreshToken;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import com.develop_ping.union.auth.domain.TokenManager;
 import com.develop_ping.union.user.domain.User;

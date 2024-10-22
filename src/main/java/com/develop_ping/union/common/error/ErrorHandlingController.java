@@ -1,13 +1,12 @@
 package com.develop_ping.union.common.error;
 
 
+import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import com.develop_ping.union.common.exception.*;
 import com.develop_ping.union.common.exception.UnsupportedFileFormatException;
 import com.develop_ping.union.common.exception.gathering.*;
 import com.develop_ping.union.image.exception.*;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
-import com.develop_ping.union.common.exception.*;
-import com.develop_ping.union.common.exception.gathering.*;
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -93,5 +92,12 @@ public class ErrorHandlingController {
         log.error("이미지 업로드에 실패하였습니다.");
         log.error("file name: {}", e.getFileName());
         return buildError(ErrorCode.IMAGE_UPLOAD_FAILED);
+    }
+
+    @ExceptionHandler(OauthNotPreparedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleOauthNotPreparedException(OauthNotPreparedException e) {
+        log.error("Oauth가 수행되지 않았습니다.");
+        return buildError(ErrorCode.OAUTH_NOT_PREPARED);
     }
 }
