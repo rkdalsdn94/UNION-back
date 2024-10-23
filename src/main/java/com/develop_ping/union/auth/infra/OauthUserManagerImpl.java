@@ -5,6 +5,7 @@ import com.develop_ping.union.auth.domain.OauthUserManager;
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -14,11 +15,13 @@ public class OauthUserManagerImpl implements OauthUserManager {
     private final OauthUserRepository oauthUserRepository;
 
     @Override
+    @Transactional
     public OauthUser findByToken(String token) {
         return oauthUserRepository.findByToken(token).orElseThrow(OauthNotPreparedException::new);
     }
 
     @Override
+    @Transactional
     public String save(String email, String photoUrl) {
         OauthUser user = OauthUser.builder()
                 .email(email)
