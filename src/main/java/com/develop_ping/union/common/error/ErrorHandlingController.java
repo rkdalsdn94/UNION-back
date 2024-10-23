@@ -4,7 +4,8 @@ package com.develop_ping.union.common.error;
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import com.develop_ping.union.common.exception.*;
 import com.develop_ping.union.common.exception.UnsupportedFileFormatException;
-import com.develop_ping.union.common.exception.gathering.*;
+import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
+import com.develop_ping.union.gathering.exception.GatheringValidationException;
 import com.develop_ping.union.image.exception.*;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.user.exception.UserNotFoundException;
@@ -99,5 +100,13 @@ public class ErrorHandlingController {
     protected ErrorResponse handleOauthNotPreparedException(OauthNotPreparedException e) {
         log.error("Oauth가 수행되지 않았습니다.");
         return buildError(ErrorCode.OAUTH_NOT_PREPARED);
+    }
+
+    @ExceptionHandler(GatheringValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleGatheringValidationException(GatheringValidationException e) {
+        log.error("모임 검증에 실패하였습니다.");
+        log.error("gathering: {}", e.getMessage());
+        return buildError(ErrorCode.INPUT_VALUE_INVALID);
     }
 }

@@ -30,14 +30,6 @@ public class WebSecurityConfig {
     private final CustomOAuth2UserService oAuth2UserService;
     private final OAuth2SuccessHandler successHandler;
 
-    // 스프링 시큐리티 기능 비활성화
-    @Bean
-    public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring()
-                .requestMatchers(toH2Console()) // 배포 시 삭제할 것
-                .requestMatchers(new AntPathRequestMatcher("/static/**"));
-    }
-
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,7 +37,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/signup", "/user/signin", "/user/token", "/ws/**", "ws").permitAll() // 로그인, 회원가입은 허용
+                        .requestMatchers("/user/signup", "/user/signin", "/user/token", "/ws/**", "ws", "/**").permitAll() // 로그인, 회원가입은 허용
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

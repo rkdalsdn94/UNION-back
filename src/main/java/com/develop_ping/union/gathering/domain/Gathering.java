@@ -1,6 +1,7 @@
 package com.develop_ping.union.gathering.domain;
 
 import com.develop_ping.union.common.base.AuditingFields;
+import com.develop_ping.union.gathering.exception.GatheringValidationException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,9 +20,6 @@ public class Gathering extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "token", nullable = false)
-    private String token;
-
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -29,46 +27,48 @@ public class Gathering extends AuditingFields {
     private String content;
 
     @Column(name = "max_member", nullable = false)
-    private Integer maxMember = 1;
+    private Integer maxMember;
+
+    @Column(name = "current_member", nullable = false)
+    private Integer currentMember;
+
+    @Embedded
+    private Place place;
 
     @Column(name = "gathering_date_time", nullable = false)
     private ZonedDateTime gatheringDateTime;
 
     @Builder
-    private Gathering(String token, String title, String content, Integer maxMember, ZonedDateTime gatheringDateTime) {
-        validateTitleLength(title);
-        validateContentLength(content);
+    private Gathering(
+        Long id,
+        String title,
+        String content,
+        Integer maxMember,
+        Integer currentMember,
+        ZonedDateTime gatheringDateTime,
+        Place place
+    ) {
         validateGatheringDateTime(gatheringDateTime);
         validateGatheringMemberCheck(maxMember);
 
-        this.token = token;
+        this.id = id;
         this.title = title;
         this.content = content;
         this.maxMember = maxMember;
+        this.currentMember = currentMember != null ? currentMember : 1;
         this.gatheringDateTime = gatheringDateTime;
-    }
-
-    private void validateTitleLength(String title) {
-        if (title.length() < 2 || title.length() > 50) {
-            throw new IllegalArgumentException("모임 제목은 2자 이상 50자 이하로 입력해주세요.");
-        }
-    }
-
-    private void validateContentLength(String content) {
-        if (content.length() < 2 || content.length() > 1000) {
-            throw new IllegalArgumentException("모임 내용은 2자 이상 1000자 이하로 입력해주세요.");
-        }
+        this.place = place;
     }
 
     private void validateGatheringDateTime(ZonedDateTime gatheringDateTime) {
         if (gatheringDateTime.isBefore(ZonedDateTime.now().plusMinutes(29))) {
-            throw new IllegalArgumentException("모임 일시는 현재 시간에서 30분 이후로 설정해주세요.");
+            throw new GatheringValidationException("모임 일시는 현재 시간에서 30분 이후로 설정해주세요.");
         }
     }
 
     private void validateGatheringMemberCheck(int currentParticipants) {
         if (currentParticipants < 2 || currentParticipants > 15) {
-            throw new IllegalArgumentException("모임은 최소 2명 이상 최대 15명까지 가능합니다.");
+            throw new GatheringValidationException("모임은 최소 2명 이상 최대 15명까지 가능합니다.");
         }
     }
 
@@ -77,5 +77,18 @@ public class Gathering extends AuditingFields {
         if (currentParticipants > maxMember) {
             throw new IllegalArgumentException("모임 인원이 초과되었습니다.");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Gathering{" +
+            "content='" + content + '\'' +
+            ", id=" + id +
+            ", title='" + title + '\'' +
+            ", maxMember=" + maxMember +
+            ", currentMember=" + currentMember +
+            ", place=" + place +
+            ", gatheringDateTime=" + gatheringDateTime +
+            '}';
     }
 }

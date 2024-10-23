@@ -1,4 +1,4 @@
-package com.develop_ping.union.common.exception.gathering;
+package com.develop_ping.union.gathering.exception;
 
 import lombok.Getter;
 

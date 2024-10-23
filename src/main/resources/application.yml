@@ -8,6 +8,10 @@ spring:
       - aws
       - oauth
 
+app:
+  token:
+    SECRET_KEY: ${SECRET_KEY:default_secret_key}
+
 ---
 spring:
   config:
@@ -37,7 +41,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:/uniondb
     username: sa
-    password: password
+    password:
 
   jpa:
     hibernate:
@@ -52,7 +56,12 @@ spring:
     console:
       enabled: true
 
-  SECRET_KEY: {secret-key}
+  # TODO: 테스트할 때 환경 변수 설정 -> 왜 동작을 안하지... (멘토님한테 물어봐야 겠다...)
+#  aws:
+#    credentials:
+#      accessKey: ${AWS_ACCESS_KEY:test_key}
+#      secretKey: ${AWS_SECRET_KEY:test_secret}
+#  SECRET_KEY: ${SECRET_KEY:test_secret_key}
 
 ---
 spring:
