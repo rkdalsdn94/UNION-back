@@ -4,6 +4,7 @@ import com.develop_ping.union.auth.domain.OauthUser;
 import com.develop_ping.union.auth.domain.OauthUserManager;
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OauthUserManagerImpl implements OauthUserManager {
     private final OauthUserRepository oauthUserRepository;
 
@@ -22,14 +24,25 @@ public class OauthUserManagerImpl implements OauthUserManager {
 
     @Override
     @Transactional
-    public String save(String email, String photoUrl) {
-        OauthUser user = OauthUser.builder()
-                .email(email)
-                .profileImage(photoUrl)
-                .token(UUID.randomUUID().toString())
-                .build();
+    public void save(String email, String photoUrl) {
+        OauthUser user = oauthUserRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    // 사용자가 없으면 새로 생성
+                    OauthUser newUser = OauthUser.builder()
+                            .email(email)
+                            .profileImage(photoUrl)
+                            .token(UUID.randomUUID().toString())
+                            .build();
 
-        oauthUserRepository.save(user);
-        return user.getToken();
+                    // 새로운 사용자 저장
+                    oauthUserRepository.save(newUser);
+                    log.info("임시 사용자 저장 완료. email: {}", email);
+                    return newUser;
+                });
+    }
+
+    @Override
+    public OauthUser findByEmail(String email) {
+        return oauthUserRepository.findByEmail(email).orElseThrow(OauthNotPreparedException::new);
     }
 }

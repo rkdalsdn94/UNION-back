@@ -27,10 +27,7 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true, updatable = false)
     private String email;
 
-    // Spring Security 관련 필드
-    private String password;
-
-    // UUID 기반의 고유 토큰
+    // UUID 기반의 고유 토큰, 패스워드 용으로도 사용
     @Column(nullable = false, unique = true, updatable = false)
     private String token;
 
@@ -68,7 +65,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return token;
     }
 
     @Override

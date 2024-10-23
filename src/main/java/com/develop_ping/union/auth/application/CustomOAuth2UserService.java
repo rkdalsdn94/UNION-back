@@ -36,10 +36,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 5. 이미지가 없으면 기본 이미지로 설정
         if (picture.isEmpty()) picture = BASE_PHOTO_URL;
 
-        // 6. OauthUserManager를 통해 사용자 저장
-        String token = oauthUserManager.save(email, picture);
 
-        log.info("임시 사용자 저장 완료. email: {}", email);
+        // 6. OauthUserManager를 통해 사용자 저장
+        oauthUserManager.save(email, picture);
 
         return oAuth2User;
     }

@@ -6,5 +6,7 @@ import org.springframework.stereotype.Component;
 
 public interface OauthUserManager {
     OauthUser findByToken(String token);
-    String save(String email, String photoUrl);
+    void save(String email, String photoUrl);
+
+    OauthUser findByEmail(String email);
 }
