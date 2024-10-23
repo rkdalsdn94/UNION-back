@@ -1,6 +1,8 @@
 package com.develop_ping.union.post.domain;
 
 import com.develop_ping.union.common.base.AuditingFields;
+import com.develop_ping.union.post.application.dto.command.PostCreationCommand;
+import com.develop_ping.union.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,16 +26,42 @@ public class Post extends AuditingFields {
     @Column(nullable = true)
     private String thumbnail;
 
-    // TODO: 작성자 추가하기
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    @Column(nullable = false)
+    private Integer views;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Builder
-    public Post(String title, String content, PostType type, String thumbnail) {
+    private Post(String title, String content, PostType type, String thumbnail, Integer views, User user
+    ) {
         this.title = title;
         this.content = content;
         this.type = type;
         this.thumbnail = thumbnail;
+        this.views = views;
+        this.user = user;
+    }
+
+    public static Post of(PostCreationCommand command, User user, String thumbnail) {
+        // TODO: validate를 서비스나 여기서 호출하는게.. 맞지 않나...
+
+        return Post.builder()
+                .title(command.getTitle())
+                .content(command.getContent())
+                .type(PostType.valueOf(command.getType().toUpperCase()))
+                .thumbnail(thumbnail)
+                .views(0)
+                .user(user)
+                .build();
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
     }
 }

@@ -103,6 +103,13 @@ public class ErrorHandlingController {
         return buildError(ErrorCode.OAUTH_NOT_PREPARED);
     }
 
+    @ExceptionHandler(InvalidInputException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleInvalidInputException(InvalidInputException e) {
+        log.error("입력 값이 형식에 맞지 않습니다.");
+        return buildError(ErrorCode.INVALID_INPUT);
+    }
+
     @ExceptionHandler(GatheringValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleGatheringValidationException(GatheringValidationException e) {
