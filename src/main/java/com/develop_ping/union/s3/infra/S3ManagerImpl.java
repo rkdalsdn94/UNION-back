@@ -14,12 +14,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.net.URL;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class S3UploadManagerImpl implements S3UploadManager {
+public class S3ManagerImpl implements S3Manager {
     private static final List<String> SUPPORTED_EXTENSIONS = Arrays.asList(
             ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"
     );
@@ -31,7 +32,7 @@ public class S3UploadManagerImpl implements S3UploadManager {
 
     @Override
     public List<String> uploadImages(MultipartFile[] images, String token) {
-        log.info("uploading images with token: {}", token);
+        log.info("[ CALL: S3Manager.uploadImages() ] uploading images with token: {}", token);
 
         // TODO: token에서 user token 추출
         String userToken = token;
@@ -46,6 +47,13 @@ public class S3UploadManagerImpl implements S3UploadManager {
                     }
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void validateObjectExists(String url) {
+        log.info("[ CALL: S3Manager.doesObjectExist() ] checking if object exists in S3: {}", url);
+        String objectKey = extractObjectKeyFromUrl(url);
+        amazonS3Client.doesObjectExist(bucketName, objectKey);
     }
 
     // 이미지 업로드
@@ -96,5 +104,14 @@ public class S3UploadManagerImpl implements S3UploadManager {
 
     private boolean isSupportedExtension(String extension) {
         return SUPPORTED_EXTENSIONS.contains(extension);
+    }
+
+    // url에서 객체 키 추출
+    private String extractObjectKeyFromUrl(String url) {
+        try {
+            return new URL(url).getPath().substring(1);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid S3 URL: " + url);
+        }
     }
 }

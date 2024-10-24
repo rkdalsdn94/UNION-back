@@ -3,9 +3,9 @@ package com.develop_ping.union.common.error;
 
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import com.develop_ping.union.common.exception.*;
-import com.develop_ping.union.common.exception.UnsupportedFileFormatException;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
+import com.develop_ping.union.photo.exception.*;
 import com.develop_ping.union.s3.exception.*;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.user.exception.UserNotFoundException;
@@ -108,5 +108,21 @@ public class ErrorHandlingController {
         log.error("모임 검증에 실패하였습니다.");
         log.error("gathering: {}", e.getMessage());
         return buildError(ErrorCode.INPUT_VALUE_INVALID);
+    }
+
+    @ExceptionHandler(InvalidTargetTypeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleInvalidTargetTypeException(InvalidTargetTypeException e) {
+        log.error("잘못된 타겟 타입이 전달되었습니다.");
+        log.error("target type: {}", e.getTargetType());
+        return buildError(ErrorCode.INVALID_TARGET_TYPE);
+    }
+
+    @ExceptionHandler(InvalidS3UrlException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleInvalidS3UrlException(InvalidS3UrlException e) {
+        log.error("잘못된 S3 URL이 전달되었습니다.");
+        log.error("url: {}", e.getUrl());
+        return buildError(ErrorCode.INVALID_S3_URL);
     }
 }
