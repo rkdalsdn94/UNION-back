@@ -1,7 +1,6 @@
 package com.develop_ping.union.post.presentation.dto.response;
 
-import com.develop_ping.union.post.domain.dto.info.PostCreationInfo;
-import com.develop_ping.union.post.domain.dto.info.PostUpdateInfo;
+import com.develop_ping.union.post.domain.dto.info.PostInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +16,7 @@ public class PostUpdateResponse {
         this.id = id;
     }
 
-    public static PostUpdateResponse from(PostUpdateInfo postUpdateInfo) {
+    public static PostUpdateResponse from(PostInfo postUpdateInfo) {
         return PostUpdateResponse.builder()
                 .id(postUpdateInfo.getId())
                 .build();

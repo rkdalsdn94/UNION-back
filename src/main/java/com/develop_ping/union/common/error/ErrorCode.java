@@ -15,6 +15,9 @@ public enum ErrorCode {
     INVALID_TOKEN("INVALID_TOKEN", "유효하지 않은 JWT 토큰입니다.", 401),
     OAUTH_NOT_PREPARED("OAUTH_NOT_PREPARED", "Oauth 등록이 수행되지 않았습니다.", 401),
 
+    // 403 Forbidden
+    POST_PERMISSION_DENIED("POST_PERMISSION_DENIED", "게시글에 대한 권한이 없습니다.", 403),
+
     // 404 Not Found
     USER_NOT_FOUND("USER_NOT_FOUND", "해당 유저를 찾을 수 없습니다.", 404),
     POST_NOT_FOUND("POST_NOT_FOUND", "해당 게시글을 찾을 수 없습니다.", 404),

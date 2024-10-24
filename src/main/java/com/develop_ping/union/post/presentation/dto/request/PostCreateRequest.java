@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCreateRequest {
@@ -21,13 +19,13 @@ public class PostCreateRequest {
     @Size(min = 2, max = 2000)
     private String content;
 
-    private List<String> photos;
+    private String thumbnail;
 
     @Builder
-    public PostCreateRequest(String title, String content, List<String> photos) {
+    public PostCreateRequest(String title, String content, String thumbnail) {
         this.title = title;
         this.content = content;
-        this.photos = photos;
+        this.thumbnail = thumbnail;
     }
 
     public PostCreationCommand toCommand(String token, String type) {
@@ -35,7 +33,7 @@ public class PostCreateRequest {
                 .token(token)
                 .title(this.title)
                 .content(this.content)
-                .photos(this.photos)
+                .thumbnail(this.thumbnail)
                 .type(type)
                 .build();
     }

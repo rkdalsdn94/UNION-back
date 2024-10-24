@@ -1,14 +1,14 @@
 package com.develop_ping.union.common.error;
 
 
-import com.develop_ping.union.auth.exception.OauthNotPreparedException;
+import com.develop_ping.union.auth.exception.*;
+import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.common.exception.*;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
 import com.develop_ping.union.post.exception.*;
 import com.develop_ping.union.photo.exception.*;
 import com.develop_ping.union.s3.exception.*;
-import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -132,5 +132,13 @@ public class ErrorHandlingController {
         log.error("잘못된 S3 URL이 전달되었습니다.");
         log.error("url: {}", e.getUrl());
         return buildError(ErrorCode.INVALID_S3_URL);
+    }
+
+    @ExceptionHandler(PostPermissionDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorResponse handlePostPermissionDeniedException(PostPermissionDeniedException e) {
+        log.error("게시글에 대한 권한이 없습니다.");
+        log.error("user id: {}, post id: {}", e.getUserId(), e.getPostId());
+        return buildError(ErrorCode.POST_PERMISSION_DENIED);
     }
 }

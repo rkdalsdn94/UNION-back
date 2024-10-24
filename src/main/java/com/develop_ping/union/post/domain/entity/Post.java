@@ -2,9 +2,12 @@ package com.develop_ping.union.post.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
 import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
-import com.develop_ping.union.user.domain.User;
+import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -30,12 +33,16 @@ public class Post extends AuditingFields {
     private Integer views;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Builder
-    private Post(String title, String content, PostType type, String thumbnail, Integer views, User user
-    ) {
+    private Post(String title,
+                 String content,
+                 PostType type,
+                 String thumbnail,
+                 Integer views,
+                 User user) {
         this.title = title;
         this.content = content;
         this.type = type;
@@ -61,5 +68,9 @@ public class Post extends AuditingFields {
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void incrementViews() {
+        this.views += 1;
     }
 }

@@ -1,6 +1,6 @@
 package com.develop_ping.union.post.presentation.dto.response;
 
-import com.develop_ping.union.post.domain.dto.info.PostCreationInfo;
+import com.develop_ping.union.post.domain.dto.info.PostInfo;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,9 +13,9 @@ public class PostCreationResponse {
         this.id = id;
     }
 
-    public static PostCreationResponse from(PostCreationInfo postCreationInfo) {
+    public static PostCreationResponse from(PostInfo postInfo) {
         return PostCreationResponse.builder()
-            .id(postCreationInfo.getId())
+            .id(postInfo.getId())
             .build();
     }
 }
