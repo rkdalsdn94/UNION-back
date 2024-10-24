@@ -1,7 +1,6 @@
-package com.develop_ping.union.gathering.application.dto;
+package com.develop_ping.union.gathering.domain.dto;
 
-import com.develop_ping.union.gathering.domain.Gathering;
-import com.develop_ping.union.gathering.domain.Place;
+import com.develop_ping.union.gathering.domain.entity.Gathering;
 import lombok.Builder;
 import lombok.Getter;
 

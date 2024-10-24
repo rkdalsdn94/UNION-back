@@ -1,5 +1,6 @@
 package com.develop_ping.union.gathering.domain;
 
+import com.develop_ping.union.gathering.domain.entity.Place;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

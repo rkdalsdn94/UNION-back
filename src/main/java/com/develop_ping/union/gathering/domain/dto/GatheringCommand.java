@@ -1,7 +1,7 @@
-package com.develop_ping.union.gathering.application.dto;
+package com.develop_ping.union.gathering.domain.dto;
 
-import com.develop_ping.union.gathering.domain.Gathering;
-import com.develop_ping.union.gathering.domain.Place;
+import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.gathering.domain.entity.Place;
 import lombok.Builder;
 
 import java.time.ZonedDateTime;

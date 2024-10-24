@@ -1,4 +1,4 @@
-package com.develop_ping.union.gathering.domain;
+package com.develop_ping.union.gathering.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;

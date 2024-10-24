@@ -1,9 +1,8 @@
-package com.develop_ping.union.gathering.application;
+package com.develop_ping.union.gathering.domain.service;
 
-import com.develop_ping.union.gathering.application.dto.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
 import com.develop_ping.union.gathering.domain.GatheringManager;
-import com.develop_ping.union.gathering.application.dto.GatheringCommand;
-import com.develop_ping.union.gathering.infra.GatheringRepository;
+import com.develop_ping.union.gathering.domain.dto.GatheringCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

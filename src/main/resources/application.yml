@@ -3,7 +3,7 @@ spring:
     ansi:
       enabled: ALWAYS
   profiles:
-    default: local
+    active: local
     include:
       - aws
       - oauth
@@ -26,11 +26,16 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true # 기본적으로 H2, HSQL, Derdy만 지원, 다른 DB를 추가하려면 sql.init.mode를 활성화 해야 됨
+
+  sql:
+    init:
+      mode: always # data.sql 파일 적용
 
 ---
 spring:
@@ -55,13 +60,6 @@ spring:
   h2:
     console:
       enabled: true
-
-  # TODO: 테스트할 때 환경 변수 설정 -> 왜 동작을 안하지... (멘토님한테 물어봐야 겠다...)
-#  aws:
-#    credentials:
-#      accessKey: ${AWS_ACCESS_KEY:test_key}
-#      secretKey: ${AWS_SECRET_KEY:test_secret}
-#  SECRET_KEY: ${SECRET_KEY:test_secret_key}
 
 ---
 spring:

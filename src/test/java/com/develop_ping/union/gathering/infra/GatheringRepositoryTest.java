@@ -1,8 +1,8 @@
 package com.develop_ping.union.gathering.infra;
 
 import com.develop_ping.union.IntegrationTestSupport;
-import com.develop_ping.union.gathering.domain.Gathering;
-import com.develop_ping.union.gathering.domain.Place;
+import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.gathering.domain.entity.Place;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

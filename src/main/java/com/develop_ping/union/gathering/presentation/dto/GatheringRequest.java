@@ -1,6 +1,6 @@
-package com.develop_ping.union.gathering.controller.dto;
+package com.develop_ping.union.gathering.presentation.dto;
 
-import com.develop_ping.union.gathering.application.dto.GatheringCommand;
+import com.develop_ping.union.gathering.domain.dto.GatheringCommand;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,8 @@
-package com.develop_ping.union.gathering.controller;
+package com.develop_ping.union.gathering.presentation;
 
-import com.develop_ping.union.gathering.application.GatheringService;
-import com.develop_ping.union.gathering.application.dto.GatheringInfo;
-import com.develop_ping.union.gathering.controller.dto.GatheringRequest;
-import com.develop_ping.union.gathering.domain.Gathering;
+import com.develop_ping.union.gathering.domain.service.GatheringService;
+import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
+import com.develop_ping.union.gathering.presentation.dto.GatheringRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
