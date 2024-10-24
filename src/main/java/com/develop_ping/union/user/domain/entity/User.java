@@ -40,7 +40,7 @@ public class User extends AuditingFields implements UserDetails{
     @Column(length = 50, nullable = false)
     private String profileImage;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 30)
     private String univName;
 
     @Builder

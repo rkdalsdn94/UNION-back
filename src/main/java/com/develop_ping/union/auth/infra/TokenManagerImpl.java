@@ -34,7 +34,7 @@ public class TokenManagerImpl implements TokenManager {
     // JWT 토큰 생성 메서드
     @Override
     public String generateToken(User user, Duration expiredAt) {
-        log.info("Generating JWT token for user: {}", user.getId());
+        log.info("JWT 토큰 생성: {}", user.getId());
 
         Date now = new Date();
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
@@ -42,7 +42,7 @@ public class TokenManagerImpl implements TokenManager {
 
     // JWT 토큰 생성 로직
     private String makeToken(Date expiry, User user) {
-        log.debug("Creating JWT token with expiry date: {} for user: {}", expiry, user.getId());
+        log.debug("JWT 토큰 만료일: {} 사용자: {}", expiry, user.getId());
         Date now = new Date();
 
         return Jwts.builder()
@@ -60,7 +60,7 @@ public class TokenManagerImpl implements TokenManager {
     // JWT 토큰 유효성 검증 메서드
     @Override
     public boolean validToken(String token) {
-        log.info("Validating JWT token");
+        log.info("JWT 검증 시작");
 
         try {
             Jwts.parserBuilder()
@@ -68,10 +68,10 @@ public class TokenManagerImpl implements TokenManager {
                     .build()              // 빌더를 완성
                     .parseClaimsJws(token);  // 토큰을 검증 및 파싱
 
-            log.info("JWT token is valid");
+            log.info("JWT 토큰 유효");
             return true;  // 유효한 토큰
         } catch (Exception e) {
-            log.error("Invalid JWT token: {}", token);
+            log.error("유효하지 않은 JWT 토큰: {}", token);
             throw new InvalidTokenException();
         }
     }
@@ -79,7 +79,7 @@ public class TokenManagerImpl implements TokenManager {
     // JWT 토큰에서 인증 정보를 가져오는 메서드
     @Override
     public Authentication getAuthentication(String token) {
-        log.info("Extracting authentication details from JWT token");
+        log.info("JWT 토큰에서 인증 정보 추출");
 
         Claims claims = getClaims(token);
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
@@ -93,7 +93,7 @@ public class TokenManagerImpl implements TokenManager {
 
     // 클레임을 추출하는 메서드
     private Claims getClaims(String token) {
-        log.info("Parsing claims from JWT token");
+        log.info("JWT 토큰에서 클레임 추출");
 
         try {
             return Jwts.parserBuilder()
@@ -102,7 +102,7 @@ public class TokenManagerImpl implements TokenManager {
                     .parseClaimsJws(token)  // 토큰을 파싱하여 클레임 추출
                     .getBody();            // 클레임의 본문(body) 반환
         } catch (Exception e) {
-            log.error("Error parsing claims from JWT token: {}", token, e);
+            log.error("클레임 시도 했으나 올바르지 않은 토큰: {}", token, e);
             throw new InvalidTokenException();
         }
     }

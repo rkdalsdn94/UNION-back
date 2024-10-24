@@ -2,6 +2,7 @@ package com.develop_ping.union.auth.domain.service;
 
 import com.develop_ping.union.auth.domain.dto.OAuth2ACommand;
 import com.develop_ping.union.auth.domain.OauthUserManager;
+import com.develop_ping.union.auth.domain.entity.OauthUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -9,6 +10,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -38,7 +41,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 
         // 6. OauthUserManager를 통해 사용자 저장
-        oauthUserManager.save(email, picture);
+        OauthUser oauthUser = OauthUser.builder()
+                .token(UUID.randomUUID().toString())
+                .email(email)
+                .profileImage(picture)
+                .build();
+        oauthUserManager.save(oauthUser);
 
         return oAuth2User;
     }

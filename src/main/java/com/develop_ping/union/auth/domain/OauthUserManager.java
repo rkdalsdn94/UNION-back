@@ -4,7 +4,7 @@ import com.develop_ping.union.auth.domain.entity.OauthUser;
 
 public interface OauthUserManager {
     OauthUser findByToken(String token);
-    void save(String email, String photoUrl);
+    OauthUser save(OauthUser oauthUser);
 
     OauthUser findByEmail(String email);
 

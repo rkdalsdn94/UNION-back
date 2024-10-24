@@ -19,31 +19,21 @@ public class OauthUserManagerImpl implements OauthUserManager {
     @Override
     @Transactional(readOnly = true)
     public OauthUser findByToken(String token) {
+        log.info("토큰으로 유저 찾기");
         return oauthUserRepository.findByToken(token).orElseThrow(OauthNotPreparedException::new);
     }
 
     @Override
     @Transactional
-    public void save(String email, String photoUrl) {
-        OauthUser user = oauthUserRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    // 사용자가 없으면 새로 생성
-                    OauthUser newUser = OauthUser.builder()
-                            .email(email)
-                            .profileImage(photoUrl)
-                            .token(UUID.randomUUID().toString())
-                            .build();
-
-                    // 새로운 사용자 저장
-                    oauthUserRepository.save(newUser);
-                    log.info("임시 사용자 저장 완료. email: {}", email);
-                    return newUser;
-                });
+    public OauthUser save(OauthUser oauthUser) {
+        log.info("임시 유저 저장");
+        return oauthUserRepository.save(oauthUser);
     }
 
     @Override
     @Transactional(readOnly = true)
     public OauthUser findByEmail(String email) {
+        log.info("Email로 유저 찾기");
         return oauthUserRepository.findByEmail(email).orElseThrow(OauthNotPreparedException::new);
     }
 
