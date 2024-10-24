@@ -16,10 +16,11 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/user/token")
-    public ResponseEntity<Void> createNewAccessToken(@RequestHeader("Refresh-Token") String refreshToken) {
-        log.info("Received request to create new access token");
+    public ResponseEntity<Void> createNewAccessToken(@RequestHeader("Refresh-Token") String refreshToken,
+                                                     @RequestParam String token) {
+        log.info("새 토큰 발급 요청 받음");
 
-        String newAccessToken = tokenService.createNewAccessToken(refreshToken);
+        String newAccessToken = tokenService.createNewAccessToken(refreshToken, token);
 
         // 새로운 액세스 토큰을 헤더에 추가
         HttpHeaders headers = new HttpHeaders();

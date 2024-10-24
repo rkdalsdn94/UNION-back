@@ -30,6 +30,12 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
+    public User findByToken(String token) {
+        return userRepository.findByToken(token)
+                .orElseThrow(() -> new UserNotFoundException(token));
+    }
+
+    @Override
     public User save(User user) {
         log.info("유저 저장: {}", user.getNickname());
         return userRepository.save(user);

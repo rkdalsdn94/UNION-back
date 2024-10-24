@@ -7,6 +7,8 @@ public interface UserManager {
 
     User findByEmail(String email);
 
+    User findByToken(String token);
+
     User save(User user);
 
     void delete(User user);

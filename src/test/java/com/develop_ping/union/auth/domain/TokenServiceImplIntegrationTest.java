@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +50,7 @@ class TokenServiceImplIntegrationTest {
         // 테스트용 User 데이터 저장
         User user = User.builder()
                 .email("test@example.com")
-                .token(UUID.randomUUID().toString())
+                .token("sample-user-token")
                 .nickname("testUser")
                 .description("test description")
                 .profileImage("https://example.com/profile.jpg")
@@ -80,9 +79,10 @@ class TokenServiceImplIntegrationTest {
     void createNewAccessToken_ShouldGenerateNewAccessToken() {
         // Given
         String refreshToken = "sample-refresh-token";
+        String token = "sample-user-token";
 
         // When
-        String result = tokenService.createNewAccessToken(refreshToken);
+        String result = tokenService.createNewAccessToken(refreshToken, token);
 
         // Then
         assertThat(result).isNotNull();
@@ -95,25 +95,24 @@ class TokenServiceImplIntegrationTest {
     void createNewAccessToken_InvalidToken_ShouldThrowException() {
         // Given
         String invalidRefreshToken = "invalid-refresh-token";
+        String token = "sample-user-token";
 
         // When & Then
-        assertThatThrownBy(() -> tokenService.createNewAccessToken(invalidRefreshToken))
+        assertThatThrownBy(() -> tokenService.createNewAccessToken(invalidRefreshToken, token))
                 .isInstanceOf(InvalidTokenException.class);
     }
 
-    @DisplayName("존재하지 않는 유저 ID로 새 액세스 토큰을 발급하려고 하면 예외가 발생한다.")
+
+    @DisplayName("존재하지 않는 유저 토큰으로 새 액세스 토큰을 발급하려고 하면 예외가 발생한다.")
     @Test
     @Transactional
     void createNewAccessToken_UserNotFound_ShouldThrowException() {
         // Given
         String refreshToken = "sample-refresh-token";
-
-        // 삭제된 사용자 시나리오를 위해 유저 삭제
-        User user = userManager.findByEmail("test@example.com");
-        userManager.delete(user);
+        String token = "invalid-user-token";
 
         // When & Then
-        assertThatThrownBy(() -> tokenService.createNewAccessToken(refreshToken))
+        assertThatThrownBy(() -> tokenService.createNewAccessToken(refreshToken, token))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
@@ -141,5 +140,28 @@ class TokenServiceImplIntegrationTest {
         // When & Then
         assertThatThrownBy(() -> tokenService.findPhoto(invalidOauthUserToken))
                 .isInstanceOf(OauthNotPreparedException.class);
+    }
+
+    @DisplayName("리프레시 토큰과 유저 토큰의 소유자가 다를 경우 예외가 발생한다.")
+    @Test
+    @Transactional
+    void createNewAccessToken_TokenMismatch_ShouldThrowInvalidTokenException() {
+        // Given
+        String refreshToken = "sample-refresh-token";
+
+        // 다른 유저를 생성하여 토큰이 다르게 설정되도록 만듭니다.
+        User anotherUser = User.builder()
+                .email("another@example.com")
+                .token(UUID.randomUUID().toString()) // 다른 유저의 토큰
+                .nickname("anotherUser")
+                .description("another description")
+                .profileImage("https://example.com/another-profile.jpg")
+                .univName("Another University")
+                .build();
+        userManager.save(anotherUser);
+
+        // When & Then
+        assertThatThrownBy(() -> tokenService.createNewAccessToken(refreshToken, anotherUser.getToken()))
+                .isInstanceOf(InvalidTokenException.class);
     }
 }
