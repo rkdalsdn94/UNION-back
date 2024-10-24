@@ -1,6 +1,6 @@
-package com.develop_ping.union.image.controller;
+package com.develop_ping.union.s3.presentation;
 
-import com.develop_ping.union.image.infra.S3ImageManager;
+import com.develop_ping.union.s3.infra.S3UploadManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +14,16 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class ImageController {
-    private final S3ImageManager s3ImageManager;
+public class S3UploadController {
+    private final S3UploadManager s3UploadManager;
 
     @PostMapping("/image")
     public ResponseEntity<List<String>> upload(@RequestParam("images") MultipartFile[] images) {
-        log.info("CALL: ImageController.upload");
+        log.info("CALL: S3UploadController.upload");
 
         // TODO: requestHeader로 token 받아오기
         String token = "userToken";
 
-        return ResponseEntity.ok(s3ImageManager.uploadImages(images, token));
+        return ResponseEntity.ok(s3UploadManager.uploadImages(images, token));
     }
 }

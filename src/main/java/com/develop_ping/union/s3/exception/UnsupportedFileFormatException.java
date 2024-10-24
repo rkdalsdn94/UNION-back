@@ -1,4 +1,4 @@
-package com.develop_ping.union.image.exception;
+package com.develop_ping.union.s3.exception;
 
 import lombok.Getter;
 

@@ -6,7 +6,7 @@ import com.develop_ping.union.common.exception.*;
 import com.develop_ping.union.common.exception.UnsupportedFileFormatException;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
-import com.develop_ping.union.image.exception.*;
+import com.develop_ping.union.s3.exception.*;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;

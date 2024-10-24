@@ -1,9 +1,9 @@
-package com.develop_ping.union.image.infra;
+package com.develop_ping.union.s3.infra;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.develop_ping.union.image.exception.ImageUploadFailedException;
-import com.develop_ping.union.image.exception.UnsupportedFileFormatException;
+import com.develop_ping.union.s3.exception.ImageUploadFailedException;
+import com.develop_ping.union.s3.exception.UnsupportedFileFormatException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class S3ImageManagerImpl implements S3ImageManager {
+public class S3UploadManagerImpl implements S3UploadManager {
     private static final List<String> SUPPORTED_EXTENSIONS = Arrays.asList(
             ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"
     );
