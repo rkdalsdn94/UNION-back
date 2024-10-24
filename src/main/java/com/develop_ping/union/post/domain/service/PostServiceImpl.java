@@ -1,9 +1,9 @@
-package com.develop_ping.union.post.application;
+package com.develop_ping.union.post.domain.service;
 
-import com.develop_ping.union.post.application.dto.command.*;
-import com.develop_ping.union.post.application.dto.info.*;
-import com.develop_ping.union.post.domain.Post;
 import com.develop_ping.union.post.domain.PostManager;
+import com.develop_ping.union.post.domain.dto.command.*;
+import com.develop_ping.union.post.domain.dto.info.*;
+import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
-package com.develop_ping.union.post.controller.dto.request;
+package com.develop_ping.union.post.presentation.dto.request;
 
-import com.develop_ping.union.post.application.dto.command.PostUpdateCommand;
+import com.develop_ping.union.post.domain.dto.command.PostUpdateCommand;
 import lombok.*;
 
 @Getter

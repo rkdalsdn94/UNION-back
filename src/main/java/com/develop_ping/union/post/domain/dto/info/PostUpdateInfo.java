@@ -1,8 +1,8 @@
-package com.develop_ping.union.post.application.dto.info;
+package com.develop_ping.union.post.domain.dto.info;
 
-import com.develop_ping.union.post.controller.dto.response.PostUpdateResponse;
-import com.develop_ping.union.post.domain.Post;
-import com.develop_ping.union.post.domain.PostType;
+import com.develop_ping.union.post.presentation.dto.response.PostUpdateResponse;
+import com.develop_ping.union.post.domain.entity.Post;
+import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,12 +40,6 @@ public class PostUpdateInfo {
                 .thumbnail(post.getThumbnail())
                 .views(post.getViews())
                 .user(post.getUser())
-                .build();
-    }
-
-    public PostUpdateResponse toResponse() {
-        return PostUpdateResponse.builder()
-                .id(this.id)
                 .build();
     }
 }

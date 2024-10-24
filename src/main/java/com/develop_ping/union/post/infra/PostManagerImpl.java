@@ -1,6 +1,6 @@
 package com.develop_ping.union.post.infra;
 
-import com.develop_ping.union.post.domain.Post;
+import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.exception.PostNotFoundException;
 import lombok.RequiredArgsConstructor;

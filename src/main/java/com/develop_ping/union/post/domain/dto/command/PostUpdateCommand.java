@@ -1,4 +1,4 @@
-package com.develop_ping.union.post.application.dto.command;
+package com.develop_ping.union.post.domain.dto.command;
 
 import lombok.*;
 

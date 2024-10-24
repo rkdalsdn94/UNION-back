@@ -1,7 +1,7 @@
-package com.develop_ping.union.post.domain;
+package com.develop_ping.union.post.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
-import com.develop_ping.union.post.application.dto.command.PostCreationCommand;
+import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
 import com.develop_ping.union.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,7 +30,7 @@ public class Post extends AuditingFields {
     private Integer views;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
 
     @Builder
@@ -45,8 +45,6 @@ public class Post extends AuditingFields {
     }
 
     public static Post of(PostCreationCommand command, User user, String thumbnail) {
-        // TODO: validate를 서비스나 여기서 호출하는게.. 맞지 않나...
-
         return Post.builder()
                 .title(command.getTitle())
                 .content(command.getContent())

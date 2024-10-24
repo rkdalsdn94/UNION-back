@@ -1,6 +1,6 @@
-package com.develop_ping.union.post.controller.dto.request;
+package com.develop_ping.union.post.presentation.dto.request;
 
-import com.develop_ping.union.post.application.dto.command.PostCreationCommand;
+import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;

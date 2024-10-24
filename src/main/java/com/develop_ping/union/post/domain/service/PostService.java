@@ -1,7 +1,7 @@
-package com.develop_ping.union.post.application;
+package com.develop_ping.union.post.domain.service;
 
-import com.develop_ping.union.post.application.dto.command.*;
-import com.develop_ping.union.post.application.dto.info.*;
+import com.develop_ping.union.post.domain.dto.command.*;
+import com.develop_ping.union.post.domain.dto.info.*;
 
 public interface PostService {
     PostCreationInfo createPost(PostCreationCommand command);

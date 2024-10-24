@@ -1,9 +1,11 @@
-package com.develop_ping.union.post.controller;
+package com.develop_ping.union.post.presentation;
 
-import com.develop_ping.union.post.application.PostService;
-import com.develop_ping.union.post.application.dto.command.*;
-import com.develop_ping.union.post.controller.dto.request.*;
-import com.develop_ping.union.post.controller.dto.response.*;
+import com.develop_ping.union.post.domain.dto.info.PostCreationInfo;
+import com.develop_ping.union.post.domain.dto.info.PostUpdateInfo;
+import com.develop_ping.union.post.domain.service.PostService;
+import com.develop_ping.union.post.domain.dto.command.*;
+import com.develop_ping.union.post.presentation.dto.request.*;
+import com.develop_ping.union.post.presentation.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,11 +27,9 @@ public class PostController {
         // TODO: @RequestHeader("Authorization")로 토큰 받기
         String token = "token";
 
-        log.info("type: {}, token: {}", type, token);
-
         PostCreationCommand command = request.toCommand(token, type);
-        System.out.println("command.getType: " + command.getType()+", command.getTitle: "+command.getTitle()+", command.getContent: "+command.getContent());
-        PostCreationResponse response = postService.createPost(command).toResponse();
+        PostCreationInfo info = postService.createPost(command);
+        PostCreationResponse response = PostCreationResponse.from(info);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -44,7 +44,8 @@ public class PostController {
         String token = "token";
 
         PostUpdateCommand command = request.toCommand(token, postId);
-        PostUpdateResponse response = postService.updatePost(command).toResponse();
+        PostUpdateInfo info = postService.updatePost(command);
+        PostUpdateResponse response = PostUpdateResponse.from(info);
 
         return ResponseEntity.ok(response);
     }

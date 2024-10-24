@@ -1,4 +1,4 @@
-package com.develop_ping.union.post.domain;
+package com.develop_ping.union.post.domain.entity;
 
 public enum PostType {
     FREE,
