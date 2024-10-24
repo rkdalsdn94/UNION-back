@@ -1,7 +1,9 @@
 package com.develop_ping.union.auth.domain.service;
 
+import com.develop_ping.union.auth.domain.OauthUserManager;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import com.develop_ping.union.auth.domain.TokenManager;
+import com.develop_ping.union.auth.domain.entity.OauthUser;
 import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.domain.UserManager;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +20,24 @@ public class TokenServiceImpl implements TokenService{
     private final TokenManager tokenManager;
     private final RefreshTokenManager refreshTokenManager;
     private final UserManager userManager;
+    private final OauthUserManager oauthUserManager;
 
     @Override
     public String createNewAccessToken(String refreshToken) {
-        log.info("Received request to create a new Access Token");
+        log.info("새 액세스 토큰 발급 요청");
 
         tokenManager.validToken(refreshToken);
         Long userId =  refreshTokenManager.findByRefreshToken(refreshToken).getUserId();
         User user = userManager.findById(userId);
 
-        log.info("Creating new Access Token for user ID: {}", userId);
+        log.info("새 액세스 토큰 발급 완료: {}", userId);
         return tokenManager.generateToken(user, Duration.ofHours(2));
+    }
+
+    @Override
+    public String findPhoto(String oauthUserToken) {
+        log.info("oauth에서 받아온 기본 이미지 반환");
+        OauthUser oauthUser =  oauthUserManager.findByToken(oauthUserToken);
+        return oauthUser.getProfileImage();
     }
 }

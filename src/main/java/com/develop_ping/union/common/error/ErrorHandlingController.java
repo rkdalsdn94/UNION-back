@@ -98,7 +98,7 @@ public class ErrorHandlingController {
     @ExceptionHandler(OauthNotPreparedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleOauthNotPreparedException(OauthNotPreparedException e) {
-        log.error("Oauth가 수행되지 않았습니다.");
+        log.error("Oauth등록이 수행되지 않았습니다.");
         return buildError(ErrorCode.OAUTH_NOT_PREPARED);
     }
 

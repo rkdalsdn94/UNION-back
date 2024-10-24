@@ -25,8 +25,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    public static String REDIRECT_URL_USER_NOT_FOUND = "https://union-frontend-rust.vercel.app/LoginCallback";
-    public static String REDIRECT_URL_USER_EXIST = "https://union-frontend-rust.vercel.app/Home";
+    public static String REDIRECT_URL = "https://union-frontend-rust.vercel.app/LoginCallback";
     public static Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(30);
     public static Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
 
@@ -51,7 +50,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
             //리다이렉트 URL 생성, 차후에 쿠키 방식으로 리펙토링
             String redirectUrl = ServletUriComponentsBuilder
-                    .fromUriString(REDIRECT_URL_USER_EXIST)
+                    .fromUriString(REDIRECT_URL)
                     .queryParam("accessToken", accessToken)
                     .queryParam("refreshToken", refreshToken)
                     .build()
@@ -63,7 +62,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         } catch (UserNotFoundException e) {
             // 유저가 없을 경우 임시 테이블의 유저 토큰과 함께 리다이렉트
             OauthUser oauthUser = oauthUserManager.findByEmail(email);
-            getRedirectStrategy().sendRedirect(request, response, REDIRECT_URL_USER_NOT_FOUND + "?oauthUserToken=" + oauthUser.getToken());
+            getRedirectStrategy().sendRedirect(request, response, REDIRECT_URL + "?oauthUserToken=" + oauthUser.getToken());
         }
 
     }

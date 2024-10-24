@@ -7,4 +7,6 @@ public interface OauthUserManager {
     void save(String email, String photoUrl);
 
     OauthUser findByEmail(String email);
+
+    void delete(OauthUser oauthUser);
 }

@@ -17,7 +17,7 @@ public class OauthUserManagerImpl implements OauthUserManager {
     private final OauthUserRepository oauthUserRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public OauthUser findByToken(String token) {
         return oauthUserRepository.findByToken(token).orElseThrow(OauthNotPreparedException::new);
     }
@@ -42,7 +42,14 @@ public class OauthUserManagerImpl implements OauthUserManager {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OauthUser findByEmail(String email) {
         return oauthUserRepository.findByEmail(email).orElseThrow(OauthNotPreparedException::new);
+    }
+
+    @Override
+    public void delete(OauthUser oauthUser) {
+        oauthUserRepository.delete(oauthUser);
+        log.info("임시 사용자 인증 완료. 임시 테이블에서 데이터 삭제");
     }
 }
