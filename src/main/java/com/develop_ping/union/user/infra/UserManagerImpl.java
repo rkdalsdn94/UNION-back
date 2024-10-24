@@ -1,6 +1,6 @@
 package com.develop_ping.union.user.infra;
 
-import com.develop_ping.union.user.domain.User;
+import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;

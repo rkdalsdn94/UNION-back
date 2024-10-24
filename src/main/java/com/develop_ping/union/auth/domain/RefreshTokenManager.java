@@ -1,6 +1,8 @@
 package com.develop_ping.union.auth.domain;
 
 
+import com.develop_ping.union.auth.domain.entity.RefreshToken;
+
 public interface RefreshTokenManager {
 
     // 리프레시 토큰 삭제

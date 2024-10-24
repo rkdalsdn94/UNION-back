@@ -1,6 +1,6 @@
 package com.develop_ping.union.auth.infra;
 
-import com.develop_ping.union.auth.domain.OauthUser;
+import com.develop_ping.union.auth.domain.entity.OauthUser;
 import com.develop_ping.union.auth.domain.OauthUserManager;
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import lombok.RequiredArgsConstructor;

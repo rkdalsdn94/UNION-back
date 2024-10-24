@@ -1,5 +1,6 @@
-package com.develop_ping.union.auth.domain;
+package com.develop_ping.union.auth.domain.entity;
 
+import com.develop_ping.union.common.base.AuditingFields;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Table(name = "oauth_users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OauthUser {
+public class OauthUser extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 

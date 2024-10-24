@@ -1,4 +1,4 @@
-package com.develop_ping.union.auth.application.dto;
+package com.develop_ping.union.auth.domain.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;

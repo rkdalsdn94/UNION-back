@@ -1,5 +1,7 @@
-package com.develop_ping.union.user.domain;
+package com.develop_ping.union.user.domain.entity;
 
+import com.develop_ping.union.common.base.AuditingFields;
+import com.develop_ping.union.user.domain.dto.SignUpCommand;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,9 +18,7 @@ import java.util.*;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-public class User implements UserDetails {
+public class User extends AuditingFields implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,15 +43,26 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 50)
     private String univName;
 
-    // 자동으로 생성 시간 설정
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private ZonedDateTime createdAt;
+    @Builder
+    private User(String email, String token, String nickname, String description, String profileImage, String univName) {
+        this.email = email;
+        this.token = token;
+        this.nickname = nickname;
+        this.description = description;
+        this.profileImage = profileImage;
+        this.univName = univName;
+    }
 
-    // 자동으로 수정 시간 설정
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private ZonedDateTime updatedAt;
+    public static User of (SignUpCommand command, String email, String profileImage) {
+        return User.builder()
+                .email(email)
+                .profileImage(profileImage)
+                .token(UUID.randomUUID().toString())
+                .nickname(command.getNickname())
+                .univName(command.getUnivName())
+                .description(command.getDescription())
+                .build();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

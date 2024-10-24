@@ -1,4 +1,4 @@
-package com.develop_ping.union.user.application;
+package com.develop_ping.union.user.domain.service;
 
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import com.develop_ping.union.user.infra.UserRepository;

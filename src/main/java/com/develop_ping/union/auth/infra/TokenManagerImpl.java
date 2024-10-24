@@ -2,7 +2,7 @@ package com.develop_ping.union.auth.infra;
 
 import com.develop_ping.union.auth.domain.TokenManager;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
-import com.develop_ping.union.user.domain.User;
+import com.develop_ping.union.user.domain.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

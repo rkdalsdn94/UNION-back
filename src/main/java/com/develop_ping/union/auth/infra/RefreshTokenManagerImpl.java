@@ -1,6 +1,6 @@
 package com.develop_ping.union.auth.infra;
 
-import com.develop_ping.union.auth.domain.RefreshToken;
+import com.develop_ping.union.auth.domain.entity.RefreshToken;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

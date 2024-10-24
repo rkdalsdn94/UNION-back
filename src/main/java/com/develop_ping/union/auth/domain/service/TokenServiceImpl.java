@@ -1,8 +1,8 @@
-package com.develop_ping.union.auth.application;
+package com.develop_ping.union.auth.domain.service;
 
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import com.develop_ping.union.auth.domain.TokenManager;
-import com.develop_ping.union.user.domain.User;
+import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.domain.UserManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

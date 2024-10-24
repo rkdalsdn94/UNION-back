@@ -1,6 +1,6 @@
 package com.develop_ping.union.auth.infra;
 
-import com.develop_ping.union.auth.domain.RefreshToken;
+import com.develop_ping.union.auth.domain.entity.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

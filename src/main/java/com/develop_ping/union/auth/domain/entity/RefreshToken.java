@@ -1,5 +1,6 @@
-package com.develop_ping.union.auth.domain;
+package com.develop_ping.union.auth.domain.entity;
 
+import com.develop_ping.union.common.base.AuditingFields;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class RefreshToken {
+public class RefreshToken extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

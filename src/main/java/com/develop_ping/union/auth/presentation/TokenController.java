@@ -1,6 +1,6 @@
-package com.develop_ping.union.auth.controller;
+package com.develop_ping.union.auth.presentation;
 
-import com.develop_ping.union.auth.application.TokenService;
+import com.develop_ping.union.auth.domain.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

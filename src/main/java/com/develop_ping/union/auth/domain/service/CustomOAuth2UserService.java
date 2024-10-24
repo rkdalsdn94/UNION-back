@@ -1,6 +1,6 @@
-package com.develop_ping.union.auth.application;
+package com.develop_ping.union.auth.domain.service;
 
-import com.develop_ping.union.auth.application.dto.OAuth2ACommand;
+import com.develop_ping.union.auth.domain.dto.OAuth2ACommand;
 import com.develop_ping.union.auth.domain.OauthUserManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

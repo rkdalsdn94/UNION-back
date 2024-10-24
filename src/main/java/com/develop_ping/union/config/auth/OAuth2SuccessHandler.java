@@ -1,10 +1,10 @@
 package com.develop_ping.union.config.auth;
 
-import com.develop_ping.union.auth.domain.OauthUser;
+import com.develop_ping.union.auth.domain.entity.OauthUser;
 import com.develop_ping.union.auth.domain.OauthUserManager;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import com.develop_ping.union.auth.domain.TokenManager;
-import com.develop_ping.union.user.domain.User;
+import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import jakarta.servlet.ServletException;

@@ -1,6 +1,6 @@
 package com.develop_ping.union.user.infra;
 
-import com.develop_ping.union.user.domain.User;
+import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
