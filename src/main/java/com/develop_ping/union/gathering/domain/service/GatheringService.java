@@ -6,4 +6,6 @@ import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
 public interface GatheringService {
 
     GatheringInfo createGathering(GatheringCommand command);
+
+    GatheringInfo getGatheringDetail(Long gatheringId);
 }

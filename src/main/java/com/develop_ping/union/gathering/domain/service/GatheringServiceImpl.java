@@ -17,10 +17,17 @@ public class GatheringServiceImpl implements GatheringService {
 
     @Transactional
     public GatheringInfo createGathering(GatheringCommand command) {
-        log.info("모임 ServiceImpl 클래스 : {}", command);
+        log.info("모임 ServiceImpl 클래스 생성 : {}", command);
 
         // TODO: party 테이블에 User정보 추가해야 됨
 
         return gatheringManager.createGathering(command.toEntity());
+    }
+
+    @Override
+    public GatheringInfo getGatheringDetail(Long gatheringId) {
+        log.info("모임 상세 조회 ServiceImpl 클래스 : {}", gatheringId);
+
+        return gatheringManager.getGatheringDetail(gatheringId);
     }
 }

@@ -2,15 +2,14 @@ package com.develop_ping.union.gathering.presentation;
 
 import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
-import com.develop_ping.union.gathering.presentation.dto.GatheringRequest;
+import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
+import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
+import com.develop_ping.union.gathering.presentation.dto.response.GatheringResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,14 +23,34 @@ public class GatheringController {
         return "gathering";
     }
 
+    /**
+     * 모임 생성 API
+     * @param request 모임 생성 요청 DTO
+     * @return GatheringResponse
+     */
     @PostMapping("/gathering")
-    public ResponseEntity<GatheringInfo> createGathering(@Valid @RequestBody GatheringRequest request) {
+    public ResponseEntity<GatheringResponse> createGathering(@Valid @RequestBody GatheringRequest request) {
         log.info("모임 컨트롤러 진입: {}", request);
 
-        // TODO: 필요하다면 GatheringInfo에서 GatheringResponse로 변경해야 됨
         // TODO: User 정보 추가해야 됨
         GatheringInfo gathering = gatheringService.createGathering(request.toCommand());
+        GatheringResponse response = GatheringResponse.of(gathering);
 
-        return ResponseEntity.ok(gathering);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 모임 상세 조회 API
+     * @param gatheringId 모임 ID
+     * @return GatheringResponse 모임 상세 DTO
+     */
+    @GetMapping("/gathering/{gatheringId}")
+    public ResponseEntity<GatheringDetailResponse> getGatheringDetail(@PathVariable("gatheringId") Long gatheringId) {
+        log.info("모임 상세 조회 컨트롤러 진입: {}", gatheringId);
+
+        GatheringInfo gathering = gatheringService.getGatheringDetail(gatheringId);
+        GatheringDetailResponse response = GatheringDetailResponse.of(gathering);
+
+        return ResponseEntity.ok(response);
     }
 }

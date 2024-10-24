@@ -1,4 +1,4 @@
-package com.develop_ping.union.gathering.presentation.dto;
+package com.develop_ping.union.gathering.presentation.dto.request;
 
 import com.develop_ping.union.gathering.domain.dto.GatheringCommand;
 import com.fasterxml.jackson.annotation.JsonFormat;
