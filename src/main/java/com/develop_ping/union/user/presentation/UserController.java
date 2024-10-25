@@ -5,7 +5,7 @@ import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.domain.service.UserService;
 import com.develop_ping.union.user.presentation.dto.request.RegisterRequest;
 import com.develop_ping.union.user.presentation.dto.request.UpdateRequest;
-import com.develop_ping.union.user.presentation.dto.response.UserDetailResponse;
+import com.develop_ping.union.user.presentation.dto.response.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +23,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDetailResponse> signUp(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody RegisterRequest request) {
         log.info("유저 생성 요청 받음 : {}", request.getNickname());
         UserInfo userInfo = userService.signUp(request.toCommand());
-        UserDetailResponse response = new UserDetailResponse(userInfo);
+        UserResponse response = new UserResponse(userInfo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + userInfo.getAccessToken())
@@ -35,20 +35,30 @@ public class UserController {
     }
 
     @PutMapping("/my")
-    public ResponseEntity<UserDetailResponse> updateUser (@Valid @RequestBody UpdateRequest request,
-                                                          @AuthenticationPrincipal User user) {
+    public ResponseEntity<UserResponse> updateUser (@Valid @RequestBody UpdateRequest request,
+                                                    @AuthenticationPrincipal User user) {
         log.info("유저 정보 업데이트 요청 받음 : {}", request.getNickname());
         UserInfo userInfo = userService.updateUser(request.toCommand(), user);
-        UserDetailResponse response = new UserDetailResponse(userInfo);
+        UserResponse response = new UserResponse(userInfo);
 
         return ResponseEntity.ok()
                 .body(response);
     }
 
-    @PostMapping("/user/signout")
+    @PostMapping("/signout")
     public ResponseEntity<Void> signOutUser (@AuthenticationPrincipal User user) {
         log.info("로그아웃 요청 확인 : {}", user.getNickname());
         userService.signOut(user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{userToken}")
+    public ResponseEntity<UserResponse> searchUser(@PathVariable String userToken) {
+        log.info("유저 상세 조회 요청 확인");
+        UserInfo userInfo = userService.searchUser(userToken);
+        UserResponse response = new UserResponse(userInfo);
+
+        return ResponseEntity.ok()
+                .body(response);
     }
 }

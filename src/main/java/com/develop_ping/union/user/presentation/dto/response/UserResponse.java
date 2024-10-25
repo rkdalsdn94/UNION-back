@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserDetailResponse {
+public class UserResponse {
     private String token;
     private String nickname;
     private String description;
     private String univName;
     private String profileImage;
 
-    public UserDetailResponse(UserInfo userInfo) {
+    public UserResponse(UserInfo userInfo) {
         this.token = userInfo.getToken();
         this.nickname = userInfo.getNickname();
         this.description = userInfo.getDescription();

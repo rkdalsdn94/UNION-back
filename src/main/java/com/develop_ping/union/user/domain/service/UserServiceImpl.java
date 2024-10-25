@@ -58,4 +58,10 @@ public class UserServiceImpl implements UserService{
     public void signOut(User user) {
         refreshTokenManager.deleteByUserId(user.getId());
     }
+
+    @Override
+    public UserInfo searchUser(String token) {
+        User user = userManager.findByToken(token);
+        return UserInfo.of(user);
+    }
 }

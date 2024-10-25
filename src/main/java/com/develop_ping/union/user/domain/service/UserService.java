@@ -10,4 +10,6 @@ public interface UserService {
     UserInfo updateUser (UserCommand commad, User user);
 
     void signOut(User user);
+
+    UserInfo searchUser (String token);
 }
