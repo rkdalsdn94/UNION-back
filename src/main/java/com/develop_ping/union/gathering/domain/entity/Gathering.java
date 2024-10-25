@@ -38,6 +38,9 @@ public class Gathering extends AuditingFields {
     @Column(name = "gathering_date_time", nullable = false)
     private ZonedDateTime gatheringDateTime;
 
+    @Column(name = "views")
+    private Long views;
+
     @Builder
     private Gathering(
         Long id,
@@ -58,6 +61,7 @@ public class Gathering extends AuditingFields {
         this.currentMember = currentMember != null ? currentMember : 1;
         this.gatheringDateTime = gatheringDateTime;
         this.place = place;
+        this.views = 0L;
     }
 
     private void validateGatheringDateTime(ZonedDateTime gatheringDateTime) {

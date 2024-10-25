@@ -19,6 +19,7 @@ public class GatheringResponse {
     private final Double latitude;
     private final Double longitude;
     private final ZonedDateTime gatheringDateTime;
+    private final Long views;
 
     @Builder
     private GatheringResponse(
@@ -30,7 +31,8 @@ public class GatheringResponse {
         String address,
         Double latitude,
         Double longitude,
-        ZonedDateTime gatheringDateTime
+        ZonedDateTime gatheringDateTime,
+        Long views
     ) {
         this.id = id;
         this.title = title;
@@ -41,19 +43,21 @@ public class GatheringResponse {
         this.latitude = latitude;
         this.longitude = longitude;
         this.gatheringDateTime = gatheringDateTime;
+        this.views = views;
     }
 
     public static GatheringResponse of(GatheringInfo gathering) {
         return GatheringResponse.builder()
-                            .id(gathering.getId())
-                            .title(gathering.getTitle())
-                            .content(gathering.getContent())
-                            .maxMember(gathering.getMaxMember())
-                            .currentMember(gathering.getCurrentMember())
-                            .address(gathering.getAddress())
-                            .latitude(gathering.getLatitude())
-                            .longitude(gathering.getLongitude())
-                            .gatheringDateTime(gathering.getGatheringDateTime())
-                            .build();
+                                .id(gathering.getId())
+                                .title(gathering.getTitle())
+                                .content(gathering.getContent())
+                                .maxMember(gathering.getMaxMember())
+                                .currentMember(gathering.getCurrentMember())
+                                .address(gathering.getAddress())
+                                .latitude(gathering.getLatitude())
+                                .longitude(gathering.getLongitude())
+                                .gatheringDateTime(gathering.getGatheringDateTime())
+                                .views(gathering.getViews())
+                                .build();
     }
 }

@@ -1,7 +1,7 @@
 package com.develop_ping.union.gathering.presentation;
 
-import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
+import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringResponse;
@@ -29,14 +29,18 @@ public class GatheringController {
      * @return GatheringResponse
      */
     @PostMapping("/gathering")
-    public ResponseEntity<GatheringResponse> createGathering(@Valid @RequestBody GatheringRequest request) {
+    public Long createGathering(
+        @Valid @RequestBody GatheringRequest request
+    ) {
         log.info("모임 컨트롤러 진입: {}", request);
 
         // TODO: User 정보 추가해야 됨
-        GatheringInfo gathering = gatheringService.createGathering(request.toCommand());
+        Long userId = 1L;
+
+        GatheringInfo gathering = gatheringService.createGathering(request.toCommand(), userId);
         GatheringResponse response = GatheringResponse.of(gathering);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response.getId()).getBody();
     }
 
     /**
@@ -45,7 +49,9 @@ public class GatheringController {
      * @return GatheringResponse 모임 상세 DTO
      */
     @GetMapping("/gathering/{gatheringId}")
-    public ResponseEntity<GatheringDetailResponse> getGatheringDetail(@PathVariable("gatheringId") Long gatheringId) {
+    public ResponseEntity<GatheringDetailResponse> getGatheringDetail(
+        @PathVariable("gatheringId") Long gatheringId
+    ) {
         log.info("모임 상세 조회 컨트롤러 진입: {}", gatheringId);
 
         GatheringInfo gathering = gatheringService.getGatheringDetail(gatheringId);

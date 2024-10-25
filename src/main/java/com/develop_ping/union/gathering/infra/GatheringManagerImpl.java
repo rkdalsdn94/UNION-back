@@ -25,9 +25,6 @@ public class GatheringManagerImpl implements GatheringManager {
         log.info("모임 ManagerImpl 클래스 : {}", gathering);
 
         Gathering savedGathering = gatheringRepository.save(gathering);
-
-        // TODO: party 테이블의 추가
-        // partyRepository.save(Party.builder().gathering(save).build());
         return GatheringInfo.of(savedGathering);
     }
 
