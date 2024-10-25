@@ -2,11 +2,13 @@ package com.develop_ping.union.auth.infra;
 
 import com.develop_ping.union.auth.domain.TokenManager;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
+import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,11 +25,13 @@ import java.util.Set;
 @Slf4j
 @Component
 public class TokenManagerImpl implements TokenManager {
-
+    private final UserManager userManager;
     private final String issuer = "union";
+
     private final Key key;
 
-    public TokenManagerImpl(@Value("${SECRET_KEY}") String secretKey) {
+    public TokenManagerImpl(UserManager userManager, @Value("${SECRET_KEY}") String secretKey) {
+        this.userManager = userManager;
         this.key= Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
@@ -82,13 +86,15 @@ public class TokenManagerImpl implements TokenManager {
         log.info("JWT 토큰에서 인증 정보 추출");
 
         Claims claims = getClaims(token);
+        Long userId = claims.get("id", Long.class);
+
+        // 데이터베이스에서 실제 User 객체를 조회
+        User user = userManager.findById(userId);
+
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 
-        return new UsernamePasswordAuthenticationToken(
-                new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities),
-                token,
-                authorities
-        );
+        // 실제 User 엔티티 객체를 Principal로 사용
+        return new UsernamePasswordAuthenticationToken(user, token, authorities);
     }
 
     // 클레임을 추출하는 메서드
@@ -102,7 +108,7 @@ public class TokenManagerImpl implements TokenManager {
                     .parseClaimsJws(token)  // 토큰을 파싱하여 클레임 추출
                     .getBody();            // 클레임의 본문(body) 반환
         } catch (Exception e) {
-            log.error("클레임 시도 했으나 올바르지 않은 토큰: {}", token, e);
+            log.error("클레임 추출을 시도 했으나 올바르지 않은 토큰: {}", token, e);
             throw new InvalidTokenException();
         }
     }

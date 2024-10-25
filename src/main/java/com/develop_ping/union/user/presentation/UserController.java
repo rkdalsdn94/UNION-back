@@ -39,5 +39,6 @@ public class UserController {
                                                           @AuthenticationPrincipal User user) {
         log.info("유저 정보 업데이트 요청 받음 : {}", request.getNickname());
         UserInfo userInfo = userService.updateUser(request.toCommand(user.getId()));
+        return null;
     }
 }
