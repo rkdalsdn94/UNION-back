@@ -1,15 +1,13 @@
 package com.develop_ping.union.gathering.infra;
 
+import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
-import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -29,8 +27,12 @@ public class GatheringManagerImpl implements GatheringManager {
     }
 
     @Override
+    @Transactional
     public GatheringInfo getGatheringDetail(Long gatheringId) {
         log.info("모임 상세 조회 ManagerImpl 클래스 : {}", gatheringId);
+
+        // 조회수 증가
+        gatheringRepository.incrementViewCount(gatheringId);
 
         return GatheringInfo.of(gatheringRepository.findById(gatheringId)
                                                    .orElseThrow(() -> new GatheringNotFoundException(gatheringId)));

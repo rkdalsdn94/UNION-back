@@ -1,7 +1,6 @@
 package com.develop_ping.union.gathering.presentation.dto.response;
 
 import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
-import com.develop_ping.union.gathering.domain.entity.Gathering;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,7 +18,6 @@ public class GatheringResponse {
     private final Double latitude;
     private final Double longitude;
     private final ZonedDateTime gatheringDateTime;
-    private final Long views;
 
     @Builder
     private GatheringResponse(
@@ -31,8 +29,7 @@ public class GatheringResponse {
         String address,
         Double latitude,
         Double longitude,
-        ZonedDateTime gatheringDateTime,
-        Long views
+        ZonedDateTime gatheringDateTime
     ) {
         this.id = id;
         this.title = title;
@@ -43,7 +40,6 @@ public class GatheringResponse {
         this.latitude = latitude;
         this.longitude = longitude;
         this.gatheringDateTime = gatheringDateTime;
-        this.views = views;
     }
 
     public static GatheringResponse of(GatheringInfo gathering) {
@@ -57,7 +53,6 @@ public class GatheringResponse {
                                 .latitude(gathering.getLatitude())
                                 .longitude(gathering.getLongitude())
                                 .gatheringDateTime(gathering.getGatheringDateTime())
-                                .views(gathering.getViews())
                                 .build();
     }
 }

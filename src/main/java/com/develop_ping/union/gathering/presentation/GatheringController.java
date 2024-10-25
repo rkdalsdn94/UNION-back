@@ -1,14 +1,17 @@
 package com.develop_ping.union.gathering.presentation;
 
+import com.develop_ping.union.gathering.domain.dto.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
 import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringResponse;
+import com.develop_ping.union.user.domain.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -30,13 +33,12 @@ public class GatheringController {
      */
     @PostMapping("/gathering")
     public Long createGathering(
+        @AuthenticationPrincipal User user,
         @Valid @RequestBody GatheringRequest request
     ) {
         log.info("모임 컨트롤러 진입: {}", request);
 
-        // TODO: User 정보 추가해야 됨
-        Long userId = 1L;
-
+        Long userId = user.getId();
         GatheringInfo gathering = gatheringService.createGathering(request.toCommand(), userId);
         GatheringResponse response = GatheringResponse.of(gathering);
 
@@ -50,12 +52,14 @@ public class GatheringController {
      */
     @GetMapping("/gathering/{gatheringId}")
     public ResponseEntity<GatheringDetailResponse> getGatheringDetail(
+        @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
         log.info("모임 상세 조회 컨트롤러 진입: {}", gatheringId);
 
-        GatheringInfo gathering = gatheringService.getGatheringDetail(gatheringId);
-        GatheringDetailResponse response = GatheringDetailResponse.of(gathering);
+        Long userId = user.getId();
+        GatheringDetailInfo gatheringDetailInfo = gatheringService.getGatheringDetail(gatheringId, userId);
+        GatheringDetailResponse response = GatheringDetailResponse.of(gatheringDetailInfo);
 
         return ResponseEntity.ok(response);
     }

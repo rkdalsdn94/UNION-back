@@ -1,6 +1,6 @@
 package com.develop_ping.union.gathering.presentation.dto.response;
 
-import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.GatheringDetailInfo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,9 +18,14 @@ public class GatheringDetailResponse {
     private final Double latitude;
     private final Double longitude;
     private final ZonedDateTime gatheringDateTime;
+    private final String userNickname;
+    private final ZonedDateTime createdAt;
+    private final Long likes;
+    private final Long views;
+    private final boolean isOwner;
 
     @Builder
-    private GatheringDetailResponse (
+    private GatheringDetailResponse(
         Long id,
         String title,
         String content,
@@ -29,7 +34,12 @@ public class GatheringDetailResponse {
         String address,
         Double latitude,
         Double longitude,
-        ZonedDateTime gatheringDateTime
+        ZonedDateTime gatheringDateTime,
+        Long views,
+        ZonedDateTime createdAt,
+        String userNickname,
+        Long likes,
+        boolean isOwner
     ) {
         this.id = id;
         this.title = title;
@@ -40,19 +50,29 @@ public class GatheringDetailResponse {
         this.latitude = latitude;
         this.longitude = longitude;
         this.gatheringDateTime = gatheringDateTime;
+        this.views = views;
+        this.createdAt = createdAt;
+        this.userNickname = userNickname;
+        this.likes = likes;
+        this.isOwner = isOwner;
     }
 
-    public static GatheringDetailResponse of(GatheringInfo gathering) {
+    public static GatheringDetailResponse of(GatheringDetailInfo gatheringInfo) {
         return GatheringDetailResponse.builder()
-                                .id(gathering.getId())
-                                .title(gathering.getTitle())
-                                .content(gathering.getContent())
-                                .maxMember(gathering.getMaxMember())
-                                .currentMember(gathering.getCurrentMember())
-                                .address(gathering.getAddress())
-                                .latitude(gathering.getLatitude())
-                                .longitude(gathering.getLongitude())
-                                .gatheringDateTime(gathering.getGatheringDateTime())
+                                .id(gatheringInfo.getId())
+                                .title(gatheringInfo.getTitle())
+                                .content(gatheringInfo.getContent())
+                                .maxMember(gatheringInfo.getMaxMember())
+                                .currentMember(gatheringInfo.getCurrentMember())
+                                .address(gatheringInfo.getAddress())
+                                .latitude(gatheringInfo.getLatitude())
+                                .longitude(gatheringInfo.getLongitude())
+                                .gatheringDateTime(gatheringInfo.getGatheringDateTime())
+                                .views(gatheringInfo.getViews())
+                                .createdAt(gatheringInfo.getCreatedAt())
+                                .userNickname(gatheringInfo.getUserNickname())
+                                .likes(gatheringInfo.getLikes())
+                                .isOwner(gatheringInfo.isOwner())
                                 .build();
     }
 }
