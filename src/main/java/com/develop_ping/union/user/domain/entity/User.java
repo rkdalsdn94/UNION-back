@@ -40,20 +40,25 @@ public class User extends AuditingFields implements UserDetails{
     @Column(nullable = false, length = 30)
     private String univName;
 
+    @Column(nullable = false, length = 30)
+    private String provider;
+
     @Builder
-    private User(String email, String token, String nickname, String description, String profileImage, String univName) {
+    private User(String email, String token, String nickname, String description, String profileImage, String univName, String provider) {
         this.email = email;
         this.token = token;
         this.nickname = nickname;
         this.description = description;
         this.profileImage = profileImage;
         this.univName = univName;
+        this.provider = provider;
     }
 
-    public static User of (UserCommand command, String email, String profileImage) {
+    public static User of (UserCommand command, String email, String profileImage, String provider) {
         return User.builder()
                 .email(email)
                 .profileImage(profileImage)
+                .provider(provider)
                 .token(UUID.randomUUID().toString())
                 .nickname(command.getNickname())
                 .univName(command.getUnivName())

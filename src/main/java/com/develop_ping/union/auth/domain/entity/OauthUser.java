@@ -28,10 +28,18 @@ public class OauthUser extends AuditingFields {
     @Column(nullable = false, unique = true, updatable = false)
     private String token;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String oauthAccessToken;
+
+    @Column(nullable = false, length = 30)
+    private String provider;
+
     @Builder
-    public OauthUser(String email, String profileImage, String token) {
+    public OauthUser(String email, String profileImage, String token, String provider, String oauthAccessToken) {
         this.email = email;
         this.profileImage = profileImage;
         this.token = token;
+        this.provider = provider;
+        this.oauthAccessToken = oauthAccessToken;
     }
 }

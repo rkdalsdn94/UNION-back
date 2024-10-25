@@ -1,5 +1,6 @@
 package com.develop_ping.union.user.domain.service;
 
+import com.develop_ping.union.auth.domain.OAuthUnlinkManager;
 import com.develop_ping.union.auth.domain.OauthUserManager;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import com.develop_ping.union.auth.domain.TokenManager;
@@ -25,16 +26,17 @@ public class UserServiceImpl implements UserService{
     private final UserManager userManager;
     private final TokenManager tokenManager;
     private final RefreshTokenManager refreshTokenManager;
+    private final OAuthUnlinkManager oAuthUnlinkManager;
+
     @Override
     public UserInfo signUp(UserCommand command) {
         // 유저 임시 토큰 검증
         log.info("임시 사용자 검색");
         OauthUser oauthUser = oauthUserManager.findByToken(command.getOauthUserToken());
-        oauthUserManager.delete(oauthUser);
 
         // 유저 생성
         log.info("새 유저 생성");
-        User user = User.of(command, oauthUser.getEmail(), oauthUser.getProfileImage());
+        User user = User.of(command, oauthUser.getEmail(), oauthUser.getProfileImage(), oauthUser.getProvider());
         userManager.save(user);
 
         // JWT 토큰 생성
@@ -63,5 +65,11 @@ public class UserServiceImpl implements UserService{
     public UserInfo searchUser(String token) {
         User user = userManager.findByToken(token);
         return UserInfo.of(user);
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        oAuthUnlinkManager.unlinkUser(user);
+        userManager.delete(user);
     }
 }

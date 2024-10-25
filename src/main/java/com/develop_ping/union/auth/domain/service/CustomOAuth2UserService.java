@@ -30,6 +30,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        String accessToken = userRequest.getAccessToken().getTokenValue();
+        log.info("oauth 액세스 토큰 : {}", accessToken);
+
         String provider = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
@@ -48,6 +51,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .token(UUID.randomUUID().toString())
                     .email(email)
                     .profileImage(picture)
+                    .provider(provider)
+                    .oauthAccessToken(accessToken)
                     .build();
             oauthUserManager.save(oauthUser);
         }
