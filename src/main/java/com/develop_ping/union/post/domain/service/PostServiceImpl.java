@@ -2,12 +2,13 @@ package com.develop_ping.union.post.domain.service;
 
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
+import com.develop_ping.union.post.domain.dto.command.PostDeleteCommand;
 import com.develop_ping.union.post.domain.dto.command.PostUpdateCommand;
 import com.develop_ping.union.post.domain.dto.info.PostInfo;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.exception.PostPermissionDeniedException;
-import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostManager postManager;
-    private final UserManager userManager;
 
     @Override
+    @Transactional
     public PostInfo createPost(PostCreationCommand command) {
         log.info("[ CALL: PostService.createPost() ] title: {}",command.getTitle());
 
-        User user = userManager.findByToken(command.getToken());
-//        User user = userManager.findById(1L);
+        User user = command.getUser();
 
         // TODO: thumbnail에 들어갈 사진 압축하기
         String thumbnail = null;
@@ -37,12 +37,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public PostInfo updatePost(PostUpdateCommand command) {
         log.info("[ CALL: PostService.updatePost() ] post id: {}", command.getId());
 
         Post post = postManager.findById(command.getId());
-        User user = userManager.findByToken(command.getToken());
-//        User user = userManager.findById(1L);
+        User user = command.getUser();
 
         validatePostOwner(user, post);
 
@@ -54,12 +54,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(String token, Long postId) {
-        log.info("[ CALL: PostService.deletePost() ] post id: {}", postId);
+    @Transactional
+    public void deletePost(PostDeleteCommand command) {
+        log.info("[ CALL: PostService.deletePost() ] post id: {}", command.getPostId());
 
-        Post post = postManager.findById(postId);
-        User user = userManager.findByToken(token);
-//        User user = userManager.findById(1L);
+        Post post = postManager.findById(command.getPostId());
+        User user = command.getUser();
 
         validatePostOwner(user, post);
 
@@ -67,6 +67,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public PostInfo getPost(Long postId) {
         log.info("[ CALL: PostService.getPost() ] post id: {}", postId);
 

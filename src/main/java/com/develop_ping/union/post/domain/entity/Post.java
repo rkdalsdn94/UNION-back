@@ -55,7 +55,7 @@ public class Post extends AuditingFields {
         return Post.builder()
                 .title(command.getTitle())
                 .content(command.getContent())
-                .type(PostType.valueOf(command.getType().toUpperCase()))
+                .type(command.getPostType())
                 .thumbnail(thumbnail)
                 .views(0)
                 .user(user)

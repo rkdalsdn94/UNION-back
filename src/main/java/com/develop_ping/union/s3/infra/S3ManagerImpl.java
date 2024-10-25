@@ -34,11 +34,10 @@ public class S3ManagerImpl implements S3Manager {
     private String bucketName;
 
     @Override
-    public List<String> uploadImages(MultipartFile[] images, String token) {
-        log.info("[ CALL: S3Manager.uploadImages() ] uploading images with token: {}", token);
+    public List<String> uploadImages(MultipartFile[] images, User user) {
+        log.info("[ CALL: S3Manager.uploadImages() ] uploading images with user: {}", user.getNickname());
 
-        // 유저 추출
-        User user = userManager.findByToken(token);
+        // 유저 토큰 추출
         String userToken = user.getToken();
 
         // 리스트 반환

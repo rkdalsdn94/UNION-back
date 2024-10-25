@@ -21,8 +21,7 @@ public class PhotoServiceImpl implements PhotoService {
     public void savePhotos(PhotoCommand command) {
         log.info("[ CALL: PhotoService.savePhoto() ] ");
 
-        // TODO: command.getToken()으로 user id 뽑기
-        Long userId = 1L;
+        Long userId = command.getUser().getId();
 
         // target 소유 여부 확인 -> targetType이 나중에 새로 추가되는게 있다면 어떻게 해야할까?
         switch (command.getTargetType()) {

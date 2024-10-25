@@ -7,9 +7,7 @@ public enum ErrorCode {
     // 400 Bad Request
     INPUT_VALUE_INVALID("INPUT_VALUE_INVALID", "데이터 형식이 맞지 않습니다.", 400),
     UNSUPPORTED_FILE_FORMAT("UNSUPPORTED_FILE_FORMAT", "지원하지 않는 파일 형식입니다.", 400),
-    INVALID_TARGET_TYPE("INVALID_TARGET_TYPE", "잘못된 타겟 타입이 전달되었습니다.", 400),
     INVALID_S3_URL("INVALID_S3_URL", "잘못된 S3 URL이 전달되었습니다.", 400),
-    INVALID_INPUT("INVALID_INPUT", "입력 값이 형식에 맞지 않습니다.", 400),
 
     // 401 Unauthorized
     INVALID_TOKEN("INVALID_TOKEN", "유효하지 않은 JWT 토큰입니다.", 401),

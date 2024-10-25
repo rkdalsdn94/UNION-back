@@ -1,14 +1,16 @@
 package com.develop_ping.union.common.error;
 
 
-import com.develop_ping.union.auth.exception.*;
 import com.develop_ping.union.auth.exception.InvalidTokenException;
-import com.develop_ping.union.common.exception.*;
+import com.develop_ping.union.auth.exception.OauthNotPreparedException;
+import com.develop_ping.union.common.exception.DuplicateNicknameException;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
-import com.develop_ping.union.post.exception.*;
-import com.develop_ping.union.photo.exception.*;
-import com.develop_ping.union.s3.exception.*;
+import com.develop_ping.union.post.exception.PostNotFoundException;
+import com.develop_ping.union.post.exception.PostPermissionDeniedException;
+import com.develop_ping.union.s3.exception.ImageUploadFailedException;
+import com.develop_ping.union.s3.exception.InvalidS3UrlException;
+import com.develop_ping.union.s3.exception.UnsupportedFileFormatException;
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -103,27 +105,12 @@ public class ErrorHandlingController {
         return buildError(ErrorCode.OAUTH_NOT_PREPARED);
     }
 
-    @ExceptionHandler(InvalidInputException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleInvalidInputException(InvalidInputException e) {
-        log.error("입력 값이 형식에 맞지 않습니다.");
-        return buildError(ErrorCode.INVALID_INPUT);
-    }
-
     @ExceptionHandler(GatheringValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleGatheringValidationException(GatheringValidationException e) {
         log.error("모임 검증에 실패하였습니다.");
         log.error("gathering: {}", e.getMessage());
         return buildError(ErrorCode.INPUT_VALUE_INVALID);
-    }
-
-    @ExceptionHandler(InvalidTargetTypeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleInvalidTargetTypeException(InvalidTargetTypeException e) {
-        log.error("잘못된 타겟 타입이 전달되었습니다.");
-        log.error("target type: {}", e.getTargetType());
-        return buildError(ErrorCode.INVALID_TARGET_TYPE);
     }
 
     @ExceptionHandler(InvalidS3UrlException.class)

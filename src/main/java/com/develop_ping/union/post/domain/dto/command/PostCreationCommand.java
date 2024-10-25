@@ -1,5 +1,7 @@
 package com.develop_ping.union.post.domain.dto.command;
 
+import com.develop_ping.union.post.domain.entity.PostType;
+import com.develop_ping.union.user.domain.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,18 +10,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCreationCommand {
-    private String token;
+    private User user;
     private String title;
     private String content;
     private String thumbnail;
-    private String type;
+    private PostType postType;
 
     @Builder
-    public PostCreationCommand(String token, String title, String content, String thumbnail,String type) {
-        this.token = token;
+    public PostCreationCommand(User user, String title, String content, String thumbnail, PostType postType) {
+        this.user = user;
         this.title = title;
         this.content = content;
         this.thumbnail = thumbnail;
-        this.type = type;
+        this.postType = postType;
     }
 }

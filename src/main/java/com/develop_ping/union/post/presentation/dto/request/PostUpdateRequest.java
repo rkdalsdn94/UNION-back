@@ -1,7 +1,11 @@
 package com.develop_ping.union.post.presentation.dto.request;
 
 import com.develop_ping.union.post.domain.dto.command.PostUpdateCommand;
-import lombok.*;
+import com.develop_ping.union.user.domain.entity.User;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,9 +19,9 @@ public class PostUpdateRequest {
         this.content = content;
     }
 
-    public PostUpdateCommand toCommand(String token, Long id) {
+    public PostUpdateCommand toCommand(User user, Long id) {
         return PostUpdateCommand.builder()
-                .token(token)
+                .user(user)
                 .id(id)
                 .title(title)
                 .content(content)
