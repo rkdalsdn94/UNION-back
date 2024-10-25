@@ -40,4 +40,9 @@ public class OauthUserManagerImpl implements OauthUserManager {
         oauthUserRepository.delete(oauthUser);
         log.info("임시 사용자 인증 완료. 임시 테이블에서 데이터 삭제");
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return oauthUserRepository.existsByEmail(email);
+    }
 }

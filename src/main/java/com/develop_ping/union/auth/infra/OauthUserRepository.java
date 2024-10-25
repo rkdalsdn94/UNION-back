@@ -9,4 +9,7 @@ public interface OauthUserRepository extends JpaRepository<OauthUser, Long> {
     Optional<OauthUser> findByToken(String token);
 
     Optional<OauthUser> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }
+

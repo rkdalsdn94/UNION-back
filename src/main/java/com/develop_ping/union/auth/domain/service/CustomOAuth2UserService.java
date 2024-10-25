@@ -43,9 +43,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.info("OAuth 사용자 이메일 : {}", email);
         log.info("OAuth 사용자 사진 : {}", picture);
 
-        try {
-            userManager.findByEmail(email);
-        } catch (UserNotFoundException e) {
+        if(!userManager.existsByEmail(email) && !oauthUserManager.existsByEmail(email)) {
             OauthUser oauthUser = OauthUser.builder()
                     .token(UUID.randomUUID().toString())
                     .email(email)

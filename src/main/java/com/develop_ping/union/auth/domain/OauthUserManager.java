@@ -9,4 +9,6 @@ public interface OauthUserManager {
     OauthUser findByEmail(String email);
 
     void delete(OauthUser oauthUser);
+
+    boolean existsByEmail(String email);
 }

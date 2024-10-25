@@ -46,4 +46,9 @@ public class UserManagerImpl implements UserManager {
         log.info("유저 삭제: {}", user.getNickname());
         userRepository.delete(user);
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }

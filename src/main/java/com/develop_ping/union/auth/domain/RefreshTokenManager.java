@@ -13,4 +13,5 @@ public interface RefreshTokenManager {
 
     // 리프레시 토큰 저장
     void saveRefreshToken(Long userId, String refreshToken);
+
 }
