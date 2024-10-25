@@ -1,16 +1,13 @@
 package com.develop_ping.union.user.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
-import com.develop_ping.union.user.domain.dto.SignUpCommand;
+import com.develop_ping.union.user.domain.dto.UserCommand;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import lombok.*;
 
-import java.time.ZonedDateTime;
 import java.util.*;
 
 
@@ -53,7 +50,7 @@ public class User extends AuditingFields implements UserDetails{
         this.univName = univName;
     }
 
-    public static User of (SignUpCommand command, String email, String profileImage) {
+    public static User of (UserCommand command, String email, String profileImage) {
         return User.builder()
                 .email(email)
                 .profileImage(profileImage)

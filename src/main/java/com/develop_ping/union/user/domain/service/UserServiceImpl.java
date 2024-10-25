@@ -5,7 +5,7 @@ import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import com.develop_ping.union.auth.domain.TokenManager;
 import com.develop_ping.union.auth.domain.entity.OauthUser;
 import com.develop_ping.union.user.domain.UserManager;
-import com.develop_ping.union.user.domain.dto.SignUpCommand;
+import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.user.domain.dto.UserInfo;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService{
     private final TokenManager tokenManager;
     private final RefreshTokenManager refreshTokenManager;
     @Override
-    public UserInfo signUp(SignUpCommand command) {
+    public UserInfo signUp(UserCommand command) {
         // 유저 임시 토큰 검증
         log.info("임시 사용자 검색");
         OauthUser oauthUser = oauthUserManager.findByToken(command.getOauthUserToken());
@@ -45,5 +45,14 @@ public class UserServiceImpl implements UserService{
 
         //dto 변환
         return UserInfo.of(user, accessToken, refreshToken);
+    }
+
+    @Override
+    public UserInfo updateUser(UserCommand command) {
+        // 유저 정보 확인
+        String userToken = command.getUserToken();
+
+        // 업데이트
+        return null;
     }
 }

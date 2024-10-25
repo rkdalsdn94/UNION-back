@@ -8,28 +8,22 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class RegisterRequest {
-    @NotNull
-    private String oauthUserToken;
+public class UpdateRequest {
     @NotNull
     @Size(max = 30)
     private String nickname;
-    @Size(max = 50)
-    private String description;
     @NotNull
     @Size(max = 50)
     private String profileImage;
-    @NotNull
-    @Size(max = 30)
-    private String univName;
+    @Size(max = 50)
+    private String description;
 
-    public UserCommand toCommand () {
+    public UserCommand toCommand(Long userId) {
         return UserCommand.builder()
-                .oauthUserToken(oauthUserToken)
-                .description(description)
-                .profileImage(profileImage)
-                .univName(univName)
                 .nickname(nickname)
+                .profileImage(profileImage)
+                .description(description)
+                .userId(userId)
                 .build();
     }
 }
