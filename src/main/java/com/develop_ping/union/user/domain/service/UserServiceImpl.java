@@ -48,11 +48,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserInfo updateUser(UserCommand command) {
-        // 유저 정보 확인
-        String userToken = command.getUserToken();
+    public UserInfo updateUser(UserCommand command, User user) {
+        user.update(command.getNickname(), command.getDescription(), command.getProfileImage());
+        User updatedUser = userManager.save(user);
+        return UserInfo.of(updatedUser);
+    }
 
-        // 업데이트
-        return null;
+    @Override
+    public void signOut(User user) {
+        refreshTokenManager.deleteByUserId(user.getId());
     }
 }

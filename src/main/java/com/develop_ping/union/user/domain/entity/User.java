@@ -61,6 +61,18 @@ public class User extends AuditingFields implements UserDetails{
                 .build();
     }
 
+    public void update(String nickname, String description, String profileImage) {
+        if (nickname != null && !nickname.isEmpty()) {
+            this.nickname = nickname;
+        }
+        if (description != null) {
+            this.description = description;
+        }
+        if (profileImage != null && !profileImage.isEmpty()) {
+            this.profileImage = profileImage;
+        }
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("user"));

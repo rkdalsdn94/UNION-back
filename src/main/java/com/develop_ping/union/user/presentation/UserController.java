@@ -38,7 +38,17 @@ public class UserController {
     public ResponseEntity<UserDetailResponse> updateUser (@Valid @RequestBody UpdateRequest request,
                                                           @AuthenticationPrincipal User user) {
         log.info("유저 정보 업데이트 요청 받음 : {}", request.getNickname());
-        UserInfo userInfo = userService.updateUser(request.toCommand(user.getId()));
-        return null;
+        UserInfo userInfo = userService.updateUser(request.toCommand(), user);
+        UserDetailResponse response = new UserDetailResponse(userInfo);
+
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    @PostMapping("/user/signout")
+    public ResponseEntity<Void> signOutUser (@AuthenticationPrincipal User user) {
+        log.info("로그아웃 요청 확인 : {}", user.getNickname());
+        userService.signOut(user);
+        return ResponseEntity.ok().build();
     }
 }

@@ -38,4 +38,14 @@ public class UserInfo {
                 .description(user.getDescription())
                 .build();
     }
+
+    public static UserInfo of (User user) {
+        return UserInfo.builder()
+                .token(user.getToken())
+                .nickname(user.getNickname())
+                .univName(user.getUnivName())
+                .profileImage(user.getProfileImage())
+                .description(user.getDescription())
+                .build();
+    }
 }

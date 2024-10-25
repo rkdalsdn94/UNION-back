@@ -2,6 +2,7 @@ package com.develop_ping.union.auth.infra;
 
 import com.develop_ping.union.auth.domain.entity.RefreshToken;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
+import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,15 +18,15 @@ public class RefreshTokenManagerImpl implements RefreshTokenManager {
 
     @Override
     @Transactional
-    public void deleteByToken(String refreshToken) {
-        log.info("리프레시 토큰 삭제 시도: {}", refreshToken);
+    public void deleteByUserId(Long userId) {
+        log.info("리프레시 토큰 삭제 시도");
 
         // 토큰을 조회하고 바로 삭제
-        RefreshToken token = refreshTokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(InvalidTokenException::new);
+        RefreshToken token = refreshTokenRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId.toString()));
         refreshTokenRepository.delete(token);
 
-        log.info("리프레시 토큰 삭제 완료: {}", refreshToken);
+        log.info("리프레시 토큰 삭제 완료: {}", userId);
     }
 
     @Override
