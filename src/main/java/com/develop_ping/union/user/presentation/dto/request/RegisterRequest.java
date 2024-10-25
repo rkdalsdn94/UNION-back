@@ -17,7 +17,7 @@ public class RegisterRequest {
     @Size(max = 50)
     private String description;
     @NotNull
-    @Size(max = 50)
+    @Size(max = 255)
     private String profileImage;
     @NotNull
     @Size(max = 30)

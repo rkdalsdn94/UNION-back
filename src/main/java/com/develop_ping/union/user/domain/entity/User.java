@@ -21,7 +21,7 @@ public class User extends AuditingFields implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, updatable = false)
+    @Column(nullable = false, updatable = false)
     private String email;
 
     // UUID 기반의 고유 토큰, 패스워드 용으로도 사용
@@ -34,7 +34,7 @@ public class User extends AuditingFields implements UserDetails{
     @Column(length = 50)
     private String description;
 
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String profileImage;
 
     @Column(nullable = false, length = 30)

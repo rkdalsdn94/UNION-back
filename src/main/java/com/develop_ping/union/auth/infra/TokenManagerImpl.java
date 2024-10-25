@@ -54,9 +54,7 @@ public class TokenManagerImpl implements TokenManager {
                 .setIssuer(issuer)  // 발급자 설정
                 .setIssuedAt(now)  // 발급 시간 설정
                 .setExpiration(expiry)  // 만료 시간 설정
-                .setSubject(user.getNickname())  // 이메일을 subject로 설정
-                .claim("id", user.getId())  // 클레임에 유저 ID 추가
-                .claim("token", user.getToken())  // 추가로 token도 클레임에 추가
+                .setSubject(user.getToken())  // 이메일을 subject로 설정
                 .signWith(key, SignatureAlgorithm.HS256)  // 서명 알고리즘 설정
                 .compact();
     }
@@ -86,10 +84,10 @@ public class TokenManagerImpl implements TokenManager {
         log.info("JWT 토큰에서 인증 정보 추출");
 
         Claims claims = getClaims(token);
-        Long userId = claims.get("id", Long.class);
+        String usertoken =  claims.getSubject();
 
         // 데이터베이스에서 실제 User 객체를 조회
-        User user = userManager.findById(userId);
+        User user = userManager.findByToken(usertoken);
 
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 

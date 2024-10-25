@@ -39,6 +39,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = (String) oAuth2User.getAttributes().get("email");
+        log.info("핸들러에서 이메일 {}", email);
 
         try {
             User user = userManager.findByEmail(email);
@@ -50,7 +51,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
             //리다이렉트 URL 생성, 차후에 쿠키 방식으로 리펙토링
             String redirectUrl = ServletUriComponentsBuilder
-                    .fromUriString(REDIRECT_URL+ "emailverification")
+                    .fromUriString(REDIRECT_URL+ "home")
                     .queryParam("accessToken", accessToken)
                     .queryParam("refreshToken", refreshToken)
                     .build()
@@ -62,7 +63,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         } catch (UserNotFoundException e) {
             // 유저가 없을 경우 임시 테이블의 유저 토큰과 함께 리다이렉트
             OauthUser oauthUser = oauthUserManager.findByEmail(email);
-            getRedirectStrategy().sendRedirect(request, response, REDIRECT_URL + "home" + "?oauthUserToken=" + oauthUser.getToken());
+            getRedirectStrategy().sendRedirect(request, response, REDIRECT_URL + "emailverification" + "?oauthUserToken=" + oauthUser.getToken());
         }
 
     }

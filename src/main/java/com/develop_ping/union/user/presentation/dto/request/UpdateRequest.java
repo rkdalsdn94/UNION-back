@@ -13,7 +13,7 @@ public class UpdateRequest {
     @Size(max = 30)
     private String nickname;
     @NotNull
-    @Size(max = 50)
+    @Size(max = 255)
     private String profileImage;
     @Size(max = 50)
     private String description;

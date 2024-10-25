@@ -31,7 +31,7 @@ public class OauthUserManagerImpl implements OauthUserManager {
     @Override
     @Transactional(readOnly = true)
     public OauthUser findByEmail(String email) {
-        log.info("Email로 유저 찾기");
+        log.info("Email로 임시 유저 찾기");
         return oauthUserRepository.findByEmail(email).orElseThrow(OauthNotPreparedException::new);
     }
 
