@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.develop_ping.union.s3.exception.ImageUploadFailedException;
 import com.develop_ping.union.s3.exception.UnsupportedFileFormatException;
+import com.develop_ping.union.user.domain.UserManager;
+import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,10 +13,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.net.URL;
 import java.util.stream.Collectors;
 
 @Component
@@ -26,6 +28,7 @@ public class S3ManagerImpl implements S3Manager {
     );
 
     private final AmazonS3Client amazonS3Client;
+    private final UserManager userManager;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -34,8 +37,9 @@ public class S3ManagerImpl implements S3Manager {
     public List<String> uploadImages(MultipartFile[] images, String token) {
         log.info("[ CALL: S3Manager.uploadImages() ] uploading images with token: {}", token);
 
-        // TODO: token에서 user token 추출
-        String userToken = token;
+        // 유저 추출
+        User user = userManager.findByToken(token);
+        String userToken = user.getToken();
 
         // 리스트 반환
         return Arrays.stream(images)
