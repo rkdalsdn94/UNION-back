@@ -32,13 +32,13 @@ public class TokenManagerImpl implements TokenManager {
 
     public TokenManagerImpl(UserManager userManager, @Value("${SECRET_KEY}") String secretKey) {
         this.userManager = userManager;
-        this.key= Keys.hmacShaKeyFor(secretKey.getBytes());
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     // JWT 토큰 생성 메서드
     @Override
     public String generateToken(User user, Duration expiredAt) {
-        log.info("JWT 토큰 생성: {}", user.getId());
+        log.info("JWT 토큰 생성 시도. 사용자 ID: {}", user.getId());
 
         Date now = new Date();
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
@@ -46,7 +46,7 @@ public class TokenManagerImpl implements TokenManager {
 
     // JWT 토큰 생성 로직
     private String makeToken(Date expiry, User user) {
-        log.debug("JWT 토큰 만료일: {} 사용자: {}", expiry, user.getId());
+        log.info("JWT 토큰 생성. 만료일: {}, 사용자 ID: {}", expiry, user.getId());
         Date now = new Date();
 
         return Jwts.builder()
@@ -62,7 +62,7 @@ public class TokenManagerImpl implements TokenManager {
     // JWT 토큰 유효성 검증 메서드
     @Override
     public boolean validToken(String token) {
-        log.info("JWT 검증 시작");
+        log.info("JWT 토큰 검증 시작. 토큰: {}", token);
 
         try {
             Jwts.parserBuilder()
@@ -70,10 +70,10 @@ public class TokenManagerImpl implements TokenManager {
                     .build()              // 빌더를 완성
                     .parseClaimsJws(token);  // 토큰을 검증 및 파싱
 
-            log.info("JWT 토큰 유효");
+            log.info("JWT 토큰 검증 완료. 유효한 토큰입니다.");
             return true;  // 유효한 토큰
         } catch (Exception e) {
-            log.error("유효하지 않은 JWT 토큰: {}", token);
+            log.error("JWT 토큰 검증 실패. 유효하지 않은 토큰: {}", token);
             throw new InvalidTokenException();
         }
     }
@@ -81,15 +81,17 @@ public class TokenManagerImpl implements TokenManager {
     // JWT 토큰에서 인증 정보를 가져오는 메서드
     @Override
     public Authentication getAuthentication(String token) {
-        log.info("JWT 토큰에서 인증 정보 추출");
+        log.info("JWT 토큰에서 인증 정보 추출 시도. 토큰: {}", token);
 
         Claims claims = getClaims(token);
-        String usertoken =  claims.getSubject();
+        String userToken = claims.getSubject();
 
         // 데이터베이스에서 실제 User 객체를 조회
-        User user = userManager.findByToken(usertoken);
+        User user = userManager.findByToken(userToken);
 
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+
+        log.info("JWT 토큰으로부터 인증 정보 추출 성공. 사용자 ID: {}", user.getId());
 
         // 실제 User 엔티티 객체를 Principal로 사용
         return new UsernamePasswordAuthenticationToken(user, token, authorities);
@@ -97,7 +99,7 @@ public class TokenManagerImpl implements TokenManager {
 
     // 클레임을 추출하는 메서드
     private Claims getClaims(String token) {
-        log.info("JWT 토큰에서 클레임 추출");
+        log.info("JWT 토큰에서 클레임 추출 시도. 토큰: {}", token);
 
         try {
             return Jwts.parserBuilder()
@@ -106,7 +108,7 @@ public class TokenManagerImpl implements TokenManager {
                     .parseClaimsJws(token)  // 토큰을 파싱하여 클레임 추출
                     .getBody();            // 클레임의 본문(body) 반환
         } catch (Exception e) {
-            log.error("클레임 추출을 시도 했으나 올바르지 않은 토큰: {}", token, e);
+            log.error("JWT 토큰에서 클레임 추출 실패. 잘못된 토큰: {}", token, e);
             throw new InvalidTokenException();
         }
     }

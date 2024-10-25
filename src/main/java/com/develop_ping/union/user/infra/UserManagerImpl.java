@@ -13,10 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class UserManagerImpl implements UserManager {
     private final UserRepository userRepository;
+
     @Override
     @Transactional(readOnly = true)
     public User findById(Long userId) {
-        log.info("ID로 유저 검색 시도");
+        log.info("사용자 ID로 검색 시도: {}", userId);
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId.toString()));
     }
@@ -24,31 +25,35 @@ public class UserManagerImpl implements UserManager {
     @Override
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
-        log.info("Email로 유저 검색 시도");
+        log.info("이메일로 사용자 검색 시도: {}", email);
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findByToken(String token) {
+        log.info("토큰으로 사용자 검색 시도");
         return userRepository.findByToken(token)
                 .orElseThrow(() -> new UserNotFoundException(token));
     }
 
     @Override
     public User save(User user) {
-        log.info("유저 저장: {}", user.getNickname());
+        log.info("사용자 저장 시도: 닉네임 - {}", user.getNickname());
         return userRepository.save(user);
     }
 
     @Override
     public void delete(User user) {
-        log.info("유저 삭제: {}", user.getNickname());
+        log.info("사용자 삭제 시도: 닉네임 - {}", user.getNickname());
         userRepository.delete(user);
+        log.info("사용자 삭제 완료: 닉네임 - {}", user.getNickname());
     }
 
     @Override
     public boolean existsByEmail(String email) {
+        log.info("이메일로 사용자 존재 여부 확인: {}", email);
         return userRepository.existsByEmail(email);
     }
 }

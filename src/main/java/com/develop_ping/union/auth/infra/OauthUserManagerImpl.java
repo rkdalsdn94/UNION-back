@@ -17,32 +17,33 @@ public class OauthUserManagerImpl implements OauthUserManager {
     @Override
     @Transactional(readOnly = true)
     public OauthUser findByToken(String token) {
-        log.info("토큰으로 유저 찾기");
+        log.info("토큰으로 OAuth 유저를 조회합니다. 토큰: {}", token);
         return oauthUserRepository.findByToken(token).orElseThrow(OauthNotPreparedException::new);
     }
 
     @Override
     @Transactional
     public OauthUser save(OauthUser oauthUser) {
-        log.info("임시 유저 저장");
+        log.info("OAuth 임시 유저를 저장합니다. 이메일: {}", oauthUser.getEmail());
         return oauthUserRepository.save(oauthUser);
     }
 
     @Override
     @Transactional(readOnly = true)
     public OauthUser findByEmail(String email) {
-        log.info("Email로 임시 유저 찾기");
+        log.info("이메일로 OAuth 임시 유저를 조회합니다. 이메일: {}", email);
         return oauthUserRepository.findByEmail(email).orElseThrow(OauthNotPreparedException::new);
     }
 
     @Override
     public void delete(OauthUser oauthUser) {
+        log.info("임시 유저 인증 완료. 임시 테이블에서 해당 유저 데이터를 삭제합니다. 이메일: {}", oauthUser.getEmail());
         oauthUserRepository.delete(oauthUser);
-        log.info("임시 사용자 인증 완료. 임시 테이블에서 데이터 삭제");
     }
 
     @Override
     public boolean existsByEmail(String email) {
+        log.info("이메일로 임시 유저의 존재 여부를 확인합니다. 이메일: {}", email);
         return oauthUserRepository.existsByEmail(email);
     }
 }

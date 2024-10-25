@@ -24,7 +24,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody RegisterRequest request) {
-        log.info("유저 생성 요청 받음 : {}", request.getNickname());
+        log.info("회원 가입 요청 받음: 닉네임 - {}", request.getNickname());
         UserInfo userInfo = userService.signUp(request.toCommand());
         UserResponse response = new UserResponse(userInfo);
 
@@ -37,37 +37,36 @@ public class UserController {
     @PutMapping("/my")
     public ResponseEntity<UserResponse> updateUser (@Valid @RequestBody UpdateRequest request,
                                                     @AuthenticationPrincipal User user) {
-        log.info("유저 정보 업데이트 요청 받음 : {}", request.getNickname());
+        log.info("회원 정보 업데이트 요청 받음: 닉네임 - {}", request.getNickname());
         UserInfo userInfo = userService.updateUser(request.toCommand(), user);
         UserResponse response = new UserResponse(userInfo);
 
-        return ResponseEntity.ok()
-                .body(response);
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/signout")
     public ResponseEntity<Void> signOutUser (@AuthenticationPrincipal User user) {
-        log.info("로그아웃 요청 확인 : {}", user.getNickname());
+        log.info("로그아웃 요청 확인: 닉네임 - {}", user.getNickname());
         userService.signOut(user);
+        log.info("로그아웃 완료: 닉네임 - {}", user.getNickname());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{userToken}")
     public ResponseEntity<UserResponse> searchUser(@PathVariable String userToken) {
-        log.info("유저 상세 조회 요청 확인");
+        log.info("회원 상세 조회 요청 확인: 토큰 - {}", userToken);
         UserInfo userInfo = userService.searchUser(userToken);
         UserResponse response = new UserResponse(userInfo);
 
-        return ResponseEntity.ok()
-                .body(response);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal User user) {
-        log.info("유저 삭제 요청 확인");
+        log.info("회원 삭제 요청 확인: 닉네임 - {}", user.getNickname());
         userService.deleteUser(user);
 
-        log.info("유저 삭제 완료");
+        log.info("회원 삭제 완료: 닉네임 - {}", user.getNickname());
         return ResponseEntity.ok().build();
     }
 }
