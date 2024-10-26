@@ -27,7 +27,7 @@ public class GatheringRequest {
     private Integer currentMember;
 
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private ZonedDateTime gatheringDateTime;
     private String address;
     private Double latitude;
