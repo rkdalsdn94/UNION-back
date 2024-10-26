@@ -1,13 +1,16 @@
 package com.develop_ping.union.common.error;
 
 
+import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
-import com.develop_ping.union.common.exception.*;
-import com.develop_ping.union.common.exception.UnsupportedFileFormatException;
+import com.develop_ping.union.user.exception.DuplicateNicknameException;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
-import com.develop_ping.union.image.exception.*;
-import com.develop_ping.union.auth.exception.InvalidTokenException;
+import com.develop_ping.union.post.exception.PostNotFoundException;
+import com.develop_ping.union.post.exception.PostPermissionDeniedException;
+import com.develop_ping.union.s3.exception.ImageUploadFailedException;
+import com.develop_ping.union.s3.exception.InvalidS3UrlException;
+import com.develop_ping.union.s3.exception.UnsupportedFileFormatException;
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -98,7 +101,7 @@ public class ErrorHandlingController {
     @ExceptionHandler(OauthNotPreparedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleOauthNotPreparedException(OauthNotPreparedException e) {
-        log.error("Oauth가 수행되지 않았습니다.");
+        log.error("Oauth등록이 수행되지 않았습니다.");
         return buildError(ErrorCode.OAUTH_NOT_PREPARED);
     }
 
@@ -108,5 +111,21 @@ public class ErrorHandlingController {
         log.error("모임 검증에 실패하였습니다.");
         log.error("gathering: {}", e.getMessage());
         return buildError(ErrorCode.INPUT_VALUE_INVALID);
+    }
+
+    @ExceptionHandler(InvalidS3UrlException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleInvalidS3UrlException(InvalidS3UrlException e) {
+        log.error("잘못된 S3 URL이 전달되었습니다.");
+        log.error("url: {}", e.getUrl());
+        return buildError(ErrorCode.INVALID_S3_URL);
+    }
+
+    @ExceptionHandler(PostPermissionDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorResponse handlePostPermissionDeniedException(PostPermissionDeniedException e) {
+        log.error("게시글에 대한 권한이 없습니다.");
+        log.error("user id: {}, post id: {}", e.getUserId(), e.getPostId());
+        return buildError(ErrorCode.POST_PERMISSION_DENIED);
     }
 }

@@ -29,11 +29,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             // 요청 헤더에서 Authorization 값 조회
             String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
-            log.debug("Authorization header found: {}", authorizationHeader);
+            log.debug("인증 헤더를 찾음: {}", authorizationHeader);
 
             // Bearer 접두사 제거 후 토큰 추출
             String token = getAccessToken(authorizationHeader);
-            log.debug("Extracted JWT token: {}", token);
+            log.debug("헤더에서 JWT 추출: {}", token);
 
             // 토큰이 유효한지 확인하고, 인증 정보가 없는 경우 인증 설정
             if (token != null && tokenManager.validToken(token) &&
@@ -41,11 +41,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
                 Authentication authentication = tokenManager.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("JWT token is valid. Authentication set for user: {}", authentication.getName());
+                log.info("유효한 JWT 토큰입니다. 유저 : {}", authentication.getName());
             }
         } catch (Exception ex) {
             // 예외 발생 시 로그 남기기
-            log.error("Error occurred in JWT filter", ex);
+            log.error("JWT 필터에서 예외 발생", ex);
         }
 
         filterChain.doFilter(request, response);
@@ -54,10 +54,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     // Authorization 헤더에서 Bearer 토큰을 추출하는 메서드
     private String getAccessToken(String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
-            log.debug("Valid Authorization header found: {}", authorizationHeader);
+            log.debug("유효한 형식의 헤더입니다: {}", authorizationHeader);
             return authorizationHeader.substring(TOKEN_PREFIX.length());
         }
-        log.warn("Authorization header is missing or does not start with Bearer");
+        log.warn("헤더에 액세스 토큰이 없거나, Bearer 접두어가 빠져있습니다.");
         return null;
     }
 }

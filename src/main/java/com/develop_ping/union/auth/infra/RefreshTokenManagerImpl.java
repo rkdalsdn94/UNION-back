@@ -1,7 +1,8 @@
 package com.develop_ping.union.auth.infra;
 
-import com.develop_ping.union.auth.domain.RefreshToken;
+import com.develop_ping.union.auth.domain.entity.RefreshToken;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
+import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,21 +18,21 @@ public class RefreshTokenManagerImpl implements RefreshTokenManager {
 
     @Override
     @Transactional
-    public void deleteByToken(String refreshToken) {
-        log.info("Attempting to delete refresh token: {}", refreshToken);
+    public void deleteByUserId(Long userId) {
+        log.info("리프레시 토큰 삭제 시도. 사용자 ID: {}", userId);
 
         // 토큰을 조회하고 바로 삭제
-        RefreshToken token = refreshTokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(InvalidTokenException::new);
+        RefreshToken token = refreshTokenRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId.toString()));
         refreshTokenRepository.delete(token);
 
-        log.info("Refresh token deleted successfully: {}", refreshToken);
+        log.info("리프레시 토큰 삭제 완료. 사용자 ID: {}", userId);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public RefreshToken findByRefreshToken(String refreshToken) {
-        log.info("Searching for refresh token: {}", refreshToken);
+        log.info("리프레시 토큰 검색 시도. 토큰: {}", refreshToken);
         return refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(InvalidTokenException::new);
     }
@@ -39,15 +40,14 @@ public class RefreshTokenManagerImpl implements RefreshTokenManager {
     @Override
     @Transactional
     public void saveRefreshToken(Long userId, String refreshToken) {
-        log.info("Saving refresh token for user ID: {}", userId);
+        log.info("리프레시 토큰 생성 또는 업데이트 시도. 사용자 ID: {}", userId);
         RefreshToken tokenEntity = refreshTokenRepository.findById(userId)
                 .orElseGet(() -> {
-                    log.info("No existing refresh token found for user ID: {}, creating a new one", userId);
+                    log.info("기존 리프레시 토큰이 없어 신규 생성. 사용자 ID: {}", userId);
                     return new RefreshToken(userId, refreshToken);
                 });
-        log.info("Refresh token found or created for user ID: {}", userId);
         tokenEntity.update(refreshToken);
         refreshTokenRepository.save(tokenEntity);
-        log.info("Refresh token updated successfully for user ID: {}", userId);
+        log.info("리프레시 토큰 저장 완료. 사용자 ID: {}", userId);
     }
 }

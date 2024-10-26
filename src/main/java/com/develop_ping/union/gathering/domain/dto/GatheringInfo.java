@@ -1,10 +1,12 @@
 package com.develop_ping.union.gathering.domain.dto;
 
 import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.gathering.domain.entity.Place;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 @Getter
 public class GatheringInfo {
@@ -18,6 +20,8 @@ public class GatheringInfo {
     private final Double latitude;
     private final Double longitude;
     private final ZonedDateTime gatheringDateTime;
+    private final Long views;
+    private final ZonedDateTime createdAt;
 
     @Builder
     private GatheringInfo(
@@ -29,7 +33,9 @@ public class GatheringInfo {
         String address,
         Double latitude,
         Double longitude,
-        ZonedDateTime gatheringDateTime
+        ZonedDateTime gatheringDateTime,
+        Long views,
+        ZonedDateTime createdAt
     ) {
         this.id = id;
         this.title = title;
@@ -40,19 +46,22 @@ public class GatheringInfo {
         this.latitude = latitude;
         this.longitude = longitude;
         this.gatheringDateTime = gatheringDateTime;
+        this.views = views;
+        this.createdAt = createdAt;
     }
 
     public static GatheringInfo of(Gathering gathering) {
         return GatheringInfo.builder()
-                .id(gathering.getId())
-                .title(gathering.getTitle())
-                .content(gathering.getContent())
-                .maxMember(gathering.getMaxMember())
-                .currentMember(gathering.getCurrentMember())
-                .address(gathering.getPlace().getAddress())
-                .latitude(gathering.getPlace().getLatitude())
-                .longitude(gathering.getPlace().getLongitude())
-                .gatheringDateTime(gathering.getGatheringDateTime())
-                .build();
-    }
-}
+                            .id(gathering.getId())
+                            .title(gathering.getTitle())
+                            .content(gathering.getContent())
+                            .maxMember(gathering.getMaxMember())
+                            .currentMember(gathering.getCurrentMember())
+                            .address(Optional.ofNullable(gathering.getPlace()).map(Place::getAddress).orElse(null))
+                            .latitude(Optional.ofNullable(gathering.getPlace()).map(Place::getLatitude).orElse(null))
+                            .longitude(Optional.ofNullable(gathering.getPlace()).map(Place::getLongitude).orElse(null))
+                            .gatheringDateTime(gathering.getGatheringDateTime())
+                            .views(gathering.getViews())
+                            .createdAt(gathering.getCreatedAt())
+                            .build();
+    }}

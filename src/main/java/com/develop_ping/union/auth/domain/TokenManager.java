@@ -1,6 +1,6 @@
 package com.develop_ping.union.auth.domain;
 
-import com.develop_ping.union.user.domain.User;
+import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.security.core.Authentication;
 
 import java.time.Duration;
