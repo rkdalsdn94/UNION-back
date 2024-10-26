@@ -91,7 +91,9 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user) {
         log.info("사용자 계정 삭제 요청: 사용자 ID - {}", user.getId());
         oAuthUnlinkManager.unlinkUser(user);
+        OauthUser oauthUser = oauthUserManager.findByEmail(user.getEmail());
         userManager.delete(user);
+        oauthUserManager.delete(oauthUser);
         log.info("사용자 계정 삭제 완료: 사용자 ID - {}", user.getId());
     }
 }
