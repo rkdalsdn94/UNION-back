@@ -9,6 +9,7 @@ import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.user.domain.dto.UserInfo;
 import com.develop_ping.union.user.domain.entity.User;
+import com.develop_ping.union.user.exception.DuplicateNicknameException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,11 @@ public class UserServiceImpl implements UserService {
         log.info("임시 사용자 토큰으로 사용자 조회 시작");
         OauthUser oauthUser = oauthUserManager.findByToken(command.getOauthUserToken());
 
+        // 닉네임 중복 체크
+        if (userManager.existsByNickname(command.getNickname())) {
+            throw new DuplicateNicknameException(command.getNickname());
+        }
+
         // 유저 생성
         log.info("새로운 사용자 생성 시작");
         User user = User.of(command, oauthUser.getEmail(), oauthUser.getProfileImage(), oauthUser.getProvider());
@@ -54,6 +60,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfo updateUser(UserCommand command, User user) {
         log.info("사용자 정보 업데이트 요청: 사용자 ID - {}", user.getId());
+
+        // 닉네임 중복 체크
+        if (userManager.existsByNickname(command.getNickname())) {
+            throw new DuplicateNicknameException(command.getNickname());
+        }
+
         user.update(command.getNickname(), command.getDescription(), command.getProfileImage());
         User updatedUser = userManager.save(user);
         log.info("사용자 정보 업데이트 완료: 사용자 ID - {}", updatedUser.getId());

@@ -14,4 +14,6 @@ public interface UserManager {
     void delete(User user);
 
     boolean existsByEmail(String email);
+
+    boolean existsByNickname(String nickname);
 }

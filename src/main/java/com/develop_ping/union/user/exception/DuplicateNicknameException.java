@@ -1,4 +1,4 @@
-package com.develop_ping.union.common.exception;
+package com.develop_ping.union.user.exception;
 
 import lombok.Getter;
 

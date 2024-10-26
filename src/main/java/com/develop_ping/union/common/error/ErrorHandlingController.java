@@ -3,7 +3,7 @@ package com.develop_ping.union.common.error;
 
 import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
-import com.develop_ping.union.common.exception.DuplicateNicknameException;
+import com.develop_ping.union.user.exception.DuplicateNicknameException;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
 import com.develop_ping.union.post.exception.PostNotFoundException;

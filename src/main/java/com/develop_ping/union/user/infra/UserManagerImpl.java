@@ -39,12 +39,14 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         log.info("사용자 저장 시도: 닉네임 - {}", user.getNickname());
         return userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public void delete(User user) {
         log.info("사용자 삭제 시도: 닉네임 - {}", user.getNickname());
         userRepository.delete(user);
@@ -52,8 +54,15 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
+    @Transactional
     public boolean existsByEmail(String email) {
         log.info("이메일로 사용자 존재 여부 확인: {}", email);
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public boolean existsByNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 }
