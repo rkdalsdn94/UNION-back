@@ -25,5 +25,6 @@ public abstract class IntegrationTestSupport {
     @DisplayName("스프링 부트 테스트, 환경변수가 로드되어야 한다.")
     @Test
     void testPropertyLoad() {
+        int test = 1;
     }
 }
