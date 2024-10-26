@@ -31,6 +31,7 @@ public class PostController {
                                                            @RequestBody PostCreateRequest request,
                                                            @AuthenticationPrincipal User user) {
         log.info("[ CALL: PostController.createPost() ]");
+        log.info("[ USER ID: {} ]", user.getId());
 
         PostCreationCommand command = request.toCommand(user, type);
         PostInfo info = postService.createPost(command);
@@ -45,6 +46,7 @@ public class PostController {
                                                          @RequestBody PostUpdateRequest request,
                                                          @AuthenticationPrincipal User user) {
         log.info("[ CALL: PostController.updatePost() ] with postId: {}", postId);
+        log.info("[ USER ID: {} ]", user.getId());
 
         PostUpdateCommand command = request.toCommand(user, postId);
         PostInfo info = postService.updatePost(command);
@@ -58,6 +60,7 @@ public class PostController {
                                            @PathVariable("postId") Long postId,
                                            @AuthenticationPrincipal User user) {
         log.info("[ CALL: PostController.deletePost() ] with postId: {}", postId);
+        log.info("[ USER ID: {} ]", user.getId());
 
         postService.deletePost(PostDeleteCommand.of(postId, user));
 
