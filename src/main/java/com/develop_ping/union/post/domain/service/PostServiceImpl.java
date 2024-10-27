@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private void validatePostOwner(User user, Post post) {
-        if (!user.equals(post.getUser())) {
+        if (!user.getId().equals(post.getUser().getId())) {
             throw new PostPermissionDeniedException(user.getId(), post.getId());
         }
     }
