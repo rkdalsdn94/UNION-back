@@ -23,6 +23,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostInfo createPost(PostCreationCommand command) {
         log.info("[ CALL: PostService.createPost() ] title: {}",command.getTitle());
+        log.info("[ USER ID: {} ]", command.getUser().getId());
 
         User user = command.getUser();
 
@@ -40,6 +41,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostInfo updatePost(PostUpdateCommand command) {
         log.info("[ CALL: PostService.updatePost() ] post id: {}", command.getId());
+        log.info("[ USER ID: {} ]", command.getUser().getId());
 
         Post post = postManager.findById(command.getId());
         User user = command.getUser();
@@ -57,6 +59,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void deletePost(PostDeleteCommand command) {
         log.info("[ CALL: PostService.deletePost() ] post id: {}", command.getPostId());
+        log.info("[ USER ID: {} ]", command.getUser().getId());
 
         Post post = postManager.findById(command.getPostId());
         User user = command.getUser();
