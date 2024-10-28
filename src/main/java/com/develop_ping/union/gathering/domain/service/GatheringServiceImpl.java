@@ -1,9 +1,9 @@
 package com.develop_ping.union.gathering.domain.service;
 
 import com.develop_ping.union.gathering.domain.GatheringManager;
-import com.develop_ping.union.gathering.domain.dto.GatheringCommand;
-import com.develop_ping.union.gathering.domain.dto.GatheringDetailInfo;
-import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
 import com.develop_ping.union.reaction.domain.ReactionManager;

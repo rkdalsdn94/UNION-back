@@ -1,7 +1,7 @@
 package com.develop_ping.union.gathering.presentation;
 
-import com.develop_ping.union.gathering.domain.dto.GatheringDetailInfo;
-import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;

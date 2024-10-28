@@ -1,4 +1,4 @@
-package com.develop_ping.union.gathering.domain.dto;
+package com.develop_ping.union.gathering.domain.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

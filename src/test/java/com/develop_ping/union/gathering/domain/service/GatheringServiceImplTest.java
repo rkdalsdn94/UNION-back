@@ -1,8 +1,8 @@
 package com.develop_ping.union.gathering.domain.service;
 
 import com.develop_ping.union.IntegrationTestSupport;
-import com.develop_ping.union.gathering.domain.dto.GatheringCommand;
-import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
 import com.develop_ping.union.party.infra.PartyRepository;

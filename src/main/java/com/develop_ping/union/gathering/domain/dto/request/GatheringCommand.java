@@ -1,4 +1,4 @@
-package com.develop_ping.union.gathering.domain.dto;
+package com.develop_ping.union.gathering.domain.dto.request;
 
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.domain.entity.Place;
