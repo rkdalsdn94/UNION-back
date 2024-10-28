@@ -90,7 +90,7 @@ class GatheringRepositoryTest extends IntegrationTestSupport {
                         .content("모임 내용")
                         .maxMember(5)
                         .gatheringDateTime(ZonedDateTime.now().plusHours(2))
-                        .place(new Place("장소", 37.123456, 127.123456))
+                        .place(new Place("장소", 37.123456, 127.123456, null))
                         .build();
     }
 }

@@ -16,6 +16,7 @@ public class GatheringCommand {
     private final Double latitude;
     private final Double longitude;
     private final ZonedDateTime gatheringDateTime;
+    private final String eupMyeonDong;
 
     @Builder
     private GatheringCommand(
@@ -26,7 +27,8 @@ public class GatheringCommand {
         String address,
         Double latitude,
         Double longitude,
-        ZonedDateTime gatheringDateTime
+        ZonedDateTime gatheringDateTime,
+        String eupMyeonDong
     ) {
         this.title = title;
         this.content = content;
@@ -36,6 +38,7 @@ public class GatheringCommand {
         this.latitude = latitude;
         this.longitude = longitude;
         this.gatheringDateTime = gatheringDateTime;
+        this.eupMyeonDong = eupMyeonDong;
     }
 
     public Gathering toEntity() {
@@ -49,6 +52,7 @@ public class GatheringCommand {
                         .address(address)
                         .latitude(latitude)
                         .longitude(longitude)
+                        .eupMyeonDong(eupMyeonDong)
                         .build())
             .build();
     }
@@ -64,6 +68,7 @@ public class GatheringCommand {
             ", latitude=" + latitude +
             ", longitude=" + longitude +
             ", gatheringDateTime=" + gatheringDateTime +
+            ", eupMyeonDong= " + eupMyeonDong +
             '}';
     }
 }

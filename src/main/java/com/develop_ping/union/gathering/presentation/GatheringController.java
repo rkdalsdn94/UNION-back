@@ -5,6 +5,7 @@ import com.develop_ping.union.gathering.domain.dto.GatheringInfo;
 import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
+import com.develop_ping.union.gathering.presentation.dto.response.GatheringListResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringResponse;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.validation.Valid;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -22,8 +25,9 @@ public class GatheringController {
     private final GatheringService gatheringService;
 
     @GetMapping("/gathering")
-    public String getGathering() {
-        return "gathering";
+    public List<GatheringListResponse> getGathering() {
+        return null;
+//        return "gathering";
     }
 
     /**

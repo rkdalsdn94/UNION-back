@@ -16,6 +16,7 @@ public class GatheringDetailInfo {
     private final String address;
     private final Double latitude;
     private final Double longitude;
+    private final String eupMyeonDong;
     private final ZonedDateTime gatheringDateTime;
     private final Long views;
     private final ZonedDateTime createdAt;
@@ -41,6 +42,7 @@ public class GatheringDetailInfo {
         this.gatheringDateTime = gatheringInfo.getGatheringDateTime();
         this.views = gatheringInfo.getViews();
         this.createdAt = gatheringInfo.getCreatedAt();
+        this.eupMyeonDong = gatheringInfo.getEupMyeonDong();
         this.userNickname = userNickname;
         this.likes = likes;
         this.isOwner = isOwner;

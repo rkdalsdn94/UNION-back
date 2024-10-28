@@ -24,21 +24,21 @@ class PlaceTest {
 
         // when & then - 위도 값이 작을 때
         GatheringValidationException smallLatitudeException = assertThrows(
-            GatheringValidationException.class, () -> new Place("서울", tooSmallLatitude, validLongitude)
+            GatheringValidationException.class, () -> new Place("서울", tooSmallLatitude, validLongitude, null)
         );
         assertThat(smallLatitudeException.getMessage()).isEqualTo("위도는 33.0 ~ 38.6 사이여야 합니다. (한국 내)");
 
         // when & then - 위도 값이 클 때
         GatheringValidationException largeLatitudeException = assertThrows(
-            GatheringValidationException.class, () -> new Place("서울", tooLargeLatitude, validLongitude)
+            GatheringValidationException.class, () -> new Place("서울", tooLargeLatitude, validLongitude, null)
         );
         assertThat(largeLatitudeException.getMessage()).isEqualTo("위도는 33.0 ~ 38.6 사이여야 합니다. (한국 내)");
 
         // when & then - 유효한 위도 값
-        Place smallPlace = assertDoesNotThrow(() -> new Place("서울", validSmallLatitude, validLongitude));
+        Place smallPlace = assertDoesNotThrow(() -> new Place("서울", validSmallLatitude, validLongitude, null));
         assertThat(smallPlace.getLatitude()).isEqualTo(validSmallLatitude);
         // when & then - 유효한 위도 값
-        Place largePlace = assertDoesNotThrow(() -> new Place("서울", validLargeLatitude, validLongitude));
+        Place largePlace = assertDoesNotThrow(() -> new Place("서울", validLargeLatitude, validLongitude, null));
         assertThat(largePlace.getLatitude()).isEqualTo(validLargeLatitude);
 
     }
@@ -55,22 +55,22 @@ class PlaceTest {
 
         // when & then - 경도 값이 작을 때
         GatheringValidationException smallLongitudeException = assertThrows(
-            GatheringValidationException.class, () -> new Place("서울", validLatitude, tooSmallLongitude)
+            GatheringValidationException.class, () -> new Place("서울", validLatitude, tooSmallLongitude, null)
         );
         assertThat(smallLongitudeException.getMessage()).isEqualTo("경도는 124.6 ~ 131.9 사이여야 합니다. (한국 내)");
 
         // when & then - 경도 값이 클 때
         GatheringValidationException largeLongitudeException = assertThrows(
-            GatheringValidationException.class, () -> new Place("서울", validLatitude, tooLargeLongitude)
+            GatheringValidationException.class, () -> new Place("서울", validLatitude, tooLargeLongitude, null)
         );
         assertThat(largeLongitudeException.getMessage()).isEqualTo("경도는 124.6 ~ 131.9 사이여야 합니다. (한국 내)");
 
         // when & then - 유효한 small 경도 값
-        Place smallPlace = assertDoesNotThrow(() -> new Place("서울", validLatitude, validSmallLongitude));
+        Place smallPlace = assertDoesNotThrow(() -> new Place("서울", validLatitude, validSmallLongitude, null));
         assertThat(smallPlace.getLongitude()).isEqualTo(validSmallLongitude);
 
         // when & then - 유효한 large 경도 값
-        Place largePlace = assertDoesNotThrow(() -> new Place("서울", validLatitude, validLargeLongitude));
+        Place largePlace = assertDoesNotThrow(() -> new Place("서울", validLatitude, validLargeLongitude, null));
         assertThat(largePlace.getLongitude()).isEqualTo(validLargeLongitude);
     }
 }

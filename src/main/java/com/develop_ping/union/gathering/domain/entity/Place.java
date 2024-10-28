@@ -22,13 +22,17 @@ public class Place {
     @Column(name = "longitude")
     private Double longitude;
 
+    @Column(name = "eup_myeon_dong")
+    private String eupMyeonDong;
+
     @Builder
-    public Place(String address, Double latitude, Double longitude) {
+    public Place(String address, Double latitude, Double longitude, String eupMyeonDong) {
         checkLatitudeAndLongitude(latitude, longitude);
 
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.eupMyeonDong = eupMyeonDong;
     }
 
     private void checkLatitudeAndLongitude(Double latitude, Double longitude) {

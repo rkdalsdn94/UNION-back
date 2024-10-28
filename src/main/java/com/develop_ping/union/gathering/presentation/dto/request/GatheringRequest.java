@@ -29,9 +29,11 @@ public class GatheringRequest {
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private ZonedDateTime gatheringDateTime;
+
     private String address;
     private Double latitude;
     private Double longitude;
+    private String eupMyeonDong;
 
     @Builder
     private GatheringRequest(
@@ -42,7 +44,8 @@ public class GatheringRequest {
         ZonedDateTime gatheringDateTime,
         String address,
         Double latitude,
-        Double longitude
+        Double longitude,
+        String eupMyeonDong
     ) {
         this.title = title;
         this.content = content;
@@ -52,6 +55,7 @@ public class GatheringRequest {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.eupMyeonDong = eupMyeonDong;
     }
 
     public GatheringCommand toCommand() {
@@ -64,6 +68,7 @@ public class GatheringRequest {
             .address(address)
             .latitude(latitude)
             .longitude(longitude)
+            .eupMyeonDong(eupMyeonDong)
             .build();
     }
 
@@ -78,6 +83,7 @@ public class GatheringRequest {
             ", gatheringDateTime=" + gatheringDateTime +
             ", latitude=" + latitude +
             ", longitude=" + longitude +
+            ", eupMyeonDong=" + eupMyeonDong +
             '}';
     }
 }

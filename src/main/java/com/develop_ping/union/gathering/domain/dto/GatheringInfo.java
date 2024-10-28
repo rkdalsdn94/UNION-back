@@ -19,6 +19,7 @@ public class GatheringInfo {
     private final String address;
     private final Double latitude;
     private final Double longitude;
+    private final String eupMyeonDong;
     private final ZonedDateTime gatheringDateTime;
     private final Long views;
     private final ZonedDateTime createdAt;
@@ -33,6 +34,7 @@ public class GatheringInfo {
         String address,
         Double latitude,
         Double longitude,
+        String eupMyeonDong,
         ZonedDateTime gatheringDateTime,
         Long views,
         ZonedDateTime createdAt
@@ -45,6 +47,7 @@ public class GatheringInfo {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.eupMyeonDong = eupMyeonDong;
         this.gatheringDateTime = gatheringDateTime;
         this.views = views;
         this.createdAt = createdAt;
@@ -60,6 +63,7 @@ public class GatheringInfo {
                             .address(Optional.ofNullable(gathering.getPlace()).map(Place::getAddress).orElse(null))
                             .latitude(Optional.ofNullable(gathering.getPlace()).map(Place::getLatitude).orElse(null))
                             .longitude(Optional.ofNullable(gathering.getPlace()).map(Place::getLongitude).orElse(null))
+                            .eupMyeonDong(Optional.ofNullable(gathering.getPlace()).map(Place::getEupMyeonDong).orElse(null))
                             .gatheringDateTime(gathering.getGatheringDateTime())
                             .views(gathering.getViews())
                             .createdAt(gathering.getCreatedAt())
