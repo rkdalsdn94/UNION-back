@@ -1,5 +1,6 @@
 package com.develop_ping.union.comment.domain.entity;
 
+import com.develop_ping.union.comment.domain.dto.CommentCommand;
 import com.develop_ping.union.common.base.AuditingFields;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.user.domain.entity.User;
@@ -41,7 +42,7 @@ public class Comment extends AuditingFields {
     private List<Comment> children = new ArrayList<>();
 
     @Builder
-    public Comment(String content,
+    private Comment(String content,
                    Post post,
                    User user,
                    Comment parent) {
@@ -49,5 +50,14 @@ public class Comment extends AuditingFields {
         this.post = post;
         this.user = user;
         this.parent = parent;
+    }
+
+    public static Comment of(String content, Post post, User user, Comment parent) {
+        return Comment.builder()
+                .content(content)
+                .post(post)
+                .user(user)
+                .parent(parent)
+                .build();
     }
 }

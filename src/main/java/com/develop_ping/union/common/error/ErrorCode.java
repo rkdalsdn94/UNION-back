@@ -7,19 +7,21 @@ public enum ErrorCode {
     // 400 Bad Request
     INPUT_VALUE_INVALID("INPUT_VALUE_INVALID", "데이터 형식이 맞지 않습니다.", 400),
     UNSUPPORTED_FILE_FORMAT("UNSUPPORTED_FILE_FORMAT", "지원하지 않는 파일 형식입니다.", 400),
-    INVALID_S3_URL("INVALID_S3_URL", "잘못된 S3 URL이 전달되었습니다.", 400),
+    INVALID_S3_URL("INVALID_S3_URL", "등록되지 않은 이미지 URL이 전달되었습니다.", 400),
 
     // 401 Unauthorized
     INVALID_TOKEN("INVALID_TOKEN", "유효하지 않은 JWT 토큰입니다.", 401),
     OAUTH_NOT_PREPARED("OAUTH_NOT_PREPARED", "Oauth 등록이 수행되지 않았습니다.", 401),
 
     // 403 Forbidden
-    POST_PERMISSION_DENIED("POST_PERMISSION_DENIED", "게시글에 대한 권한이 없습니다.", 403),
+    POST_PERMISSION_DENIED("POST_PERMISSION_DENIED", "해당 게시글에 대한 권한이 없습니다.", 403),
+    COMMENT_PERMISSION_DENIED("COMMENT_PERMISSION_DENIED", "해당 댓글에 대한 권한이 없습니다.", 403),
 
     // 404 Not Found
     USER_NOT_FOUND("USER_NOT_FOUND", "해당 유저를 찾을 수 없습니다.", 404),
     POST_NOT_FOUND("POST_NOT_FOUND", "해당 게시글을 찾을 수 없습니다.", 404),
     GATHERING_NOT_FOUND("GATHERING_NOT_FOUND", "해당 모임을 찾을 수 없습니다.", 404),
+    COMMENT_NOT_FOUND("COMMENT_NOT_FOUND", "해당 댓글을 찾을 수 없습니다.", 404),
 
     // 409 Conflict
     DUPLICATE_NICKNAME("DUPLICATE_NICKNAME", "이미 존재하는 닉네임입니다.", 409),

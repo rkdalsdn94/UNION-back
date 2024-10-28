@@ -1,17 +1,13 @@
 package com.develop_ping.union.common.error;
 
 
-import com.develop_ping.union.auth.exception.InvalidTokenException;
-import com.develop_ping.union.auth.exception.OauthNotPreparedException;
-import com.develop_ping.union.user.exception.DuplicateNicknameException;
+import com.develop_ping.union.auth.exception.*;
+import com.develop_ping.union.comment.exception.*;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
-import com.develop_ping.union.post.exception.PostNotFoundException;
-import com.develop_ping.union.post.exception.PostPermissionDeniedException;
-import com.develop_ping.union.s3.exception.ImageUploadFailedException;
-import com.develop_ping.union.s3.exception.InvalidS3UrlException;
-import com.develop_ping.union.s3.exception.UnsupportedFileFormatException;
-import com.develop_ping.union.user.exception.UserNotFoundException;
+import com.develop_ping.union.post.exception.*;
+import com.develop_ping.union.s3.exception.*;
+import com.develop_ping.union.user.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -116,7 +112,7 @@ public class ErrorHandlingController {
     @ExceptionHandler(InvalidS3UrlException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleInvalidS3UrlException(InvalidS3UrlException e) {
-        log.error("잘못된 S3 URL이 전달되었습니다.");
+        log.error("등록되지 않은 이미지 URL이 전달되었습니다.");
         log.error("url: {}", e.getUrl());
         return buildError(ErrorCode.INVALID_S3_URL);
     }
@@ -124,8 +120,24 @@ public class ErrorHandlingController {
     @ExceptionHandler(PostPermissionDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     protected ErrorResponse handlePostPermissionDeniedException(PostPermissionDeniedException e) {
-        log.error("게시글에 대한 권한이 없습니다.");
+        log.error("해당 게시글에 대한 권한이 없습니다.");
         log.error("user id: {}, post id: {}", e.getUserId(), e.getPostId());
         return buildError(ErrorCode.POST_PERMISSION_DENIED);
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ErrorResponse handleCommentNotFoundException(CommentNotFoundException e) {
+        log.error("해당 댓글을 찾을 수 없습니다.");
+        log.error("comment id: {}", e.getCommentId());
+        return buildError(ErrorCode.COMMENT_NOT_FOUND);
+    }
+
+    @ExceptionHandler(CommentPermissionDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorResponse handleCommentPermissionDeniedException(CommentPermissionDeniedException e) {
+        log.error("해당 댓글에 대한 권한이 없습니다.");
+        log.error("user id: {}, comment id: {}", e.getUserId(), e.getCommentId());
+        return buildError(ErrorCode.COMMENT_PERMISSION_DENIED);
     }
 }
