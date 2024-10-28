@@ -60,4 +60,12 @@ public class Comment extends AuditingFields {
                 .parent(parent)
                 .build();
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void addChildComment(Comment comment) {
+        this.children.add(comment);
+    }
 }
