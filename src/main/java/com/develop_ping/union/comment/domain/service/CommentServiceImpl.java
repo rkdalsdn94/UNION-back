@@ -25,11 +25,10 @@ public class CommentServiceImpl implements CommentService {
 
         User user = command.getUser();
         Post post = postManager.findById(command.getPostId());
-        Comment parent = commentManager.findById(command.getParentId());
 
-        if (parent != null) {
-            log.info("[ CommentService.createChildComment() ] parent comment id: {}", parent.getId());
-            // TODO: child comment 관련 메소드 뽑기
+        Comment parent = null;
+        if (command.getParentId() != null) {
+            parent = commentManager.findById(command.getParentId());
         }
 
         Comment comment = commentManager.save(Comment.of(command.getContent(), post, user, parent));
@@ -56,7 +55,9 @@ public class CommentServiceImpl implements CommentService {
         validateCommentOwner(user, comment);
 
         comment.updateContent(command.getContent());
-        return CommentInfo.of(comment);
+
+        Comment updatedComment = commentManager.save(comment);
+        return CommentInfo.of(updatedComment);
     }
 
     @Override

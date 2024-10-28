@@ -45,7 +45,7 @@ public class CommentInfo {
                 .id(comment.getId())
                 .content(comment.getContent())
                 .postId(comment.getPost().getId())
-                .parentId(comment.getParent().getId())
+                .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
                 .createdAt(comment.getCreatedAt())
                 .nickname(comment.getUser().getNickname())
                 .profileImage(comment.getUser().getProfileImage())

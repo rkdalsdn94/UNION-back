@@ -38,14 +38,14 @@ public class Comment extends AuditingFields {
     @JsonIgnore // 순환 참조 방지
     private Comment parent;
 
-    @OneToMany(mappedBy = "parentComment", fetch = FetchType.LAZY) // 부모 댓글 삭제되어도 유지
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY) // 부모 댓글 삭제되어도 유지
     private List<Comment> children = new ArrayList<>();
 
     @Builder
     private Comment(String content,
-                   Post post,
-                   User user,
-                   Comment parent) {
+                    Post post,
+                    User user,
+                    Comment parent) {
         this.content = content;
         this.post = post;
         this.user = user;
