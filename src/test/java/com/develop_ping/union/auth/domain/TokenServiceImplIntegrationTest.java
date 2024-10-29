@@ -59,7 +59,7 @@ class TokenServiceImplIntegrationTest {
         userManager.save(user);
 
         // 테스트용 RefreshToken 데이터 저장
-        refreshTokenManager.saveRefreshToken(user.getId(), "sample-refresh-token");
+        refreshTokenManager.saveRefreshToken(user, "sample-refresh-token");
 
         OauthUser oauthUser = OauthUser.builder()
                 .token("sample-oauth-token")

@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         log.info("JWT 액세스 토큰 및 리프레시 토큰 생성 시작");
         String accessToken = tokenManager.generateToken(user, ACCESS_TOKEN_DURATION);
         String refreshToken = tokenManager.generateToken(user, REFRESH_TOKEN_DURATION);
-        refreshTokenManager.saveRefreshToken(user.getId(), refreshToken);
+        refreshTokenManager.saveRefreshToken(user, refreshToken);
         log.info("JWT 토큰 생성 완료: 사용자 ID - {}", user.getId());
 
         // DTO 변환
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signOut(User user) {
         log.info("사용자 로그아웃 요청: 사용자 ID - {}", user.getId());
-        refreshTokenManager.deleteByUserId(user.getId());
+        refreshTokenManager.deleteByUserId(user);
         log.info("사용자 로그아웃 처리 완료: 사용자 ID - {}", user.getId());
     }
 

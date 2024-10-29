@@ -47,7 +47,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             // 토큰 생성 및 등록
             String accessToken = tokenManager.generateToken(user, ACCESS_TOKEN_DURATION);
             String refreshToken = tokenManager.generateToken(user, REFRESH_TOKEN_DURATION);
-            refreshTokenManager.saveRefreshToken(user.getId(), refreshToken);
+            refreshTokenManager.saveRefreshToken(user, refreshToken);
 
             //리다이렉트 URL 생성, 차후에 쿠키 방식으로 리펙토링
             String redirectUrl = ServletUriComponentsBuilder

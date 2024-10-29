@@ -1,6 +1,7 @@
 package com.develop_ping.union.auth.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
+import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,15 +18,16 @@ public class RefreshToken extends AuditingFields {
     @Column(updatable = false)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private Long userId;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
 
     @Column(nullable = false)
     private String refreshToken;
 
     @Builder
-    public RefreshToken(Long userId, String refreshToken) {
-        this.userId = userId;
+    public RefreshToken(User user, String refreshToken) {
+        this.user = user;
         this.refreshToken = refreshToken;
     }
 
@@ -33,4 +35,3 @@ public class RefreshToken extends AuditingFields {
         this.refreshToken = newRefreshToken;
     }
 }
-

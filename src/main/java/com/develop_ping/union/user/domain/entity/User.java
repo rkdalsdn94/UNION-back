@@ -2,6 +2,7 @@ package com.develop_ping.union.user.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
 import com.develop_ping.union.user.domain.dto.UserCommand;
+import com.develop_ping.union.auth.domain.entity.RefreshToken;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +16,7 @@ import java.util.*;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends AuditingFields implements UserDetails{
+public class User extends AuditingFields implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,6 @@ public class User extends AuditingFields implements UserDetails{
     @Column(nullable = false, updatable = false)
     private String email;
 
-    // UUID 기반의 고유 토큰, 패스워드 용으로도 사용
     @Column(nullable = false, unique = true, updatable = false)
     private String token;
 
@@ -43,6 +43,10 @@ public class User extends AuditingFields implements UserDetails{
     @Column(nullable = false, length = 30)
     private String provider;
 
+    // RefreshToken과의 1:1 관계 설정, User 삭제 시 RefreshToken도 함께 삭제
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private RefreshToken refreshToken;
+
     @Builder
     private User(String email, String token, String nickname, String description, String profileImage, String univName, String provider) {
         this.email = email;
@@ -54,7 +58,7 @@ public class User extends AuditingFields implements UserDetails{
         this.provider = provider;
     }
 
-    public static User of (UserCommand command, String email, String profileImage, String provider) {
+    public static User of(UserCommand command, String email, String profileImage, String provider) {
         return User.builder()
                 .email(email)
                 .profileImage(profileImage)
@@ -113,5 +117,3 @@ public class User extends AuditingFields implements UserDetails{
         return true;
     }
 }
-
-
