@@ -4,6 +4,8 @@ import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.user.domain.dto.UserInfo;
 import com.develop_ping.union.user.domain.entity.User;
 
+import java.util.List;
+
 public interface UserService {
     UserInfo signUp (UserCommand command);
 
@@ -14,4 +16,8 @@ public interface UserService {
     UserInfo searchUser (User user, String token);
 
     void deleteUser(User user);
+    void blockUser(User user, String userToken);
+    void unblockUser(User user, String userToken);
+
+    List<UserInfo> readBlockedUsers (User user);
 }

@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -73,6 +75,24 @@ public class UserController {
 
     @PostMapping("/block/{userToken}")
     public ResponseEntity<Void> blockUser (@AuthenticationPrincipal User user, @PathVariable String userToken) {
+        userService.blockUser(user, userToken);
+        return ResponseEntity.ok().build();
+    }
 
+    @DeleteMapping("/block/{userToken}")
+    public ResponseEntity<Void> unblockUser (@AuthenticationPrincipal User user, @PathVariable String userToken) {
+        userService.unblockUser(user, userToken);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/block")
+    public ResponseEntity<List<UserResponse>> readBlockedUsers (@AuthenticationPrincipal User user) {
+        List<UserInfo> blockedUsers = userService.readBlockedUsers(user);
+
+        List<UserResponse> responseList = blockedUsers.stream()
+                .map(UserResponse::new)
+                .toList();
+
+        return ResponseEntity.ok(responseList);
     }
 }

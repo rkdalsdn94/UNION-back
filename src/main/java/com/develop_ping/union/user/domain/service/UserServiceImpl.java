@@ -9,6 +9,7 @@ import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.user.domain.dto.UserInfo;
+import com.develop_ping.union.user.domain.entity.BlockUser;
 import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.exception.DuplicateNicknameException;
 import com.develop_ping.union.user.exception.UserBlockedException;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -108,5 +110,36 @@ public class UserServiceImpl implements UserService {
         userManager.delete(user);
         oauthUserManager.delete(oauthUser);
         log.info("사용자 계정 삭제 완료: 사용자 ID - {}", user.getId());
+    }
+
+    @Override
+    public void blockUser(User user, String userToken) {
+        log.info("토큰으로 사용자 검색 시작");
+        User targetUser = userManager.findByToken(userToken);
+        log.info("차단할 사용자 검색 완료: 사용자 ID - {}", user.getId());
+
+        if (!blockUserManager.existsByBlockingUserAndBlockedUser(user, targetUser)) {
+            blockUserManager.blockUser(user, targetUser);
+        }
+    }
+
+    @Override
+    public void unblockUser(User user, String userToken) {
+        log.info("토큰으로 사용자 검색 시작");
+        User targetUser = userManager.findByToken(userToken);
+        log.info("차단 해제할 사용자 검색 완료: 사용자 ID - {}", user.getId());
+
+        if (blockUserManager.existsByBlockingUserAndBlockedUser(user, targetUser)) {
+            blockUserManager.unblockUser(user, targetUser);
+        }
+    }
+
+    @Override
+    public List<UserInfo> readBlockedUsers(User user) {
+        List<User> blockedUsers = blockUserManager.findAllBlockedUser(user);
+
+        return blockedUsers.stream()
+                .map(UserInfo::of) // User 객체를 UserInfo 객체로 변환
+                .toList();
     }
 }
