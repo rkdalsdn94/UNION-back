@@ -16,12 +16,14 @@ public enum ErrorCode {
     // 403 Forbidden
     POST_PERMISSION_DENIED("POST_PERMISSION_DENIED", "해당 게시글에 대한 권한이 없습니다.", 403),
     COMMENT_PERMISSION_DENIED("COMMENT_PERMISSION_DENIED", "해당 댓글에 대한 권한이 없습니다.", 403),
+    USER_BLOCKED("USER_BLOCKED", "차단된 유저의 정보입니다.", 403),
 
     // 404 Not Found
     USER_NOT_FOUND("USER_NOT_FOUND", "해당 유저를 찾을 수 없습니다.", 404),
     POST_NOT_FOUND("POST_NOT_FOUND", "해당 게시글을 찾을 수 없습니다.", 404),
     GATHERING_NOT_FOUND("GATHERING_NOT_FOUND", "해당 모임을 찾을 수 없습니다.", 404),
     COMMENT_NOT_FOUND("COMMENT_NOT_FOUND", "해당 댓글을 찾을 수 없습니다.", 404),
+    BLOCK_RELATIONSHIP_NOT_FOUND("BLOCK_RELATIONSHIP_NOT_FOUND", "차단된 유저가 아닙니다.", 404),
 
     // 409 Conflict
     DUPLICATE_NICKNAME("DUPLICATE_NICKNAME", "이미 존재하는 닉네임입니다.", 409),

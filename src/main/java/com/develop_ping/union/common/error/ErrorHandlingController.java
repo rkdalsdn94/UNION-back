@@ -140,4 +140,20 @@ public class ErrorHandlingController {
         log.error("user id: {}, comment id: {}", e.getUserId(), e.getCommentId());
         return buildError(ErrorCode.COMMENT_PERMISSION_DENIED);
     }
+
+    @ExceptionHandler(BlockRelationshipNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ErrorResponse handleBlockRelationshipNotFoundException(BlockRelationshipNotFoundException e) {
+        log.error("해당 유저가 차단되어 있지 않습니다.");
+        log.error("차단하는 user id: {}, 차단되는 user id: {}", e.getBlockingUserName(), e.getBlockedUserName());
+        return buildError(ErrorCode.BLOCK_RELATIONSHIP_NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserBlockedException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ErrorResponse handleUserBlockedException(UserBlockedException e) {
+        log.error("차단된 유저의 정보입니다.");
+        log.error("조회한 user id: {}, 차단한 user id: {}", e.getBlockedUserName(), e.getBlockingUserName());
+        return buildError(ErrorCode.BLOCK_RELATIONSHIP_NOT_FOUND);
+    }
 }

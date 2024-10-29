@@ -15,6 +15,7 @@ public class UserInfo {
     private String description;
     private String univName;
     private String profileImage;
+    private boolean isBlocked;
 
     @Builder
     private UserInfo(String accessToken, String refreshToken, String token, String nickname, String description, String univName, String profileImage) {
@@ -25,6 +26,7 @@ public class UserInfo {
         this.description = description;
         this.univName = univName;
         this.profileImage = profileImage;
+        this.isBlocked = false;
     }
 
     public static UserInfo of (User user,String accessToken, String refreshToken) {
@@ -47,5 +49,9 @@ public class UserInfo {
                 .profileImage(user.getProfileImage())
                 .description(user.getDescription())
                 .build();
+    }
+
+    public void setBlocked (boolean isBlocked) {
+        this.isBlocked = isBlocked;
     }
 }

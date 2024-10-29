@@ -11,7 +11,7 @@ public interface UserService {
 
     void signOut(User user);
 
-    UserInfo searchUser (String token);
+    UserInfo searchUser (User user, String token);
 
     void deleteUser(User user);
 }

@@ -5,11 +5,13 @@ import com.develop_ping.union.auth.domain.OauthUserManager;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import com.develop_ping.union.auth.domain.TokenManager;
 import com.develop_ping.union.auth.domain.entity.OauthUser;
+import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.user.domain.dto.UserInfo;
 import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.exception.DuplicateNicknameException;
+import com.develop_ping.union.user.exception.UserBlockedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final TokenManager tokenManager;
     private final RefreshTokenManager refreshTokenManager;
     private final OAuthUnlinkManager oAuthUnlinkManager;
+    private final BlockUserManager blockUserManager;
 
     @Override
     public UserInfo signUp(UserCommand command) {
@@ -80,11 +83,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfo searchUser(String token) {
+    public UserInfo searchUser(User user, String token) {
         log.info("토큰으로 사용자 검색 시작");
-        User user = userManager.findByToken(token);
+        User targetUser = userManager.findByToken(token);
         log.info("사용자 검색 완료: 사용자 ID - {}", user.getId());
-        return UserInfo.of(user);
+        UserInfo userInfo = UserInfo.of(targetUser);
+
+        if (blockUserManager.existsByBlockingUserAndBlockedUser(user, targetUser)) {
+            userInfo.setBlocked(true);
+        }
+
+        if(blockUserManager.existsByBlockingUserAndBlockedUser(targetUser, user)) {
+            throw new UserBlockedException(targetUser.getNickname(), user.getNickname());
+        }
+
+        return userInfo;
     }
 
     @Override

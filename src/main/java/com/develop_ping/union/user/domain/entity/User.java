@@ -47,6 +47,14 @@ public class User extends AuditingFields implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private RefreshToken refreshToken;
 
+    // 이 유저가 차단한 다른 유저 목록
+    @OneToMany(mappedBy = "blockingUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BlockUser> blockingUsers;
+
+    // 다른 유저가 이 유저를 차단한 목록
+    @OneToMany(mappedBy = "blockedUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BlockUser> blockedByOtherUsers;
+
     @Builder
     private User(String email, String token, String nickname, String description, String profileImage, String univName, String provider) {
         this.email = email;

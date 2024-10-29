@@ -30,13 +30,13 @@ public class TokenServiceImpl implements TokenService{
 
         tokenManager.validToken(refreshToken);
         User user = userManager.findByToken(token);
-        Long userId =  refreshTokenManager.findByRefreshToken(refreshToken).getUserId();
+        User refreshTokenUser =  refreshTokenManager.findByRefreshToken(refreshToken).getUser();
 
-        if (!Objects.equals(user.getId(), userId)) {
+        if (!Objects.equals(user.getId(), refreshTokenUser.getId())) {
             throw new InvalidTokenException();
         }
 
-        log.info("새 액세스 토큰 발급 완료: {}", userId);
+        log.info("새 액세스 토큰 발급 완료: {}", user.getId());
         return tokenManager.generateToken(user, Duration.ofHours(2));
     }
 

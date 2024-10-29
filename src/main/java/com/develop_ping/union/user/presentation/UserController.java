@@ -5,6 +5,7 @@ import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.domain.service.UserService;
 import com.develop_ping.union.user.presentation.dto.request.RegisterRequest;
 import com.develop_ping.union.user.presentation.dto.request.UpdateRequest;
+import com.develop_ping.union.user.presentation.dto.response.OtherUserResponse;
 import com.develop_ping.union.user.presentation.dto.response.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,10 +54,10 @@ public class UserController {
     }
 
     @GetMapping("/{userToken}")
-    public ResponseEntity<UserResponse> searchUser(@PathVariable String userToken) {
+    public ResponseEntity<OtherUserResponse> searchUser(@AuthenticationPrincipal User user, @PathVariable String userToken) {
         log.info("회원 상세 조회 요청 확인: 토큰 - {}", userToken);
-        UserInfo userInfo = userService.searchUser(userToken);
-        UserResponse response = new UserResponse(userInfo);
+        UserInfo userInfo = userService.searchUser(user, userToken);
+        OtherUserResponse response = new OtherUserResponse(userInfo);
 
         return ResponseEntity.ok().body(response);
     }
@@ -68,5 +69,10 @@ public class UserController {
 
         log.info("회원 삭제 완료: 닉네임 - {}", user.getNickname());
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/block/{userToken}")
+    public ResponseEntity<Void> blockUser (@AuthenticationPrincipal User user, @PathVariable String userToken) {
+
     }
 }
