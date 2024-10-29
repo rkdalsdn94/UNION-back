@@ -2,8 +2,13 @@ package com.develop_ping.union.gathering.domain.service;
 
 import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
+import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
+import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.gathering.domain.strategy.GatheringSortStrategy;
+import com.develop_ping.union.gathering.domain.strategy.GatheringSortStrategyFactory;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
 import com.develop_ping.union.reaction.domain.ReactionManager;
@@ -11,6 +16,8 @@ import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +30,7 @@ public class GatheringServiceImpl implements GatheringService {
     private final PartyManager partyManager;
     private final UserManager userManager;
     private final ReactionManager reactionManager;
+    private final GatheringSortStrategyFactory strategyFactory;
 
     @Transactional
     public GatheringInfo createGathering(GatheringCommand command, Long userId) {
@@ -39,14 +47,21 @@ public class GatheringServiceImpl implements GatheringService {
     public GatheringDetailInfo getGatheringDetail(Long gatheringId, Long userId) {
         log.info("모임 상세 조회 ServiceImpl 클래스 : {}", gatheringId);
 
+        // 모임 정보
         GatheringInfo gatheringInfo = gatheringManager.getGatheringDetail(gatheringId);
-        Long ownerId = partyManager.findOwnerByGatheringId(gatheringId);
         PartyInfo partyResponse = partyManager.findByGatheringId(gatheringId);
+
+        // 모임 주최자 정보
+        Long ownerId = partyManager.findOwnerByGatheringId(gatheringId);
         Long ownerUserId = partyResponse.getUserId();
+        boolean isOwner = isOwnerCheck(ownerId, userId);
+
+        // 좋아요 수
+        Long likeCount = reactionManager.selectLikeCount(gatheringId);
+
+        // 주최자 닉네임
         User userResponse = userManager.findById(ownerUserId);
         String nickname = userResponse.getNickname();
-        boolean isOwner = isOwnerCheck(ownerId, userId);
-        Long likeCount = reactionManager.selectLikeCount(gatheringId);
 
         return GatheringDetailInfo.builder()
                                   .gatheringInfo(gatheringInfo)
@@ -63,5 +78,16 @@ public class GatheringServiceImpl implements GatheringService {
     @Override
     public GatheringInfo updateGathering(Long gatheringId, GatheringCommand command) {
         return null;
+    }
+
+    @Override
+    public Slice<GatheringListInfo> getGatheringList(
+        GatheringListCommand command, Pageable pageable
+    ) {
+        log.info("모임 리스트 조회 ServiceImpl 클래스 : {}", command);
+
+        GatheringSortStrategy strategy = strategyFactory.getStrategy(command.getSortType());
+        Slice<Gathering> gatheringList = gatheringManager.getGatheringList(strategy, command, pageable);
+        return GatheringListInfo.of(gatheringList);
     }
 }

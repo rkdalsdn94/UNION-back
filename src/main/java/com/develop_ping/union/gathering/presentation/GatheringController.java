@@ -1,7 +1,10 @@
 package com.develop_ping.union.gathering.presentation;
 
+import com.develop_ping.union.gathering.domain.SortType;
+import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
@@ -11,11 +14,12 @@ import com.develop_ping.union.user.domain.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,9 +29,25 @@ public class GatheringController {
     private final GatheringService gatheringService;
 
     @GetMapping("/gathering")
-    public List<GatheringListResponse> getGathering() {
-        return null;
-//        return "gathering";
+    public Slice<GatheringListResponse> getGathering(
+        @RequestParam(value = "sortType", defaultValue = "LATEST") SortType sortType,
+        @RequestParam(value = "latitude", defaultValue = "37.556016") Double latitude,
+        @RequestParam(value = "longitude", defaultValue = "126.972355") Double longitude,
+        @PageableDefault(size = 3, page = 0) Pageable pageable
+    ) {
+        log.info("모임 리스트 조회 컨트롤러 진입 - sortType: {}, latitude: {}, longitude: {}, pageable: {}",
+            sortType, latitude, longitude, pageable);
+
+        Slice<GatheringListInfo> gatheringList = gatheringService.getGatheringList(
+            GatheringListCommand.builder()
+                                .sortType(sortType)
+                                .latitude(latitude)
+                                .longitude(longitude)
+                                .build(),
+            pageable
+        );
+
+        return gatheringList.map(GatheringListResponse::from);
     }
 
     /**

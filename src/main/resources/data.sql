@@ -1,30 +1,30 @@
 -- 모임 더미 데이터
 INSERT INTO gatherings
-    (
-        current_member, latitude, longitude, views, max_member, created_at, gathering_date_time,
-        updated_at, address, content, title, eup_myeon_dong
-    )
+(
+    current_member, latitude, longitude, views, max_member, created_at, gathering_date_time,
+    updated_at, address, content, title, eup_myeon_dong
+)
 VALUES
-    (5, 37.7749, -122.4194, 10, 10, NOW(), '2024-11-01 14:00:00',
-     NOW(), '1234 Main St', '첫 번째 모임 설명', '첫 번째 모임', '역삼동'),
-    (2, 34.0522, -118.2437, 100, 5, NOW(), '2024-11-05 15:00:00',
-     NOW(), '5678 Sunset Blvd', '두 번째 모임 설명', '두 번째 모임', '서교동'),
-    (8, 40.7128, -74.0060, 1, 20, NOW(), '2024-11-10 10:00:00',
-     NOW(), '9101 Broadway', '세 번째 모임 설명', '세 번째 모임', '성수동'),
-    (3, 51.5074, -0.1278, 5, 15, NOW(), '2024-11-15 18:00:00',
-     NOW(), '12 Oxford St', '네 번째 모임 설명', '네 번째 모임', '합정동'),
-    (1, 48.8566, 2.3522, 2, 4, NOW(), '2024-11-20 12:00:00',
-     NOW(), '34 Champs-Elysees', '다섯 번째 모임 설명', '다섯 번째 모임', '둔산동'),
-    (6, 35.6895, 139.6917, 15, 12, NOW(), '2024-11-25 14:00:00',
-     NOW(), '56 Shibuya', '여섯 번째 모임 설명', '여섯 번째 모임', '괴정동'),
-    (4, 55.7558, 37.6173, 22, 8, NOW(), '2024-12-01 11:00:00',
-     NOW(), '78 Red Square', '일곱 번째 모임 설명', '일곱 번째 모임', '신북읍'),
-    (7, 35.6762, 139.6503, 0, 10, NOW(), '2024-12-05 13:00:00',
-     NOW(), '90 Shinjuku', '여덟 번째 모임 설명', '여덟 번째 모임', '남면'),
-    (2, 52.5200, 13.4050, 1, 6, NOW(), '2024-12-10 09:00:00',
-     NOW(), '101 Brandenburg Gate', '아홉 번째 모임 설명', '아홉 번째 모임', '중앙동'),
-    (9, 40.730610, -73.935242, 7, 20, NOW(), '2024-12-15 19:00:00',
-     NOW(), '112 Broadway Ave', '열 번째 모임 설명', '열 번째 모임', '수민동');
+    (5, 37.5665, 126.9780, 10, 10, DATE_SUB(NOW(), INTERVAL 9 HOUR), DATE_ADD(NOW(), INTERVAL 1 HOUR),
+     NOW(), '서울 중구 명동', '첫 번째 모임 설명', '첫 번째 모임', '명동'),
+    (2, 36.3504, 127.3845, 100, 5, DATE_SUB(NOW(), INTERVAL 8 HOUR), DATE_ADD(NOW(), INTERVAL 2 HOUR),
+     NOW(), '대전 서구 둔산동', '두 번째 모임 설명', '두 번째 모임', '둔산동'),
+    (8, 35.8722, 128.6025, 1, 20, DATE_SUB(NOW(), INTERVAL 7 HOUR), DATE_ADD(NOW(), INTERVAL 3 HOUR),
+     NOW(), '대구 수성구 수성동', '세 번째 모임 설명', '세 번째 모임', '수성동'),
+    (3, 35.1796, 129.0756, 5, 15, DATE_SUB(NOW(), INTERVAL 6 HOUR), DATE_ADD(NOW(), INTERVAL 4 HOUR),
+     NOW(), '부산 해운대구 해운대해변로', '네 번째 모임 설명', '네 번째 모임', '해운대동'),
+    (1, 35.1595, 126.8526, 2, 4, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_ADD(NOW(), INTERVAL 5 HOUR),
+     NOW(), '광주 북구 용봉동', '다섯 번째 모임 설명', '다섯 번째 모임', '용봉동'),
+    (6, 35.5384, 129.3114, 15, 12, DATE_SUB(NOW(), INTERVAL 4 HOUR), DATE_ADD(NOW(), INTERVAL 6 HOUR),
+     NOW(), '울산 남구 삼산동', '여섯 번째 모임 설명', '여섯 번째 모임', '삼산동'),
+    (4, 33.4996, 126.5312, 22, 8, DATE_SUB(NOW(), INTERVAL 3 HOUR), DATE_ADD(NOW(), INTERVAL 7 HOUR),
+     NOW(), '제주 제주시 연동', '일곱 번째 모임 설명', '일곱 번째 모임', '연동'),
+    (7, 37.4563, 126.7052, 0, 10, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_ADD(NOW(), INTERVAL 8 HOUR),
+     NOW(), '인천 중구 을왕동', '여덟 번째 모임 설명', '여덟 번째 모임', '을왕동'),
+    (2, 37.2751, 127.0097, 1, 6, DATE_SUB(NOW(), INTERVAL 1 HOUR), DATE_ADD(NOW(), INTERVAL 9 HOUR),
+     NOW(), '경기 성남시 분당구', '아홉 번째 모임 설명', '아홉 번째 모임', '분당동'),
+    (9, 35.1798, 128.1076, 7, 20, NOW(), DATE_ADD(NOW(), INTERVAL 10 HOUR),
+     NOW(), '경남 김해시 내외동', '열 번째 모임 설명', '열 번째 모임', '내외동');
 
 -- 파티 더미 데이터
 INSERT INTO parties (gathering_id, user_id, role, created_at, updated_at)

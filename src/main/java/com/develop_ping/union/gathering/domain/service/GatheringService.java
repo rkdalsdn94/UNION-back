@@ -1,8 +1,12 @@
 package com.develop_ping.union.gathering.domain.service;
 
 import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
+import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface GatheringService {
 
@@ -11,4 +15,6 @@ public interface GatheringService {
     GatheringDetailInfo getGatheringDetail(Long gatheringId, Long userId);
 
     GatheringInfo updateGathering(Long gatheringId, GatheringCommand command);
+
+    Slice<GatheringListInfo> getGatheringList(GatheringListCommand request, Pageable pageable);
 }
