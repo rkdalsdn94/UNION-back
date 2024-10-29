@@ -18,57 +18,66 @@ import java.util.Set;
 @Slf4j
 public class BlockUserManagerImpl implements BlockUserManager {
     private final BlockUserRepository blockUserRepository;
+
     @Override
     public void blockUser(User blockingUser, User blockedUser) {
+        log.info("유저 [{}]가 유저 [{}]를 차단합니다.", blockingUser.getNickname(), blockedUser.getNickname());
         BlockUser user = BlockUser.of(blockingUser, blockedUser);
         blockUserRepository.save(user);
+        log.info("유저 [{}]가 유저 [{}]를 성공적으로 차단했습니다.", blockingUser.getNickname(), blockedUser.getNickname());
     }
 
     @Override
     public void unblockUser(User blockingUser, User blockedUser) {
         if (existsByBlockingUserAndBlockedUser(blockingUser, blockedUser)) {
+            log.info("유저 [{}]가 유저 [{}]의 차단을 해제합니다.", blockingUser.getNickname(), blockedUser.getNickname());
             blockUserRepository.deleteByBlockingUserAndBlockedUser(blockingUser, blockedUser);
-        } else throw new BlockRelationshipNotFoundException(blockingUser.getNickname(), blockedUser.getNickname());
+            log.info("유저 [{}]의 차단이 성공적으로 해제되었습니다.", blockedUser.getNickname());
+        } else {
+            log.info("유저 [{}]가 유저 [{}]를 차단하지 않았으므로 차단 해제가 불가능합니다.", blockingUser.getNickname(), blockedUser.getNickname());
+            throw new BlockRelationshipNotFoundException(blockingUser.getNickname(), blockedUser.getNickname());
+        }
     }
 
     @Override
     public List<User> findAllBlockedUser(User user) {
-        // blockingUser가 차단한 BlockUser 목록 조회
+        log.info("유저 [{}]가 차단한 유저 목록을 조회합니다.", user.getNickname());
         List<BlockUser> blockUserList = blockUserRepository.findByBlockingUser(user);
-
-        // blockedUser 필드만 추출하여 User 리스트로 반환
-        return blockUserList.stream()
+        List<User> blockedUsers = blockUserList.stream()
                 .map(BlockUser::getBlockedUser)
                 .toList();
+        log.info("유저 [{}]가 차단한 유저는 총 [{}]명입니다.", user.getNickname(), blockedUsers.size());
+        return blockedUsers;
     }
 
     @Override
     public List<User> findAllBlockedOrBlockingUser(User user) {
-        // user가 차단한 유저 목록
+        log.info("유저 [{}]와 차단 관계에 있는 모든 유저를 조회합니다.", user.getNickname());
         List<BlockUser> blockedUsers = blockUserRepository.findByBlockingUser(user);
-
-        // user를 차단한 유저 목록
         List<BlockUser> blockingUsers = blockUserRepository.findByBlockedUser(user);
 
-        // 차단한 유저와 차단당한 유저들을 중복 없이 Set으로 모음
         Set<User> uniqueUsers = new HashSet<>();
-
-        // blockedUser 필드를 추출하여 추가
         for (BlockUser blockUser : blockedUsers) {
             uniqueUsers.add(blockUser.getBlockedUser());
         }
-
-        // blockingUser 필드를 추출하여 추가
         for (BlockUser blockUser : blockingUsers) {
             uniqueUsers.add(blockUser.getBlockingUser());
         }
 
-        // Set을 List로 변환하여 반환
+        log.info("유저 [{}]와 차단 관계에 있는 유저는 총 [{}]명입니다.", user.getNickname(), uniqueUsers.size());
         return new ArrayList<>(uniqueUsers);
     }
 
     @Override
     public boolean existsByBlockingUserAndBlockedUser(User blockingUser, User blockedUser) {
-        return blockUserRepository.existsByBlockingUserAndBlockedUser(blockingUser, blockedUser);
+        log.info("유저 [{}]가 유저 [{}]를 차단했는지 여부를 확인합니다.", blockingUser.getNickname(), blockedUser.getNickname());
+        boolean exists = blockUserRepository.existsByBlockingUserAndBlockedUser(blockingUser, blockedUser);
+        if (exists) {
+            log.info("유저 [{}]는 유저 [{}]를 차단한 상태입니다.", blockingUser.getNickname(), blockedUser.getNickname());
+        } else {
+            log.info("유저 [{}]는 유저 [{}]를 차단하지 않은 상태입니다.", blockingUser.getNickname(), blockedUser.getNickname());
+        }
+        return exists;
     }
 }
+
