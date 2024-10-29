@@ -6,6 +6,8 @@ import com.develop_ping.union.comment.exception.CommentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class CommentManagerImpl implements CommentManager {
@@ -25,5 +27,10 @@ public class CommentManagerImpl implements CommentManager {
     @Override
     public void delete(Comment comment) {
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public List<Comment> findByPostId(Long postId) {
+        return commentRepository.findByPostId(postId);
     }
 }

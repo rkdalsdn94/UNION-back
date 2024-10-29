@@ -3,6 +3,7 @@ package com.develop_ping.union.comment.domain.service;
 import com.develop_ping.union.comment.domain.CommentManager;
 import com.develop_ping.union.comment.domain.dto.CommentCommand;
 import com.develop_ping.union.comment.domain.dto.CommentInfo;
+import com.develop_ping.union.comment.domain.dto.CommentListInfo;
 import com.develop_ping.union.comment.domain.entity.Comment;
 import com.develop_ping.union.comment.exception.CommentPermissionDeniedException;
 import com.develop_ping.union.post.domain.PostManager;
@@ -11,6 +12,8 @@ import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -69,6 +72,15 @@ public class CommentServiceImpl implements CommentService {
 
         validateCommentOwner(user, comment);
         commentManager.delete(comment);
+    }
+
+    @Override
+    public CommentListInfo getCommentsByPostId(Long postId) {
+        log.info("[ CommentService.getCommentsByPostId() ] post id: {}", postId);
+
+        List<Comment> comments = commentManager.findByPostId(postId);
+
+        return CommentListInfo.of(comments);
     }
 
     private void validateCommentOwner(User user, Comment comment) {

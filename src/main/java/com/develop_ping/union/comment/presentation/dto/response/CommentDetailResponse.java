@@ -11,55 +11,38 @@ import java.time.ZonedDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentDetailResponse {
-    private CommentResponse comment;
+    private Long id;
+    private String content;
+    private Long postId;
+    private Long parentId;
+    private ZonedDateTime createdAt;
     private CommenterResponse commenter;
 
     @Builder
-    public CommentDetailResponse(CommentResponse comment, CommenterResponse commenter) {
-        this.comment = comment;
+    public CommentDetailResponse(Long id,
+                                 String content,
+                                 Long postId,
+                                 Long parentId,
+                                 ZonedDateTime createdAt,
+                                 CommenterResponse commenter) {
+        this.id = id;
+        this.content = content;
+        this.postId = postId;
+        this.parentId = parentId;
+        this.createdAt = createdAt;
         this.commenter = commenter;
     }
 
     public static CommentDetailResponse from(CommentInfo info) {
         return CommentDetailResponse.builder()
-                .comment(CommentResponse.from(info))
+                .id(info.getId())
+                .content(info.getContent())
+                .postId(info.getPostId())
+                .parentId(info.getParentId())
+                .createdAt(info.getCreatedAt())
                 .commenter(CommenterResponse.from(info))
                 .build();
     }
-
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class CommentResponse {
-        private Long id;
-        private String content;
-        private Long postId;
-        private Long parentId;
-        private ZonedDateTime createdAt;
-
-        @Builder
-        private CommentResponse(Long id,
-                               String content,
-                               Long postId,
-                               Long parentId,
-                               ZonedDateTime createdAt) {
-            this.id = id;
-            this.content = content;
-            this.postId = postId;
-            this.parentId = parentId;
-            this.createdAt = createdAt;
-        }
-
-        public static CommentResponse from(CommentInfo info) {
-            return CommentResponse.builder()
-                    .id(info.getId())
-                    .content(info.getContent())
-                    .postId(info.getPostId())
-                    .parentId(info.getParentId())
-                    .createdAt(info.getCreatedAt())
-                    .build();
-        }
-    }
-
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
