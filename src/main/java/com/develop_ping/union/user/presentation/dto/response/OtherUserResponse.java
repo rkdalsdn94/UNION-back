@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class OtherUserResponse {
+    private String token;
     private String nickname;
     private String description;
     private String univName;
@@ -14,6 +15,7 @@ public class OtherUserResponse {
     private boolean isBlocked;
 
     public OtherUserResponse (UserInfo userInfo) {
+        this.token = userInfo.getToken();
         this.nickname = userInfo.getNickname();
         this.description = userInfo.getDescription();
         this.univName = userInfo.getUnivName();

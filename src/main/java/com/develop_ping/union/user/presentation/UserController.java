@@ -86,11 +86,11 @@ public class UserController {
     }
 
     @GetMapping("/block")
-    public ResponseEntity<List<UserResponse>> readBlockedUsers (@AuthenticationPrincipal User user) {
+    public ResponseEntity<List<OtherUserResponse>> readBlockedUsers (@AuthenticationPrincipal User user) {
         List<UserInfo> blockedUsers = userService.readBlockedUsers(user);
 
-        List<UserResponse> responseList = blockedUsers.stream()
-                .map(UserResponse::new)
+        List<OtherUserResponse> responseList = blockedUsers.stream()
+                .map(OtherUserResponse::new)
                 .toList();
 
         return ResponseEntity.ok(responseList);
