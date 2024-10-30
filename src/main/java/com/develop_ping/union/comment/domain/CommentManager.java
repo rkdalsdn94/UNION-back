@@ -8,5 +8,5 @@ public interface CommentManager {
     Comment save(Comment comment);
     Comment findById(Long id);
     void delete(Comment comment);
-    List<Comment> findByPostId(Long postId);
+    List<Comment> findByPostIdAndParentIsNull(Long postId);
 }

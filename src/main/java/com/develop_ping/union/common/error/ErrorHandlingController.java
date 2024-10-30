@@ -156,4 +156,12 @@ public class ErrorHandlingController {
         log.error("조회한 user id: {}, 차단한 user id: {}", e.getBlockedUserName(), e.getBlockingUserName());
         return buildError(ErrorCode.BLOCK_RELATIONSHIP_NOT_FOUND);
     }
+
+    @ExceptionHandler(CommenterMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleCommenterMismatchException(CommenterMismatchException e) {
+        log.error("댓글 작성자가 일치하지 않습니다.");
+        log.error("commenter nickname: {}", e.getNickname());
+        return buildError(ErrorCode.COMMENTER_MISMATCH);
+    }
 }

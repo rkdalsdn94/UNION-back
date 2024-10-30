@@ -18,6 +18,7 @@ public class CommentInfo {
     private Long parentId;
     private String parentNickname;
     private ZonedDateTime createdAt;
+    private String token;
     private String nickname;
     private String profileImage;
     private String univName;
@@ -30,6 +31,7 @@ public class CommentInfo {
                         Long parentId,
                         String parentNickname,
                         ZonedDateTime createdAt,
+                        String token,
                         String nickname,
                         String profileImage,
                         String univName,
@@ -40,6 +42,7 @@ public class CommentInfo {
         this.parentId = parentId;
         this.parentNickname = parentNickname;
         this.createdAt = createdAt;
+        this.token = token;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.univName = univName;
@@ -52,8 +55,9 @@ public class CommentInfo {
                 .content(comment.getContent())
                 .postId(comment.getPost().getId())
                 .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
-                .parentNickname(comment.getParent() != null ? comment.getParent().getUser().getNickname() : null)
+                .parentNickname(comment.getParentNickname() != null ? comment.getParentNickname() : null)
                 .createdAt(comment.getCreatedAt())
+                .token(comment.getUser().getToken())
                 .nickname(comment.getUser().getNickname())
                 .profileImage(comment.getUser().getProfileImage())
                 .univName(comment.getUser().getUnivName());

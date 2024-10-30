@@ -60,14 +60,17 @@ public class CommentDetailResponse {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CommenterResponse {
+        private String token;
         private String nickname;
         private String profileImage;
         private String univName;
 
         @Builder
-        private CommenterResponse(String nickname,
+        private CommenterResponse(String token,
+                                  String nickname,
                                   String profileImage,
                                   String univName) {
+            this.token = token;
             this.nickname = nickname;
             this.profileImage = profileImage;
             this.univName = univName;
@@ -75,6 +78,7 @@ public class CommentDetailResponse {
 
         public static CommenterResponse from(CommentInfo info) {
             return CommenterResponse.builder()
+                    .token(info.getToken())
                     .nickname(info.getNickname())
                     .profileImage(info.getProfileImage())
                     .univName(info.getUnivName())

@@ -8,6 +8,7 @@ public enum ErrorCode {
     INPUT_VALUE_INVALID("INPUT_VALUE_INVALID", "데이터 형식이 맞지 않습니다.", 400),
     UNSUPPORTED_FILE_FORMAT("UNSUPPORTED_FILE_FORMAT", "지원하지 않는 파일 형식입니다.", 400),
     INVALID_S3_URL("INVALID_S3_URL", "등록되지 않은 이미지 URL이 전달되었습니다.", 400),
+    COMMENTER_MISMATCH("COMMENTER_MISMATCH", "댓글 작성자가 일치하지 않습니다.", 400),
 
     // 401 Unauthorized
     INVALID_TOKEN("INVALID_TOKEN", "유효하지 않은 JWT 토큰입니다.", 401),

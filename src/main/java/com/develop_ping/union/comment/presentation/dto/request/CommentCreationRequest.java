@@ -20,12 +20,15 @@ public class CommentCreationRequest {
 
     private Long parentId;
 
+    private String parentNickname;
+
     public CommentCommand toCommand(User user) {
         return CommentCommand.builder()
                 .content(this.content)
                 .postId(this.postId)
                 .user(user)
                 .parentId(this.parentId)
+                .parentNickname(this.parentNickname)
                 .build();
     }
 }

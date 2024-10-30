@@ -19,6 +19,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comments")
 public class Comment extends AuditingFields {
+    // TODO: deletedAt 필드 추가해서 삭제된 댓글 표시하기
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -38,6 +40,9 @@ public class Comment extends AuditingFields {
     @JsonIgnore // 순환 참조 방지
     private Comment parent;
 
+    @Column(nullable = true)
+    private String parentNickname;
+
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY) // 부모 댓글 삭제되어도 유지
     private List<Comment> children = new ArrayList<>();
 
@@ -45,19 +50,26 @@ public class Comment extends AuditingFields {
     private Comment(String content,
                     Post post,
                     User user,
-                    Comment parent) {
+                    Comment parent,
+                    String parentNickname) {
         this.content = content;
         this.post = post;
         this.user = user;
         this.parent = parent;
+        this.parentNickname = parentNickname;
     }
 
-    public static Comment of(String content, Post post, User user, Comment parent) {
+    public static Comment of(String content,
+                             Post post,
+                             User user,
+                             Comment parent,
+                             String parentNickname) {
         return Comment.builder()
                 .content(content)
                 .post(post)
                 .user(user)
                 .parent(parent)
+                .parentNickname(parentNickname)
                 .build();
     }
 

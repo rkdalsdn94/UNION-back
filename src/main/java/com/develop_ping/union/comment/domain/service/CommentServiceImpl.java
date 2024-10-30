@@ -6,6 +6,7 @@ import com.develop_ping.union.comment.domain.dto.CommentInfo;
 import com.develop_ping.union.comment.domain.dto.CommentListInfo;
 import com.develop_ping.union.comment.domain.entity.Comment;
 import com.develop_ping.union.comment.exception.CommentPermissionDeniedException;
+import com.develop_ping.union.comment.exception.CommenterMismatchException;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.user.domain.entity.User;
@@ -28,13 +29,9 @@ public class CommentServiceImpl implements CommentService {
 
         User user = command.getUser();
         Post post = postManager.findById(command.getPostId());
+        Comment parent = getValidatedParent(command.getParentId(), command.getParentNickname());
 
-        Comment parent = null;
-        if (command.getParentId() != null) {
-            parent = commentManager.findById(command.getParentId());
-        }
-
-        Comment comment = commentManager.save(Comment.of(command.getContent(), post, user, parent));
+        Comment comment = commentManager.save(Comment.of(command.getContent(), post, user, parent, command.getParentNickname()));
 
         return CommentInfo.of(comment);
     }
@@ -78,14 +75,33 @@ public class CommentServiceImpl implements CommentService {
     public CommentListInfo getCommentsByPostId(Long postId) {
         log.info("[ CommentService.getCommentsByPostId() ] post id: {}", postId);
 
-        List<Comment> comments = commentManager.findByPostId(postId);
+        Post post = postManager.findById(postId);
+        List<Comment> rootComments = commentManager.findByPostIdAndParentIsNull(post.getId());
 
-        return CommentListInfo.of(comments);
+        return CommentListInfo.of(rootComments);
     }
 
     private void validateCommentOwner(User user, Comment comment) {
         if (!user.getId().equals(comment.getUser().getId())) {
             throw new CommentPermissionDeniedException(user.getId(), comment.getId());
+        }
+    }
+
+    private Comment getValidatedParent(Long parentId, String parentNickname) {
+        Comment parent = null;
+        if (parentId != null) {
+            parent = commentManager.findById(parentId);
+            validateParentNickname(parent.getUser(), parentNickname);
+
+            // 부모 댓글이 최상위 댓글인지 확인하여 반환
+            return parent.getParent() != null ? parent.getParent() : parent;
+        }
+        return parent;
+    }
+
+    private void validateParentNickname(User user, String parentNickname) {
+        if (!user.getNickname().equals(parentNickname)) {
+            throw new CommenterMismatchException(parentNickname);
         }
     }
 }

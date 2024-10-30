@@ -30,7 +30,7 @@ public class CommentManagerImpl implements CommentManager {
     }
 
     @Override
-    public List<Comment> findByPostId(Long postId) {
-        return commentRepository.findByPostId(postId);
+    public List<Comment> findByPostIdAndParentIsNull(Long postId) {
+        return commentRepository.findByPostIdAndParentIsNull(postId);
     }
 }
