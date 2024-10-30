@@ -12,10 +12,11 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentListResponse {
+    // TODO: 기존 로직 다 지우고 가지고 온 최상위 댓글의 자식 댓글들 depth 수정하기
     private List<CommentDetailResponse> comments;
 
     @Builder
-    public CommentListResponse(List<CommentDetailResponse> comments) {
+    private CommentListResponse(List<CommentDetailResponse> comments) {
         this.comments = comments;
     }
 
