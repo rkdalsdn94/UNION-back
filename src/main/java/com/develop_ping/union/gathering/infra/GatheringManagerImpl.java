@@ -8,7 +8,6 @@ import com.develop_ping.union.gathering.domain.strategy.GatheringSortStrategy;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,7 @@ public class GatheringManagerImpl implements GatheringManager {
 
     @Override
     @Transactional
-    public GatheringInfo createGathering(Gathering gathering) {
+    public GatheringInfo save(Gathering gathering) {
         log.info("모임 ManagerImpl 클래스 : {}", gathering);
 
         Gathering savedGathering = gatheringRepository.save(gathering);
@@ -44,8 +43,14 @@ public class GatheringManagerImpl implements GatheringManager {
 
     @Override
     public Slice<Gathering> getGatheringList(
-        GatheringSortStrategy strategy, GatheringListCommand command, Pageable pageable
+        GatheringSortStrategy strategy, GatheringListCommand command
     ) {
-        return strategy.applySort(gatheringRepository, command, pageable);
+        return strategy.applySort(gatheringRepository, command, command.getPageable());
+    }
+
+    @Override
+    public Gathering findById(Long gatheringId) {
+        return gatheringRepository.findById(gatheringId)
+                                  .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
     }
 }

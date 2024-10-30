@@ -9,14 +9,15 @@ import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.domain.strategy.GatheringSortStrategy;
 import com.develop_ping.union.gathering.domain.strategy.GatheringSortStrategyFactory;
+import com.develop_ping.union.gathering.exception.GatheringPermissionDeniedException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
+import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,7 @@ public class GatheringServiceImpl implements GatheringService {
     public GatheringInfo createGathering(GatheringCommand command, Long userId) {
         log.info("모임 ServiceImpl 클래스 생성 : {}", command);
 
-        GatheringInfo savedGathering = gatheringManager.createGathering(command.toEntity());
+        GatheringInfo savedGathering = gatheringManager.save(command.toEntity());
         PartyInfo savedParty = partyManager.createParty(savedGathering.getId(), userId);
 
         log.info("\n모임 파티 생성 완료 : {}, \n {}", savedGathering, savedParty);
@@ -47,47 +48,71 @@ public class GatheringServiceImpl implements GatheringService {
     public GatheringDetailInfo getGatheringDetail(Long gatheringId, Long userId) {
         log.info("모임 상세 조회 ServiceImpl 클래스 : {}", gatheringId);
 
-        // 모임 정보
+        // 1. 모임 정보 가져오기
         GatheringInfo gatheringInfo = gatheringManager.getGatheringDetail(gatheringId);
-        PartyInfo partyResponse = partyManager.findByGatheringId(gatheringId);
 
-        // 모임 주최자 정보
-        Long ownerId = partyManager.findOwnerByGatheringId(gatheringId);
-        Long ownerUserId = partyResponse.getUserId();
-        boolean isOwner = isOwnerCheck(ownerId, userId);
+        // 2. 주최자 및 파티 정보 조회
+        Long ownerUserId = getOwnerUserId(gatheringId);
+        boolean isOwner = isOwnerCheck(ownerUserId, userId);
 
-        // 좋아요 수
+        // 3. 좋아요 수 조회
         Long likeCount = reactionManager.selectLikeCount(gatheringId);
 
-        // 주최자 닉네임
-        User userResponse = userManager.findById(ownerUserId);
-        String nickname = userResponse.getNickname();
+        // 4. 주최자 닉네임 조회
+        String ownerNickname = getOwnerNickname(ownerUserId);
 
-        return GatheringDetailInfo.builder()
-                                  .gatheringInfo(gatheringInfo)
-                                  .userNickname(nickname)
-                                  .likes(likeCount)
-                                  .isOwner(isOwner)
-                                  .build();
-    }
-
-    private boolean isOwnerCheck(Long ownerId, Long userId) {
-        return ownerId.equals(userId);
+        // 5. GatheringDetailInfo 생성 및 반환
+        return buildGatheringDetailInfo(gatheringInfo, ownerNickname, likeCount, isOwner);
     }
 
     @Override
-    public GatheringInfo updateGathering(Long gatheringId, GatheringCommand command) {
-        return null;
+    public GatheringInfo updateGathering(Long gatheringId, GatheringCommand command, Long userId) {
+        log.info("모임 수정 updateGathering ServiceImpl 클래스 : gatheringId {}, command: {}, userId {}", gatheringId, command, userId);
+
+        Party party = partyManager.findOwnerByGatheringId(gatheringId);
+        User user = userManager.findById(userId);
+
+        validateGatheringOwner(party.getUserId(), user.getId());
+
+        Gathering gathering = gatheringManager.findById(gatheringId);
+        gathering.updateGathering(command.toEntity());
+        gatheringManager.save(gathering);
+
+        return GatheringInfo.of(gathering);
     }
 
     @Override
-    public Slice<GatheringListInfo> getGatheringList(
-        GatheringListCommand command, Pageable pageable
-    ) {
-        log.info("모임 리스트 조회 ServiceImpl 클래스 : {}", command);
+    public Slice<GatheringListInfo> getGatheringList(GatheringListCommand command) {
+        log.info("모임 리스트 getGatheringList 조회 ServiceImpl 클래스 : {}", command);
 
         GatheringSortStrategy strategy = strategyFactory.getStrategy(command.getSortType());
-        Slice<Gathering> gatheringList = gatheringManager.getGatheringList(strategy, command, pageable);
+        Slice<Gathering> gatheringList = gatheringManager.getGatheringList(strategy, command);
         return GatheringListInfo.of(gatheringList);
+    }
+
+    // TODO: 추후 도메인으로 이동할 수 메서드가 있는지 확인
+    private Long getOwnerUserId(Long gatheringId) {
+        PartyInfo partyInfo = partyManager.findByGatheringId(gatheringId);
+        return partyInfo.getUserId();
+    }
+
+    private String getOwnerNickname(Long ownerUserId) {
+        User user = userManager.findById(ownerUserId);
+        return user.getNickname();
+    }
+
+    private GatheringDetailInfo buildGatheringDetailInfo(
+        GatheringInfo gatheringInfo, String nickname, Long likeCount, boolean isOwner) {
+        return GatheringDetailInfo.of(gatheringInfo, nickname, likeCount, isOwner);
+    }
+
+    private boolean isOwnerCheck(Long ownerUserId, Long userId) {
+        return ownerUserId.equals(userId);
+    }
+
+    private void validateGatheringOwner(Long ownerId, Long userId) {
+        if (!ownerId.equals(userId)) {
+            throw new GatheringPermissionDeniedException(ownerId, userId);
+        }
     }
 }

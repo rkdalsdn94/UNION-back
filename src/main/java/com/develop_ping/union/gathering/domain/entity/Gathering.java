@@ -83,16 +83,24 @@ public class Gathering extends AuditingFields {
         }
     }
 
+    public void updateGathering(Gathering entity) {
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.maxMember = entity.getMaxMember();
+        this.gatheringDateTime = entity.getGatheringDateTime();
+        this.place = entity.getPlace();
+    }
+
     @Override
     public String toString() {
         return "Gathering{" +
-            "content='" + content + '\'' +
-            ", id=" + id +
-            ", title='" + title + '\'' +
-            ", maxMember=" + maxMember +
-            ", currentMember=" + currentMember +
-            ", place=" + place +
-            ", gatheringDateTime=" + gatheringDateTime +
-            '}';
+               "content='" + content + '\'' +
+               ", id=" + id +
+               ", title='" + title + '\'' +
+               ", maxMember=" + maxMember +
+               ", currentMember=" + currentMember +
+               ", place=" + place +
+               ", gatheringDateTime=" + gatheringDateTime +
+               '}';
     }
 }

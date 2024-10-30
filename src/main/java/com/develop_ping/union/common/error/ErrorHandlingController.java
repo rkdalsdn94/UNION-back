@@ -1,13 +1,22 @@
 package com.develop_ping.union.common.error;
 
 
-import com.develop_ping.union.auth.exception.*;
-import com.develop_ping.union.comment.exception.*;
+import com.develop_ping.union.auth.exception.InvalidTokenException;
+import com.develop_ping.union.auth.exception.OauthNotPreparedException;
+import com.develop_ping.union.comment.exception.CommentNotFoundException;
+import com.develop_ping.union.comment.exception.CommentPermissionDeniedException;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
+import com.develop_ping.union.gathering.exception.GatheringPermissionDeniedException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
-import com.develop_ping.union.post.exception.*;
-import com.develop_ping.union.s3.exception.*;
-import com.develop_ping.union.user.exception.*;
+import com.develop_ping.union.post.exception.PostNotFoundException;
+import com.develop_ping.union.post.exception.PostPermissionDeniedException;
+import com.develop_ping.union.s3.exception.ImageUploadFailedException;
+import com.develop_ping.union.s3.exception.InvalidS3UrlException;
+import com.develop_ping.union.s3.exception.UnsupportedFileFormatException;
+import com.develop_ping.union.user.exception.BlockRelationshipNotFoundException;
+import com.develop_ping.union.user.exception.DuplicateNicknameException;
+import com.develop_ping.union.user.exception.UserBlockedException;
+import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -155,5 +164,13 @@ public class ErrorHandlingController {
         log.error("차단된 유저의 정보입니다.");
         log.error("조회한 user id: {}, 차단한 user id: {}", e.getBlockedUserName(), e.getBlockingUserName());
         return buildError(ErrorCode.BLOCK_RELATIONSHIP_NOT_FOUND);
+    }
+
+    @ExceptionHandler(GatheringPermissionDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorResponse handleGatheringPermissionDeniedException(GatheringPermissionDeniedException e) {
+        log.error("해당 모임에 대한 권한이 없습니다.");
+        log.error("user id: {}, owner id: {}", e.getUserId(), e.getOwnerId());
+        return buildError(ErrorCode.GATHERING_PERMISSION_DENIED);
     }
 }

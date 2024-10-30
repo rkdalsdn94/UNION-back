@@ -60,7 +60,6 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
                                     @Param("longitude") Double longitude,
                                     Pageable pageable);
 
-
     /**
      * 현재 시간 이후의 모임 게시글을 조회
      * @param pageable 페이징 정보

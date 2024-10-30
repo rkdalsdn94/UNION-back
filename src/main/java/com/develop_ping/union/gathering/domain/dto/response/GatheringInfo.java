@@ -68,4 +68,5 @@ public class GatheringInfo {
                             .views(gathering.getViews())
                             .createdAt(gathering.getCreatedAt())
                             .build();
-    }}
+    }
+}

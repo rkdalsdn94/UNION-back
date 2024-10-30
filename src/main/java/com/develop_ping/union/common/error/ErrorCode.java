@@ -16,6 +16,7 @@ public enum ErrorCode {
     // 403 Forbidden
     POST_PERMISSION_DENIED("POST_PERMISSION_DENIED", "해당 게시글에 대한 권한이 없습니다.", 403),
     COMMENT_PERMISSION_DENIED("COMMENT_PERMISSION_DENIED", "해당 댓글에 대한 권한이 없습니다.", 403),
+    GATHERING_PERMISSION_DENIED("GATHERING_PERMISSION_DENIED", "해당 모임에 대한 권힌이 없습니다.", 403),
     USER_BLOCKED("USER_BLOCKED", "차단된 유저의 정보입니다.", 403),
 
     // 404 Not Found

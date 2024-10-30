@@ -39,22 +39,12 @@ public class GatheringController {
             sortType, latitude, longitude, pageable);
 
         Slice<GatheringListInfo> gatheringList = gatheringService.getGatheringList(
-            GatheringListCommand.builder()
-                                .sortType(sortType)
-                                .latitude(latitude)
-                                .longitude(longitude)
-                                .build(),
-            pageable
+            GatheringListCommand.of(sortType, latitude, longitude, pageable)
         );
 
-        return gatheringList.map(GatheringListResponse::from);
+        return ResponseEntity.ok(gatheringList.map(GatheringListResponse::from)).getBody();
     }
 
-    /**
-     * 모임 생성 API
-     * @param request 모임 생성 요청 DTO
-     * @return GatheringResponse
-     */
     @PostMapping("/gathering")
     public Long createGathering(
         @AuthenticationPrincipal User user,
@@ -69,11 +59,6 @@ public class GatheringController {
         return ResponseEntity.ok(response.getId()).getBody();
     }
 
-    /**
-     * 모임 상세 조회 API
-     * @param gatheringId 모임 ID
-     * @return GatheringResponse 모임 상세 DTO
-     */
     @GetMapping("/gathering/{gatheringId}")
     public ResponseEntity<GatheringDetailResponse> getGatheringDetail(
         @AuthenticationPrincipal User user,
@@ -86,5 +71,20 @@ public class GatheringController {
         GatheringDetailResponse response = GatheringDetailResponse.of(gatheringDetailInfo);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/gathering/{gatheringId}")
+    public GatheringResponse updateGathering(
+        @AuthenticationPrincipal User user,
+        @PathVariable("gatheringId") Long gatheringId,
+        @Valid @RequestBody GatheringRequest request
+    ) {
+        log.info("모임 수정 컨트롤러 진입: {}", gatheringId);
+
+        Long userId = user.getId();
+        GatheringInfo gatheringInfo = gatheringService.updateGathering(gatheringId, request.toCommand(), userId);
+        GatheringResponse gatheringResponse = GatheringResponse.of(gatheringInfo);
+
+        return ResponseEntity.ok(gatheringResponse).getBody();
     }
 }

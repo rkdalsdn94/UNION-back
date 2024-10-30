@@ -47,4 +47,13 @@ public class GatheringDetailInfo {
         this.likes = likes;
         this.isOwner = isOwner;
     }
+
+    public static GatheringDetailInfo of(GatheringInfo gatheringInfo, String userNickname, Long likes, boolean isOwner) {
+        return GatheringDetailInfo.builder()
+                                  .gatheringInfo(gatheringInfo)
+                                  .userNickname(userNickname)
+                                  .likes(likes)
+                                  .isOwner(isOwner)
+                                  .build();
+    }
 }
