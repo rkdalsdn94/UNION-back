@@ -1,9 +1,7 @@
 package com.develop_ping.union.comment.domain.service;
 
 import com.develop_ping.union.comment.domain.CommentManager;
-import com.develop_ping.union.comment.domain.dto.CommentCommand;
-import com.develop_ping.union.comment.domain.dto.CommentInfo;
-import com.develop_ping.union.comment.domain.dto.CommentListInfo;
+import com.develop_ping.union.comment.domain.dto.*;
 import com.develop_ping.union.comment.domain.entity.Comment;
 import com.develop_ping.union.comment.exception.CommentPermissionDeniedException;
 import com.develop_ping.union.comment.exception.CommenterMismatchException;
@@ -13,6 +11,7 @@ import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +23,7 @@ public class CommentServiceImpl implements CommentService {
     private final PostManager postManager;
 
     @Override
+    @Transactional
     public CommentInfo createComment(CommentCommand command) {
         log.info("[ CommentService.createComment() ] user id: {}", command.getUser().getId());
 
@@ -33,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = commentManager.save(Comment.of(command.getContent(), post, user, parent, command.getParentNickname()));
 
+        log.info("[ New Comment! ] comment id: {}", comment.getId());
         return CommentInfo.of(comment);
     }
 
@@ -46,6 +47,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentInfo updateComment(CommentCommand command) {
         log.info("[ CommentService.updateComment() ] comment id: {}", command.getId());
 
@@ -57,10 +59,13 @@ public class CommentServiceImpl implements CommentService {
         comment.updateContent(command.getContent());
 
         Comment updatedComment = commentManager.save(comment);
+
+        log.info("[ Updated Comment! ] comment id: {}", updatedComment.getId());
         return CommentInfo.of(updatedComment);
     }
 
     @Override
+    @Transactional
     public void deleteComment(CommentCommand command) {
         log.info("[ CommentService.deleteComment() ] comment id: {}", command.getId());
 
@@ -69,37 +74,41 @@ public class CommentServiceImpl implements CommentService {
 
         validateCommentOwner(user, comment);
         commentManager.delete(comment);
+        log.info("[ Deleted Comment! ] comment id: {}", comment.getId());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CommentListInfo getCommentsByPostId(Long postId) {
         log.info("[ CommentService.getCommentsByPostId() ] post id: {}", postId);
 
         Post post = postManager.findById(postId);
         List<Comment> rootComments = commentManager.findByPostIdAndParentIsNull(post.getId());
 
+        log.info("[ Found Comments! ]");
         return CommentListInfo.of(rootComments);
     }
 
     private void validateCommentOwner(User user, Comment comment) {
+        log.info("[ validateCommentOwner() ]");
         if (!user.getId().equals(comment.getUser().getId())) {
             throw new CommentPermissionDeniedException(user.getId(), comment.getId());
         }
     }
 
     private Comment getValidatedParent(Long parentId, String parentNickname) {
-        Comment parent = null;
-        if (parentId != null) {
-            parent = commentManager.findById(parentId);
-            validateParentNickname(parent.getUser(), parentNickname);
+        log.info("[ getValidatedParent() ]");
+        if (parentId == null) return null;
 
-            // 부모 댓글이 최상위 댓글인지 확인하여 반환
-            return parent.getParent() != null ? parent.getParent() : parent;
-        }
-        return parent;
+        Comment parent = commentManager.findById(parentId);
+        validateParentNickname(parent.getUser(), parentNickname);
+
+        // 부모 댓글이 최상위 댓글인지 확인하여 반환
+        return parent.getParent() != null ? parent.getParent() : parent;
     }
 
     private void validateParentNickname(User user, String parentNickname) {
+        log.info("[ validateParentNickname() ]");
         if (!user.getNickname().equals(parentNickname)) {
             throw new CommenterMismatchException(parentNickname);
         }

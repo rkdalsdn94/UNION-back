@@ -5,6 +5,7 @@ import com.develop_ping.union.comment.domain.entity.Comment;
 import com.develop_ping.union.comment.exception.CommentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class CommentManagerImpl implements CommentManager {
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional
     public Comment save(Comment comment) {
         return commentRepository.save(comment);
     }
@@ -25,6 +27,7 @@ public class CommentManagerImpl implements CommentManager {
     }
 
     @Override
+    @Transactional
     public void delete(Comment comment) {
         commentRepository.delete(comment);
     }

@@ -1,6 +1,5 @@
 package com.develop_ping.union.comment.domain.entity;
 
-import com.develop_ping.union.comment.domain.dto.CommentCommand;
 import com.develop_ping.union.common.base.AuditingFields;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.user.domain.entity.User;
@@ -43,7 +42,7 @@ public class Comment extends AuditingFields {
     @Column(nullable = true)
     private String parentNickname;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY) // 부모 댓글 삭제되어도 유지
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 지금은 부모 댓글 삭제되면 전체 삭제하기
     private List<Comment> children = new ArrayList<>();
 
     @Builder
@@ -75,9 +74,5 @@ public class Comment extends AuditingFields {
 
     public void updateContent(String content) {
         this.content = content;
-    }
-
-    public void addChildComment(Comment comment) {
-        this.children.add(comment);
     }
 }
