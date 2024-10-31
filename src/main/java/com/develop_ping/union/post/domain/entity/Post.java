@@ -1,7 +1,7 @@
 package com.develop_ping.union.post.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
-import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
+import com.develop_ping.union.post.domain.dto.command.PostCommand;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -51,7 +51,7 @@ public class Post extends AuditingFields {
         this.user = user;
     }
 
-    public static Post of(PostCreationCommand command, User user, String thumbnail) {
+    public static Post of(PostCommand command, User user, String thumbnail) {
         return Post.builder()
                 .title(command.getTitle())
                 .content(command.getContent())

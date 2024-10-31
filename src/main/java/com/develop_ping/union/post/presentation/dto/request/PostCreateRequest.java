@@ -1,6 +1,6 @@
 package com.develop_ping.union.post.presentation.dto.request;
 
-import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
+import com.develop_ping.union.post.domain.dto.command.PostCommand;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.validation.constraints.NotBlank;
@@ -30,8 +30,8 @@ public class PostCreateRequest {
         this.thumbnail = thumbnail;
     }
 
-    public PostCreationCommand toCommand(User user, PostType type) {
-        return PostCreationCommand.builder()
+    public PostCommand toCommand(User user, PostType type) {
+        return PostCommand.builder()
                 .user(user)
                 .title(this.title)
                 .content(this.content)

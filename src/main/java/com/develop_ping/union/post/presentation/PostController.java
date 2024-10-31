@@ -1,8 +1,6 @@
 package com.develop_ping.union.post.presentation;
 
-import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
-import com.develop_ping.union.post.domain.dto.command.PostDeleteCommand;
-import com.develop_ping.union.post.domain.dto.command.PostUpdateCommand;
+import com.develop_ping.union.post.domain.dto.command.PostCommand;
 import com.develop_ping.union.post.domain.dto.info.PostInfo;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.post.domain.service.PostService;
@@ -34,7 +32,7 @@ public class PostController {
         log.info("[ USER ID: {} ]", user.getId());
 
 
-        PostCreationCommand command = request.toCommand(user, type);
+        PostCommand command = request.toCommand(user, type);
         PostInfo info = postService.createPost(command);
         PostCreationResponse response = PostCreationResponse.from(info);
 
@@ -49,7 +47,7 @@ public class PostController {
         log.info("[ CALL: PostController.updatePost() ] with postId: {}", postId);
         log.info("[ USER ID: {} ]", user.getId());
 
-        PostUpdateCommand command = request.toCommand(user, postId);
+        PostCommand command = request.toCommand(user, postId);
         PostInfo info = postService.updatePost(command);
         PostUpdateResponse response = PostUpdateResponse.from(info);
 
@@ -63,17 +61,19 @@ public class PostController {
         log.info("[ CALL: PostController.deletePost() ] with postId: {}", postId);
         log.info("[ USER ID: {} ]", user.getId());
 
-        postService.deletePost(PostDeleteCommand.of(postId, user));
+        postService.deletePost(PostCommand.of(user, postId));
 
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{boardType}/{postId}")
     public ResponseEntity<PostDetailResponse> getPost(@PathVariable("boardType") PostType type,
-                                                      @PathVariable("postId") Long postId) {
+                                                      @PathVariable("postId") Long postId,
+                                                      @AuthenticationPrincipal User user) {
         log.info("[ CALL: PostController.getPost() ] with postId: {}", postId);
 
-        PostInfo info = postService.getPost(postId);
+        PostCommand command = PostCommand.of(user, postId);
+        PostInfo info = postService.getPost(command);
         PostDetailResponse response = PostDetailResponse.from(info);
 
         return ResponseEntity.ok(response);

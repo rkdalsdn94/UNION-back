@@ -1,13 +1,11 @@
 package com.develop_ping.union.post.domain.service;
 
-import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
-import com.develop_ping.union.post.domain.dto.command.PostDeleteCommand;
-import com.develop_ping.union.post.domain.dto.command.PostUpdateCommand;
+import com.develop_ping.union.post.domain.dto.command.PostCommand;
 import com.develop_ping.union.post.domain.dto.info.PostInfo;
 
 public interface PostService {
-    PostInfo createPost(PostCreationCommand command);
-    PostInfo updatePost(PostUpdateCommand command);
-    void deletePost(PostDeleteCommand command);
-    PostInfo getPost(Long postId);
+    PostInfo createPost(PostCommand command);
+    PostInfo updatePost(PostCommand command);
+    void deletePost(PostCommand command);
+    PostInfo getPost(PostCommand command);
 }

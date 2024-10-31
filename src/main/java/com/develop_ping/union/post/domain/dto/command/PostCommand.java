@@ -9,19 +9,33 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostCreationCommand {
+public class PostCommand {
     private User user;
+    private Long id;
     private String title;
     private String content;
     private String thumbnail;
     private PostType postType;
 
     @Builder
-    public PostCreationCommand(User user, String title, String content, String thumbnail, PostType postType) {
+    public PostCommand(User user,
+                       Long id,
+                       String title,
+                       String content,
+                       String thumbnail,
+                       PostType postType) {
         this.user = user;
+        this.id = id;
         this.title = title;
         this.content = content;
         this.thumbnail = thumbnail;
         this.postType = postType;
+    }
+
+    public static PostCommand of(User user, Long id) {
+        return PostCommand.builder()
+                .user(user)
+                .id(id)
+                .build();
     }
 }

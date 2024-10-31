@@ -18,6 +18,7 @@ public class PostInfo {
     private PostType type;
     private String thumbnail;
     private Integer views;
+    private String token;
     private String nickname;
     private String profileImage;
     private String univName;
@@ -31,6 +32,7 @@ public class PostInfo {
                     PostType type,
                     String thumbnail,
                     Integer views,
+                    String token,
                     String nickname,
                     String profileImage,
                     String univName,
@@ -43,6 +45,7 @@ public class PostInfo {
         this.type = type;
         this.thumbnail = thumbnail;
         this.views = views;
+        this.token = token;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.univName = univName;
@@ -50,7 +53,7 @@ public class PostInfo {
         this.updatedAt = updatedAt;
     }
 
-    public static PostInfo of(Post post) {
+    public static PostInfo from(Post post) {
         return PostInfo.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -58,6 +61,7 @@ public class PostInfo {
                 .type(post.getType())
                 .thumbnail(post.getThumbnail())
                 .views(post.getViews())
+                .token(post.getUser().getToken())
                 .nickname(post.getUser().getNickname())
                 .profileImage(post.getUser().getProfileImage())
                 .univName(post.getUser().getUnivName())

@@ -1,9 +1,7 @@
 package com.develop_ping.union.post.domain.service;
 
 import com.develop_ping.union.post.domain.PostManager;
-import com.develop_ping.union.post.domain.dto.command.PostCreationCommand;
-import com.develop_ping.union.post.domain.dto.command.PostDeleteCommand;
-import com.develop_ping.union.post.domain.dto.command.PostUpdateCommand;
+import com.develop_ping.union.post.domain.dto.command.PostCommand;
 import com.develop_ping.union.post.domain.dto.info.PostInfo;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.exception.PostPermissionDeniedException;
@@ -21,9 +19,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostInfo createPost(PostCreationCommand command) {
+    public PostInfo createPost(PostCommand command) {
         log.info("[ CALL: PostService.createPost() ] title: {}",command.getTitle());
-        log.info("[ USER ID: {} ]", command.getUser().getId());
 
         User user = command.getUser();
 
@@ -31,17 +28,17 @@ public class PostServiceImpl implements PostService {
         String thumbnail = null;
         if (command.getThumbnail() != null) {
             // thumbnail을 compress하는 메소드 호출
+            thumbnail = command.getThumbnail();
         }
 
         Post post = postManager.save(Post.of(command, user, thumbnail));
-        return PostInfo.of(post);
+        return PostInfo.from(post);
     }
 
     @Override
     @Transactional
-    public PostInfo updatePost(PostUpdateCommand command) {
+    public PostInfo updatePost(PostCommand command) {
         log.info("[ CALL: PostService.updatePost() ] post id: {}", command.getId());
-        log.info("[ USER ID: {} ]", command.getUser().getId());
 
         Post post = postManager.findById(command.getId());
         User user = command.getUser();
@@ -52,16 +49,15 @@ public class PostServiceImpl implements PostService {
         post.updateContent(command.getContent());
 
         Post updatedPost = postManager.save(post);
-        return PostInfo.of(updatedPost);
+        return PostInfo.from(updatedPost);
     }
 
     @Override
     @Transactional
-    public void deletePost(PostDeleteCommand command) {
-        log.info("[ CALL: PostService.deletePost() ] post id: {}", command.getPostId());
-        log.info("[ USER ID: {} ]", command.getUser().getId());
+    public void deletePost(PostCommand command) {
+        log.info("[ CALL: PostService.deletePost() ] post id: {}", command.getId());
 
-        Post post = postManager.findById(command.getPostId());
+        Post post = postManager.findById(command.getId());
         User user = command.getUser();
 
         validatePostOwner(user, post);
@@ -71,15 +67,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostInfo getPost(Long postId) {
-        log.info("[ CALL: PostService.getPost() ] post id: {}", postId);
+    public PostInfo getPost(PostCommand command) {
+        log.info("[ CALL: PostService.getPost() ] post id: {}", command.getId());
 
-        Post post = postManager.findById(postId);
+        Post post = postManager.findById(command.getId());
 
         post.incrementViews();
         postManager.save(post);
 
-        return PostInfo.of(post);
+        return PostInfo.from(post);
     }
 
     private void validatePostOwner(User user, Post post) {

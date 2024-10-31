@@ -16,13 +16,10 @@ public class PostDetailResponse {
     private String title;
     private String content;
     private PostType type;
-    private String thumbnail;
     private Integer views;
-    private String nickname;
-    private String profileImage;
-    private String univName;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
+    private AuthorResponse author;
 
 
     @Builder
@@ -30,25 +27,18 @@ public class PostDetailResponse {
                               String title,
                               String content,
                               PostType type,
-                              String thumbnail,
                               Integer views,
-                              String nickname,
-                              String profileImage,
-                              String univName,
                               ZonedDateTime createdAt,
-                              ZonedDateTime updatedAt
-    ) {
+                              ZonedDateTime updatedAt,
+                              AuthorResponse author) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.type = type;
-        this.thumbnail = thumbnail;
         this.views = views;
-        this.nickname = nickname;
-        this.profileImage = profileImage;
-        this.univName = univName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.author = author;
     }
 
     public static PostDetailResponse from(PostInfo postInfo) {
@@ -57,13 +47,39 @@ public class PostDetailResponse {
                 .title(postInfo.getTitle())
                 .content(postInfo.getContent())
                 .type(postInfo.getType())
-                .thumbnail(postInfo.getThumbnail())
                 .views(postInfo.getViews())
-                .nickname(postInfo.getNickname())
-                .profileImage(postInfo.getProfileImage())
-                .univName(postInfo.getUnivName())
                 .createdAt(postInfo.getCreatedAt())
                 .updatedAt(postInfo.getUpdatedAt())
+                .author(AuthorResponse.from(postInfo))
                 .build();
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AuthorResponse {
+        private String token;
+        private String nickname;
+        private String profileImage;
+        private String univName;
+
+        @Builder
+        private AuthorResponse(String token,
+                               String nickname,
+                               String profileImage,
+                               String univName) {
+            this.token = token;
+            this.nickname = nickname;
+            this.profileImage = profileImage;
+            this.univName = univName;
+        }
+
+        public static AuthorResponse from(PostInfo info) {
+            return AuthorResponse.builder()
+                    .token(info.getToken())
+                    .nickname(info.getNickname())
+                    .profileImage(info.getProfileImage())
+                    .univName(info.getUnivName())
+                    .build();
+        }
     }
 }
