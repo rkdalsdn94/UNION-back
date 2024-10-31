@@ -7,5 +7,5 @@ public interface CommentService {
     CommentInfo getComment(Long commentId);
     CommentInfo updateComment(CommentCommand command);
     void deleteComment(CommentCommand command);
-    CommentListInfo getCommentsByPostId(Long postId);
+    CommentListInfo getCommentsByPostId(CommentCommand command);
 }

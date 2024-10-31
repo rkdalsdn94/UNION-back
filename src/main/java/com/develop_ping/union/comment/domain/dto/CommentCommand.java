@@ -34,4 +34,11 @@ public class CommentCommand {
                 .user(user)
                 .build();
     }
+
+    public static CommentCommand getOf(Long postId, User user) {
+        return CommentCommand.builder()
+                .postId(postId)
+                .user(user)
+                .build();
+    }
 }

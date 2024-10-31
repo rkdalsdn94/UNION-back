@@ -7,6 +7,7 @@ import com.develop_ping.union.comment.exception.CommentPermissionDeniedException
 import com.develop_ping.union.comment.exception.CommenterMismatchException;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.entity.Post;
+import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     private final CommentManager commentManager;
     private final PostManager postManager;
+    private final BlockUserManager blockUserManager;
 
     @Override
     @Transactional
@@ -73,17 +75,25 @@ public class CommentServiceImpl implements CommentService {
         User user = command.getUser();
 
         validateCommentOwner(user, comment);
+
+        // TODO: 삭제하려는 댓글이 부모 댓글일 경우 정보 바꾸기!!!!!!!! soft delete 적용 ㅎㅎ~
+        // TODO: 근데 자식 댓글인 경우에는 그냥 삭제하기 -> hard delete??? 되나..?
+
         commentManager.delete(comment);
         log.info("[ Deleted Comment! ] comment id: {}", comment.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CommentListInfo getCommentsByPostId(Long postId) {
-        log.info("[ CommentService.getCommentsByPostId() ] post id: {}", postId);
+    public CommentListInfo getCommentsByPostId(CommentCommand command) {
+        log.info("[ CommentService.getCommentsByPostId() ] post id: {}", command.getPostId());
 
-        Post post = postManager.findById(postId);
+        Post post = postManager.findById(command.getPostId());
         List<Comment> rootComments = commentManager.findByPostIdAndParentIsNull(post.getId());
+
+        List<User> blockUsers = blockUserManager.findAllBlockedOrBlockingUser(command.getUser());
+
+        // TODO: rootComments 랑 children 을 각각 for문이나 stream 돌려서 User deleted 확인 + blockUsers 확인해서 제외(null처리)해주기
 
         log.info("[ Found Comments! ]");
         return CommentListInfo.of(rootComments);

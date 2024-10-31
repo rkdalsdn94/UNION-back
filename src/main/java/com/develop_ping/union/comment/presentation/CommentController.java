@@ -63,11 +63,12 @@ public class CommentController {
     }
 
     @GetMapping("/comments/{postId}")
-    public ResponseEntity<CommentListResponse> getCommentsByPostId(@PathVariable("postId") Long postId) {
+    public ResponseEntity<CommentListResponse> getCommentsByPostId(@PathVariable("postId") Long postId,
+                                                                   @AuthenticationPrincipal User user) {
         log.info("[ CALL: CommentController.getCommentsByPostId() ] with postId: {}", postId);
 
-        // TODO: info와 response의 변경 스펙에 따라 수정하기
-        CommentListInfo listInfo = commentService.getCommentsByPostId(postId);
+        CommentCommand command = CommentCommand.getOf(postId, user);
+        CommentListInfo listInfo = commentService.getCommentsByPostId(command);
         CommentListResponse response = CommentListResponse.from(listInfo);
 
         return ResponseEntity.ok(response);
