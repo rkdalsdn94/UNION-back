@@ -9,7 +9,6 @@ import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.user.domain.dto.UserInfo;
-import com.develop_ping.union.user.domain.entity.BlockUser;
 import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.exception.DuplicateNicknameException;
 import com.develop_ping.union.user.exception.UserBlockedException;
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService {
         user.update(command.getNickname(), command.getDescription(), command.getProfileImage());
         User updatedUser = userManager.save(user);
         log.info("사용자 정보 업데이트 완료: 사용자 ID - {}", updatedUser.getId());
-        return UserInfo.of(updatedUser);
+        return UserInfo.from(updatedUser);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class UserServiceImpl implements UserService {
         log.info("토큰으로 사용자 검색 시작");
         User targetUser = userManager.findByToken(token);
         log.info("사용자 검색 완료: 사용자 ID - {}", user.getId());
-        UserInfo userInfo = UserInfo.of(targetUser);
+        UserInfo userInfo = UserInfo.from(targetUser);
 
         if (blockUserManager.existsByBlockingUserAndBlockedUser(user, targetUser)) {
             userInfo.setBlocked(true);
@@ -139,7 +138,7 @@ public class UserServiceImpl implements UserService {
         List<User> blockedUsers = blockUserManager.findAllBlockedUser(user);
 
         return blockedUsers.stream()
-                .map(UserInfo::of) // User 객체를 UserInfo 객체로 변환
+                .map(UserInfo::from) // User 객체를 UserInfo 객체로 변환
                 .toList();
     }
 }

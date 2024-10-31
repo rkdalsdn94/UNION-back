@@ -29,7 +29,7 @@ public class UserInfo {
         this.isBlocked = false;
     }
 
-    public static UserInfo of (User user,String accessToken, String refreshToken) {
+    public static UserInfo of (User user, String accessToken, String refreshToken) {
         return UserInfo.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -41,7 +41,7 @@ public class UserInfo {
                 .build();
     }
 
-    public static UserInfo of (User user) {
+    public static UserInfo from (User user) {
         return UserInfo.builder()
                 .token(user.getToken())
                 .nickname(user.getNickname())

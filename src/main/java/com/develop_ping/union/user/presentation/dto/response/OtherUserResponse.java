@@ -1,6 +1,7 @@
 package com.develop_ping.union.user.presentation.dto.response;
 
 import com.develop_ping.union.user.domain.dto.UserInfo;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,12 +15,24 @@ public class OtherUserResponse {
     private String profileImage;
     private boolean isBlocked;
 
-    public OtherUserResponse (UserInfo userInfo) {
-        this.token = userInfo.getToken();
-        this.nickname = userInfo.getNickname();
-        this.description = userInfo.getDescription();
-        this.univName = userInfo.getUnivName();
-        this.profileImage = userInfo.getProfileImage();
-        this.isBlocked = userInfo.isBlocked();
+    @Builder
+    private OtherUserResponse(String token, String nickname, String description, String univName, String profileImage, boolean isBlocked) {
+        this.token = token;
+        this.nickname = nickname;
+        this.description = description;
+        this.univName = univName;
+        this.profileImage = profileImage;
+        this.isBlocked = isBlocked;
+    }
+
+    public static OtherUserResponse from (UserInfo userInfo) {
+        return OtherUserResponse.builder()
+                .token(userInfo.getToken())
+                .nickname(userInfo.getNickname())
+                .description(userInfo.getDescription())
+                .univName(userInfo.getUnivName())
+                .profileImage(userInfo.getProfileImage())
+                .isBlocked(userInfo.isBlocked())
+                .build();
     }
 }

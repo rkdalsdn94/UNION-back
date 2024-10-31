@@ -29,7 +29,7 @@ public class UserController {
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody RegisterRequest request) {
         log.info("회원 가입 요청 받음: 닉네임 - {}", request.getNickname());
         UserInfo userInfo = userService.signUp(request.toCommand());
-        UserResponse response = new UserResponse(userInfo);
+        UserResponse response = UserResponse.from(userInfo);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + userInfo.getAccessToken())
@@ -42,7 +42,7 @@ public class UserController {
                                                     @AuthenticationPrincipal User user) {
         log.info("회원 정보 업데이트 요청 받음: 닉네임 - {}", request.getNickname());
         UserInfo userInfo = userService.updateUser(request.toCommand(), user);
-        UserResponse response = new UserResponse(userInfo);
+        UserResponse response = UserResponse.from(userInfo);
 
         return ResponseEntity.ok().body(response);
     }
@@ -59,7 +59,7 @@ public class UserController {
     public ResponseEntity<OtherUserResponse> searchUser(@AuthenticationPrincipal User user, @PathVariable String userToken) {
         log.info("회원 상세 조회 요청 확인: 토큰 - {}", userToken);
         UserInfo userInfo = userService.searchUser(user, userToken);
-        OtherUserResponse response = new OtherUserResponse(userInfo);
+        OtherUserResponse response = OtherUserResponse.from(userInfo);
 
         return ResponseEntity.ok().body(response);
     }
@@ -90,7 +90,7 @@ public class UserController {
         List<UserInfo> blockedUsers = userService.readBlockedUsers(user);
 
         List<OtherUserResponse> responseList = blockedUsers.stream()
-                .map(OtherUserResponse::new)
+                .map(OtherUserResponse::from)
                 .toList();
 
         return ResponseEntity.ok(responseList);
