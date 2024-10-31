@@ -1,6 +1,7 @@
 package com.develop_ping.union.user.presentation.dto.response;
 
 import com.develop_ping.union.user.domain.dto.UserInfo;
+import com.develop_ping.union.user.domain.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,15 @@ public class UserResponse {
                 .description(userInfo.getDescription())
                 .univName(userInfo.getUnivName())
                 .profileImage(userInfo.getProfileImage())
+                .build();
+    }
+
+    public static UserResponse from (User user) {
+        return UserResponse.builder()
+                .nickname(user.getNickname())
+                .description(user.getDescription())
+                .univName(user.getUnivName())
+                .profileImage(user.getProfileImage())
                 .build();
     }
 }

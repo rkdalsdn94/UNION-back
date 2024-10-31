@@ -95,4 +95,9 @@ public class UserController {
 
         return ResponseEntity.ok(responseList);
     }
+
+    @GetMapping("/my")
+    public ResponseEntity<UserResponse> readUserStatus (@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(UserResponse.from(user));
+    }
 }
