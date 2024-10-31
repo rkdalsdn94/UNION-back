@@ -1,10 +1,10 @@
 package com.develop_ping.union.gathering.infra;
 
 import com.develop_ping.union.gathering.domain.GatheringManager;
+import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
-import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,6 @@ public class GatheringManagerImpl implements GatheringManager {
     private final GatheringRepository gatheringRepository;
 
     @Override
-    @Transactional
     public GatheringInfo save(Gathering gathering) {
         log.info("모임 ManagerImpl 클래스 : {}", gathering);
 
@@ -30,7 +29,6 @@ public class GatheringManagerImpl implements GatheringManager {
     }
 
     @Override
-    @Transactional
     public GatheringInfo getGatheringDetail(Long gatheringId) {
         log.info("모임 상세 조회 ManagerImpl 클래스 : {}", gatheringId);
 
@@ -52,5 +50,10 @@ public class GatheringManagerImpl implements GatheringManager {
     public Gathering findById(Long gatheringId) {
         return gatheringRepository.findById(gatheringId)
                                   .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
+    }
+
+    @Override
+    public void deleteGathering(Long gatheringId) {
+        gatheringRepository.deleteById(gatheringId);
     }
 }

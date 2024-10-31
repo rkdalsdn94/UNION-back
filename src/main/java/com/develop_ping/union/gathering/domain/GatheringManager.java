@@ -11,4 +11,5 @@ public interface GatheringManager {
     GatheringInfo getGatheringDetail(Long gatheringId);
     Slice<Gathering> getGatheringList(GatheringSortStrategy strategy, GatheringListCommand command);
     Gathering findById(Long gatheringId);
+    void deleteGathering(Long gatheringId);
 }

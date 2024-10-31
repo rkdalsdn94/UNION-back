@@ -5,6 +5,7 @@ import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import com.develop_ping.union.comment.exception.CommentNotFoundException;
 import com.develop_ping.union.comment.exception.CommentPermissionDeniedException;
+import com.develop_ping.union.comment.exception.CommenterMismatchException;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringPermissionDeniedException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
@@ -166,13 +167,13 @@ public class ErrorHandlingController {
         return buildError(ErrorCode.BLOCK_RELATIONSHIP_NOT_FOUND);
     }
 
-
     @ExceptionHandler(CommenterMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ErrorResponse handleCommenterMismatchException(CommenterMismatchException e) {
         log.error("댓글 작성자가 일치하지 않습니다.");
         log.error("commenter nickname: {}", e.getNickname());
         return buildError(ErrorCode.COMMENTER_MISMATCH);
+    }
 
     @ExceptionHandler(GatheringPermissionDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)

@@ -39,4 +39,9 @@ public class PartyManagerImpl implements PartyManager {
         return partyRepository.findByGatheringIdAndRole(gatheringId, PartyRole.OWNER)
                               .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
     }
+
+    @Override
+    public void deleteParty(Long gatheringId) {
+        partyRepository.deleteByGatheringId(gatheringId);
+    }
 }

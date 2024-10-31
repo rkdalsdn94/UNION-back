@@ -8,4 +8,5 @@ public interface PartyManager {
     PartyInfo createParty(Long gatheringId, Long userId);
     PartyInfo findByGatheringId(Long gatheringId);
     Party findOwnerByGatheringId(Long gatheringId);
+    void deleteParty(Long gatheringId);
 }

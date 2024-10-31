@@ -1,5 +1,6 @@
 package com.develop_ping.union.gathering.presentation;
 
+import com.amazonaws.Response;
 import com.develop_ping.union.gathering.domain.SortType;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
@@ -50,7 +51,7 @@ public class GatheringController {
         @AuthenticationPrincipal User user,
         @Valid @RequestBody GatheringRequest request
     ) {
-        log.info("모임 컨트롤러 진입: {}", request);
+        log.info("모임 생성 컨트롤러 진입: {}", request);
 
         Long userId = user.getId();
         GatheringInfo gathering = gatheringService.createGathering(request.toCommand(), userId);
@@ -74,7 +75,7 @@ public class GatheringController {
     }
 
     @PutMapping("/gathering/{gatheringId}")
-    public GatheringResponse updateGathering(
+    public ResponseEntity<Void> updateGathering(
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId,
         @Valid @RequestBody GatheringRequest request
@@ -82,9 +83,22 @@ public class GatheringController {
         log.info("모임 수정 컨트롤러 진입: {}", gatheringId);
 
         Long userId = user.getId();
-        GatheringInfo gatheringInfo = gatheringService.updateGathering(gatheringId, request.toCommand(), userId);
-        GatheringResponse gatheringResponse = GatheringResponse.of(gatheringInfo);
+        gatheringService.updateGathering(gatheringId, request.toCommand(), userId);
 
-        return ResponseEntity.ok(gatheringResponse).getBody();
+        log.info("모임 수정 완료: {}", gatheringId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/gathering/{gatheringId}")
+    public ResponseEntity<Void> deleteGathering(
+        @AuthenticationPrincipal User user,
+        @PathVariable("gatheringId") Long gatheringId
+    ) {
+        log.info("모임 삭제 컨트롤러 진입: {}", gatheringId);
+
+        Long userId = user.getId();
+        gatheringService.deleteGathering(gatheringId, userId);
+
+        return ResponseEntity.noContent().build();
     }
 }

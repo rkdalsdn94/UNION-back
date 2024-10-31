@@ -9,9 +9,7 @@ import java.util.Optional;
 public interface PartyRepository extends JpaRepository<Party, Long> {
 
     Optional<Party> findByGatheringIdAndUserId(Long id, Long userId);
-
-    // 파티 참여자 정보 조회 API
     Optional<Party> findByGatheringIdAndRole(Long gatheringId, PartyRole partyRole);
-
     Optional<Party> findByGatheringId(Long gatheringId);
+    void deleteByGatheringId(Long gatheringId);
 }

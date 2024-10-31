@@ -66,6 +66,7 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     @Override
+    @Transactional
     public GatheringInfo updateGathering(Long gatheringId, GatheringCommand command, Long userId) {
         log.info("모임 수정 updateGathering ServiceImpl 클래스 : gatheringId {}, command: {}, userId {}", gatheringId, command, userId);
 
@@ -88,6 +89,20 @@ public class GatheringServiceImpl implements GatheringService {
         GatheringSortStrategy strategy = strategyFactory.getStrategy(command.getSortType());
         Slice<Gathering> gatheringList = gatheringManager.getGatheringList(strategy, command);
         return GatheringListInfo.of(gatheringList);
+    }
+
+    @Override
+    @Transactional
+    public void deleteGathering(Long gatheringId, Long userId) {
+        log.info("모임 삭제 deleteGathering ServiceImpl 클래스 : gatheringId {}, userId {}", gatheringId, userId);
+
+        Party party = partyManager.findOwnerByGatheringId(gatheringId);
+        User user = userManager.findById(userId);
+
+        validateGatheringOwner(party.getUserId(), user.getId());
+
+        partyManager.deleteParty(gatheringId);
+        gatheringManager.deleteGathering(gatheringId);
     }
 
     // TODO: 추후 도메인으로 이동할 수 메서드가 있는지 확인
