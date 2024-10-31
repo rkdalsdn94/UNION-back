@@ -1,6 +1,5 @@
 package com.develop_ping.union.gathering.presentation;
 
-import com.amazonaws.Response;
 import com.develop_ping.union.gathering.domain.SortType;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
@@ -83,9 +82,9 @@ public class GatheringController {
         log.info("모임 수정 컨트롤러 진입: {}", gatheringId);
 
         Long userId = user.getId();
-        gatheringService.updateGathering(gatheringId, request.toCommand(), userId);
+        GatheringInfo gatheringInfo = gatheringService.updateGathering(gatheringId, request.toCommand(), userId);
 
-        log.info("모임 수정 완료: {}", gatheringId);
+        log.info("모임 수정 완료: {}", gatheringInfo.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -100,5 +99,18 @@ public class GatheringController {
         gatheringService.deleteGathering(gatheringId, userId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/gathering/{gatheringId}/participants")
+    public ResponseEntity<Void> joinGathering(
+        @AuthenticationPrincipal User user,
+        @PathVariable("gatheringId") Long gatheringId
+    ) {
+        log.info("모임 참가 컨트롤러 진입: {}", gatheringId);
+
+        Long userId = user.getId();
+        gatheringService.joinGathering(gatheringId, userId);
+
+        return ResponseEntity.ok().build();
     }
 }

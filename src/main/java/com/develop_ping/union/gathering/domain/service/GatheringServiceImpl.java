@@ -45,6 +45,7 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     @Override
+    @Transactional
     public GatheringDetailInfo getGatheringDetail(Long gatheringId, Long userId) {
         log.info("모임 상세 조회 ServiceImpl 클래스 : {}", gatheringId);
 
@@ -70,10 +71,10 @@ public class GatheringServiceImpl implements GatheringService {
     public GatheringInfo updateGathering(Long gatheringId, GatheringCommand command, Long userId) {
         log.info("모임 수정 updateGathering ServiceImpl 클래스 : gatheringId {}, command: {}, userId {}", gatheringId, command, userId);
 
-        Party party = partyManager.findOwnerByGatheringId(gatheringId);
+        Long ownerUserId = getOwnerUserId(gatheringId);
         User user = userManager.findById(userId);
 
-        validateGatheringOwner(party.getUserId(), user.getId());
+        validateGatheringOwner(ownerUserId, user.getId());
 
         Gathering gathering = gatheringManager.findById(gatheringId);
         gathering.updateGathering(command.toEntity());
@@ -96,19 +97,27 @@ public class GatheringServiceImpl implements GatheringService {
     public void deleteGathering(Long gatheringId, Long userId) {
         log.info("모임 삭제 deleteGathering ServiceImpl 클래스 : gatheringId {}, userId {}", gatheringId, userId);
 
-        Party party = partyManager.findOwnerByGatheringId(gatheringId);
+        Long ownerUserId = getOwnerUserId(gatheringId);
         User user = userManager.findById(userId);
 
-        validateGatheringOwner(party.getUserId(), user.getId());
+        validateGatheringOwner(ownerUserId, user.getId());
 
         partyManager.deleteParty(gatheringId);
         gatheringManager.deleteGathering(gatheringId);
     }
 
+    @Override
+    @Transactional
+    public void joinGathering(Long gatheringId, Long userId) {
+        log.info("모임 참가 joinGathering ServiceImpl 클래스 : gatheringId {}, userId {}", gatheringId, userId);
+
+        partyManager.joinGathering(gatheringId, userId);
+    }
+
     // TODO: 추후 도메인으로 이동할 수 메서드가 있는지 확인
     private Long getOwnerUserId(Long gatheringId) {
-        PartyInfo partyInfo = partyManager.findByGatheringId(gatheringId);
-        return partyInfo.getUserId();
+        Party party = partyManager.findByGatheringId(gatheringId);
+        return party.getUserId();
     }
 
     private String getOwnerNickname(Long ownerUserId) {

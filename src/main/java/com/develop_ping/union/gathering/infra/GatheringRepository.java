@@ -1,13 +1,17 @@
 package com.develop_ping.union.gathering.infra;
 
 import com.develop_ping.union.gathering.domain.entity.Gathering;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public interface GatheringRepository extends JpaRepository<Gathering, Long> {
@@ -67,4 +71,9 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
      */
     @Query("SELECT g FROM Gathering g WHERE g.gatheringDateTime > CURRENT_TIMESTAMP ORDER BY g.gatheringDateTime ASC")
     Slice<Gathering> findByGatheringDateTimeAsc(Pageable pageable);
+
+    // TODO: 비관적 락 -> 낙관적 락으로 개선 필요 (동시성 이슈가 많이 발생하지 않을 것 같음)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT g FROM Gathering g WHERE g.id = :gatheringId")
+    Optional<Gathering> findWithPessimisticLockById(@Param("gatheringId") Long gatheringId);
 }

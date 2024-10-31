@@ -12,4 +12,5 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
     Optional<Party> findByGatheringIdAndRole(Long gatheringId, PartyRole partyRole);
     Optional<Party> findByGatheringId(Long gatheringId);
     void deleteByGatheringId(Long gatheringId);
+    boolean existsByGatheringIdAndUserId(Long gatheringId, Long userId);
 }

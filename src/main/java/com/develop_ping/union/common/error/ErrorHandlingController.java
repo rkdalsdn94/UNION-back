@@ -6,6 +6,8 @@ import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import com.develop_ping.union.comment.exception.CommentNotFoundException;
 import com.develop_ping.union.comment.exception.CommentPermissionDeniedException;
 import com.develop_ping.union.comment.exception.CommenterMismatchException;
+import com.develop_ping.union.gathering.exception.ParticipantLimitExceededException;
+import com.develop_ping.union.party.exception.AlreadyJoinedException;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.GatheringPermissionDeniedException;
 import com.develop_ping.union.gathering.exception.GatheringValidationException;
@@ -181,5 +183,21 @@ public class ErrorHandlingController {
         log.error("해당 모임에 대한 권한이 없습니다.");
         log.error("user id: {}, owner id: {}", e.getUserId(), e.getOwnerId());
         return buildError(ErrorCode.GATHERING_PERMISSION_DENIED);
+    }
+
+    @ExceptionHandler(AlreadyJoinedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    protected ErrorResponse handleAlreadyJoinedException(AlreadyJoinedException e) {
+        log.error("이미 참가한 모임입니다.");
+        log.error("gathering id: {}", e.getMessage());
+        return buildError(ErrorCode.ALREADY_JOINED);
+    }
+
+    @ExceptionHandler(ParticipantLimitExceededException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    protected ErrorResponse handleParticipantLimitExceededException(ParticipantLimitExceededException e) {
+        log.error("모임 인원이 가득 찼습니다.");
+        log.error("message: {}", e.getMessage());
+        return buildError(ErrorCode.PARTICIPANT_LIMIT_EXCEEDED);
     }
 }

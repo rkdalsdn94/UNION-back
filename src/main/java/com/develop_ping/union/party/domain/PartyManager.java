@@ -6,7 +6,7 @@ import com.develop_ping.union.party.domain.entity.Party;
 public interface PartyManager {
 
     PartyInfo createParty(Long gatheringId, Long userId);
-    PartyInfo findByGatheringId(Long gatheringId);
-    Party findOwnerByGatheringId(Long gatheringId);
+    Party findByGatheringId(Long gatheringId);
     void deleteParty(Long gatheringId);
+    void joinGathering(Long gatheringId, Long userId);
 }

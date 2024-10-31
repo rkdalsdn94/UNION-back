@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 @Table(name = "gatherings")
 public class Gathering extends AuditingFields {
 
+    // TODO: 연관 관계 고민
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -76,19 +77,16 @@ public class Gathering extends AuditingFields {
         }
     }
 
-    // TODO: 모임 참가 시 인원 제한 검증 (동시성 처리, 일단 비관락 -> 추후 낙관락으로 개선)
-    public void validateParticipantCapacity(int currentParticipants) {
-        if (currentParticipants > maxMember) {
-            throw new IllegalArgumentException("모임 인원이 초과되었습니다.");
-        }
-    }
-
     public void updateGathering(Gathering entity) {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.maxMember = entity.getMaxMember();
         this.gatheringDateTime = entity.getGatheringDateTime();
         this.place = entity.getPlace();
+    }
+
+    public void incrementCurrentMember() {
+        this.currentMember++;
     }
 
     @Override

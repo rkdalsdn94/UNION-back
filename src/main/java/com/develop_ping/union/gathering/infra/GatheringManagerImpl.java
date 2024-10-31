@@ -12,6 +12,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 @Transactional(readOnly = true)
@@ -55,5 +57,10 @@ public class GatheringManagerImpl implements GatheringManager {
     @Override
     public void deleteGathering(Long gatheringId) {
         gatheringRepository.deleteById(gatheringId);
+    }
+
+    @Override
+    public Optional<Gathering> findWithPessimisticLockById(Long gatheringId) {
+        return gatheringRepository.findWithPessimisticLockById(gatheringId);
     }
 }
