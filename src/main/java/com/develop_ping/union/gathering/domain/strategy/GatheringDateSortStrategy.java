@@ -11,12 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class GatheringDateSortStrategy implements GatheringSortStrategy {
 
-    private final GatheringRepository repository;
-
-    public GatheringDateSortStrategy(GatheringRepository repository) {
-        this.repository = repository;
-    }
-
     @Override
     public SortType getSortType() {
         return SortType.GATHERING_DATE;

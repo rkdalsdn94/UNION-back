@@ -20,4 +20,13 @@ public class GatheringListCommand {
         this.longitude = longitude;
         this.pageable = pageable;
     }
+
+    public static GatheringListCommand of(SortType sortType, Double latitude, Double longitude, Pageable pageable) {
+        return GatheringListCommand.builder()
+                                   .sortType(sortType)
+                                   .latitude(latitude)
+                                   .longitude(longitude)
+                                   .pageable(pageable)
+                                   .build();
+    }
 }
