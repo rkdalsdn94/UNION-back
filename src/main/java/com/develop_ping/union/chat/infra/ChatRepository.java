@@ -1,0 +1,8 @@
+package com.develop_ping.union.chat.infra;
+
+import com.develop_ping.union.chat.domain.entity.Chat;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ChatRepository extends JpaRepository<Chat, Long> {
+
+}
