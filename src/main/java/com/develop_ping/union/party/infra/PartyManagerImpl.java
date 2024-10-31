@@ -59,6 +59,11 @@ public class PartyManagerImpl implements PartyManager {
         gatheringManager.save(gathering);
     }
 
+    @Override
+    public boolean existsByGatheringIdAndUserId(Long gatheringId, Long userId) {
+        return partyRepository.existsByGatheringIdAndUserId(gatheringId, userId);
+    }
+
     // TODO: 도메인 로직으로 내리는 것이 좋을까?
     private void validateJoinConditions(Long gatheringId, Long userId, Gathering gathering) {
         if (partyRepository.existsByGatheringIdAndUserId(gatheringId, userId)) {

@@ -9,4 +9,5 @@ public interface PartyManager {
     Party findByGatheringId(Long gatheringId);
     void deleteParty(Long gatheringId);
     void joinGathering(Long gatheringId, Long userId);
+    boolean existsByGatheringIdAndUserId(Long gatheringId, Long userId);
 }

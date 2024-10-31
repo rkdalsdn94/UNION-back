@@ -52,15 +52,14 @@ public class GatheringServiceImpl implements GatheringService {
         // 1. 모임 정보 가져오기
         GatheringInfo gatheringInfo = gatheringManager.getGatheringDetail(gatheringId);
 
-        // 2. 주최자 및 파티 정보 조회
-        Long ownerUserId = getOwnerUserId(gatheringId);
-        boolean isOwner = isOwnerCheck(ownerUserId, userId);
+        // 2. 주최자인지 확인
+        boolean isOwner = partyManager.existsByGatheringIdAndUserId(gatheringId, userId);
 
         // 3. 좋아요 수 조회
         Long likeCount = reactionManager.selectLikeCount(gatheringId);
 
         // 4. 주최자 닉네임 조회
-        String ownerNickname = getOwnerNickname(ownerUserId);
+        String ownerNickname = getOwnerNickname(userId);
 
         // 5. GatheringDetailInfo 생성 및 반환
         return buildGatheringDetailInfo(gatheringInfo, ownerNickname, likeCount, isOwner);
@@ -128,10 +127,6 @@ public class GatheringServiceImpl implements GatheringService {
     private GatheringDetailInfo buildGatheringDetailInfo(
         GatheringInfo gatheringInfo, String nickname, Long likeCount, boolean isOwner) {
         return GatheringDetailInfo.of(gatheringInfo, nickname, likeCount, isOwner);
-    }
-
-    private boolean isOwnerCheck(Long ownerUserId, Long userId) {
-        return ownerUserId.equals(userId);
     }
 
     private void validateGatheringOwner(Long ownerId, Long userId) {
