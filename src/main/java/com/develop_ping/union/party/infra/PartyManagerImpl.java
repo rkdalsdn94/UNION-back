@@ -60,8 +60,13 @@ public class PartyManagerImpl implements PartyManager {
     }
 
     @Override
-    public boolean existsByGatheringIdAndUserId(Long gatheringId, Long userId) {
-        return partyRepository.existsByGatheringIdAndUserId(gatheringId, userId);
+    public String findOwnerNicknameByGatheringId(Long gatheringId) {
+        return partyRepository.findOwnerNicknameByGatheringIdAndRole(gatheringId, PartyRole.OWNER);
+    }
+
+    @Override
+    public boolean existsByGatheringIdAndUserIdAndRole(Long gatheringId, Long userId, PartyRole role) {
+        return partyRepository.existsByGatheringIdAndUserIdAndRole(gatheringId, userId, role);
     }
 
     // TODO: 도메인 로직으로 내리는 것이 좋을까?

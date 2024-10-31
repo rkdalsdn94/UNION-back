@@ -13,6 +13,7 @@ import com.develop_ping.union.gathering.exception.GatheringPermissionDeniedExcep
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
 import com.develop_ping.union.party.domain.entity.Party;
+import com.develop_ping.union.party.domain.entity.PartyRole;
 import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
@@ -52,14 +53,14 @@ public class GatheringServiceImpl implements GatheringService {
         // 1. 모임 정보 가져오기
         GatheringInfo gatheringInfo = gatheringManager.getGatheringDetail(gatheringId);
 
-        // 2. 주최자인지 확인
-        boolean isOwner = partyManager.existsByGatheringIdAndUserId(gatheringId, userId);
+        // 2. 요청한 사용자가 주최자인지 확인
+        boolean isOwner = partyManager.existsByGatheringIdAndUserIdAndRole(gatheringId, userId, PartyRole.OWNER);
 
-        // 3. 좋아요 수 조회
+        // 3. 주최자의 닉네임 조회
+        String ownerNickname = partyManager.findOwnerNicknameByGatheringId(gatheringId);
+
+        // 4. 좋아요 수 조회
         Long likeCount = reactionManager.selectLikeCount(gatheringId);
-
-        // 4. 주최자 닉네임 조회
-        String ownerNickname = getOwnerNickname(userId);
 
         // 5. GatheringDetailInfo 생성 및 반환
         return buildGatheringDetailInfo(gatheringInfo, ownerNickname, likeCount, isOwner);
@@ -117,11 +118,6 @@ public class GatheringServiceImpl implements GatheringService {
     private Long getOwnerUserId(Long gatheringId) {
         Party party = partyManager.findByGatheringId(gatheringId);
         return party.getUserId();
-    }
-
-    private String getOwnerNickname(Long ownerUserId) {
-        User user = userManager.findById(ownerUserId);
-        return user.getNickname();
     }
 
     private GatheringDetailInfo buildGatheringDetailInfo(
