@@ -79,5 +79,12 @@ public class BlockUserManagerImpl implements BlockUserManager {
         }
         return exists;
     }
+
+    @Override
+    public void deletedByUserInvolved(User user) {
+        log.info("유저와 관련된 차단 기록 삭제 시도: 유저 ID = {}", user.getId());
+        blockUserRepository.deleteByUserInvolved(user);
+        log.info("유저와 관련된 차단 기록 삭제 완료: 유저 ID = {}", user.getId());
+    }
 }
 

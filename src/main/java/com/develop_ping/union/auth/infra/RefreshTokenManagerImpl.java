@@ -19,7 +19,7 @@ public class RefreshTokenManagerImpl implements RefreshTokenManager {
 
     @Override
     @Transactional
-    public void deleteByUserId(User user) {
+    public void deleteByUser(User user) {
         log.info("리프레시 토큰 삭제 시도. 사용자 nickname: {}", user.getNickname());
 
         // 토큰을 조회하고 바로 삭제

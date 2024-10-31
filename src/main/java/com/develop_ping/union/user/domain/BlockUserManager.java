@@ -10,4 +10,6 @@ public interface BlockUserManager {
     List<User> findAllBlockedUser(User user);
     List<User> findAllBlockedOrBlockingUser (User user);
     boolean existsByBlockingUserAndBlockedUser(User blockingUser, User blockedUser);
+
+    void deletedByUserInvolved(User user);
 }

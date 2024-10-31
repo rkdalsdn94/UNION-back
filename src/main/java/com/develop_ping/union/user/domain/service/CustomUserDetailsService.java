@@ -20,14 +20,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
-        return userRepository.findByNickname(nickname)
+        return userRepository.findByNicknameAndDeletedIsFalse(nickname)
                 .orElseThrow(() -> new UserNotFoundException(nickname));
     }
 
     // 추가: Token을 이용한 사용자 로드 메서드
     @Transactional
     public UserDetails loadUserByToken(String token) throws UsernameNotFoundException {
-        return userRepository.findByToken(token)
+        return userRepository.findByTokenAndDeletedIsFalse(token)
                 .orElseThrow(() -> new UserNotFoundException(token));
     }
 }

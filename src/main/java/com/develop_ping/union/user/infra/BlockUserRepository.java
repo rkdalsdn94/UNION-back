@@ -3,6 +3,9 @@ package com.develop_ping.union.user.infra;
 import com.develop_ping.union.user.domain.entity.BlockUser;
 import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,4 +24,9 @@ public interface BlockUserRepository extends JpaRepository<BlockUser, Long> {
 
     // 5. 내가 특정 유저를 차단했는지 확인
     boolean existsByBlockingUserAndBlockedUser(User blockingUser, User blockedUser);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM BlockUser b WHERE b.blockingUser = :user OR b.blockedUser = :user")
+    void deleteByUserInvolved(User user);
 }

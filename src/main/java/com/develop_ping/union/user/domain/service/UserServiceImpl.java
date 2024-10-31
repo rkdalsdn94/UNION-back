@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signOut(User user) {
         log.info("사용자 로그아웃 요청: 사용자 ID - {}", user.getId());
-        refreshTokenManager.deleteByUserId(user);
+        refreshTokenManager.deleteByUser(user);
         log.info("사용자 로그아웃 처리 완료: 사용자 ID - {}", user.getId());
     }
 
@@ -103,11 +103,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(User user) {
+        // 모임 삭제, 리프레시 토큰 삭제, 차단 유저 삭제 등 로직 추가 필요
         log.info("사용자 계정 삭제 요청: 사용자 ID - {}", user.getId());
         oAuthUnlinkManager.unlinkUser(user);
         OauthUser oauthUser = oauthUserManager.findByEmail(user.getEmail());
-        userManager.delete(user);
-        oauthUserManager.delete(oauthUser);
+
+        // 삭제 로직
+        userManager.delete(user); // 유저 삭제, 논리 삭제로 진행
+        oauthUserManager.delete(oauthUser); // oauth 유저 테이블 삭제
+        refreshTokenManager.deleteByUser(user); // 유저 관련 리프레시 토큰 삭제
+        blockUserManager.deletedByUserInvolved(user); // 유저 관련 차단 관계 삭제
+
         log.info("사용자 계정 삭제 완료: 사용자 ID - {}", user.getId());
     }
 

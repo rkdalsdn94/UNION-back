@@ -7,7 +7,7 @@ import com.develop_ping.union.user.domain.entity.User;
 public interface RefreshTokenManager {
 
     // 리프레시 토큰 삭제
-    void deleteByUserId(User user);
+    void deleteByUser(User user);
 
     // 리프레시 토큰 검색
     RefreshToken findByRefreshToken(String refreshToken);

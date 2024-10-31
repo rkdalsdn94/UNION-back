@@ -43,20 +43,11 @@ public class User extends AuditingFields implements UserDetails {
     @Column(nullable = false, length = 30)
     private String provider;
 
-    // RefreshToken과의 1:1 관계 설정, User 삭제 시 RefreshToken도 함께 삭제
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private RefreshToken refreshToken;
-
-    // 이 유저가 차단한 다른 유저 목록
-    @OneToMany(mappedBy = "blockingUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BlockUser> blockingUsers;
-
-    // 다른 유저가 이 유저를 차단한 목록
-    @OneToMany(mappedBy = "blockedUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BlockUser> blockedByOtherUsers;
+    @Column(nullable = false)
+    private boolean deleted;
 
     @Builder
-    private User(String email, String token, String nickname, String description, String profileImage, String univName, String provider) {
+    private User(String email, String token, String nickname, String description, String profileImage, String univName, String provider, boolean deleted) {
         this.email = email;
         this.token = token;
         this.nickname = nickname;
@@ -64,6 +55,7 @@ public class User extends AuditingFields implements UserDetails {
         this.profileImage = profileImage;
         this.univName = univName;
         this.provider = provider;
+        this.deleted = deleted;
     }
 
     public static User of(UserCommand command, String email, String profileImage, String provider) {
@@ -75,7 +67,12 @@ public class User extends AuditingFields implements UserDetails {
                 .nickname(command.getNickname())
                 .univName(command.getUnivName())
                 .description(command.getDescription())
+                .deleted(false)
                 .build();
+    }
+
+    public void deleteUser () {
+        this.deleted = true;
     }
 
     public void update(String nickname, String description, String profileImage) {

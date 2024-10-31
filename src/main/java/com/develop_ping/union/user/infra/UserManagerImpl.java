@@ -26,7 +26,7 @@ public class UserManagerImpl implements UserManager {
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
         log.info("이메일로 사용자 검색 시도: {}", email);
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailAndDeletedIsFalse(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
@@ -34,7 +34,7 @@ public class UserManagerImpl implements UserManager {
     @Transactional(readOnly = true)
     public User findByToken(String token) {
         log.info("토큰으로 사용자 검색 시도");
-        return userRepository.findByToken(token)
+        return userRepository.findByTokenAndDeletedIsFalse(token)
                 .orElseThrow(() -> new UserNotFoundException(token));
     }
 
@@ -49,7 +49,8 @@ public class UserManagerImpl implements UserManager {
     @Transactional
     public void delete(User user) {
         log.info("사용자 삭제 시도: 닉네임 - {}", user.getNickname());
-        userRepository.delete(user);
+        user.deleteUser();
+        userRepository.save(user);
         log.info("사용자 삭제 완료: 닉네임 - {}", user.getNickname());
     }
 
@@ -57,12 +58,12 @@ public class UserManagerImpl implements UserManager {
     @Transactional
     public boolean existsByEmail(String email) {
         log.info("이메일로 사용자 존재 여부 확인: {}", email);
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmailAndDeletedIsFalse(email);
     }
 
     @Override
     @Transactional
     public boolean existsByNickname(String nickname) {
-        return userRepository.existsByNickname(nickname);
+        return userRepository.existsByNicknameAndDeletedIsFalse(nickname);
     }
 }
