@@ -4,7 +4,7 @@ import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
-import com.develop_ping.union.gathering.domain.strategy.GatheringSortStrategy;
+import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

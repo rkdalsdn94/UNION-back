@@ -1,6 +1,5 @@
-package com.develop_ping.union.gathering.domain.strategy;
+package com.develop_ping.union.gathering.domain;
 
-import com.develop_ping.union.gathering.domain.SortType;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.infra.GatheringRepository;

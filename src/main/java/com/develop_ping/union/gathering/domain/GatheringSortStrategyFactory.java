@@ -1,6 +1,6 @@
-package com.develop_ping.union.gathering.domain.strategy;
+package com.develop_ping.union.gathering.domain;
 
-import com.develop_ping.union.gathering.domain.SortType;
+import com.develop_ping.union.gathering.infra.strategy.LatestSortStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
