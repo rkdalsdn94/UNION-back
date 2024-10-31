@@ -2,13 +2,16 @@ package com.develop_ping.union.post.domain.service;
 
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.dto.command.PostCommand;
+import com.develop_ping.union.post.domain.dto.command.PostListCommand;
 import com.develop_ping.union.post.domain.dto.info.PostInfo;
+import com.develop_ping.union.post.domain.dto.info.PostListInfo;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.exception.PostPermissionDeniedException;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +35,8 @@ public class PostServiceImpl implements PostService {
         }
 
         Post post = postManager.save(Post.of(command, user, thumbnail));
+
+        log.info("[ New Post! ] post id: {}", post.getId());
         return PostInfo.from(post);
     }
 
@@ -49,6 +54,8 @@ public class PostServiceImpl implements PostService {
         post.updateContent(command.getContent());
 
         Post updatedPost = postManager.save(post);
+
+        log.info("[ Updated Post! ] post id: {}", updatedPost.getId());
         return PostInfo.from(updatedPost);
     }
 
@@ -63,6 +70,7 @@ public class PostServiceImpl implements PostService {
         validatePostOwner(user, post);
 
         postManager.delete(post);
+        log.info("[ Deleted Post! ]");
     }
 
     @Override
@@ -75,7 +83,17 @@ public class PostServiceImpl implements PostService {
         post.incrementViews();
         postManager.save(post);
 
+        log.info("[ Found Post! ] post id: {}", post.getId());
         return PostInfo.from(post);
+    }
+
+    @Override
+    public Page<PostListInfo> getPostsByPage(PostListCommand command) {
+        log.info("[ CALL: PostService.getPostsByPage() ]");
+        Page<Post> posts = postManager.findByPostType(command.getPostType(), command.getPageable());
+
+        log.info("[ Found Posts! ] total elements: {}", posts.getTotalElements());
+        return posts.map(PostListInfo::from);
     }
 
     private void validatePostOwner(User user, Post post) {

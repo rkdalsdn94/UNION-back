@@ -18,7 +18,6 @@ public class PostDetailResponse {
     private PostType type;
     private Integer views;
     private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
     private AuthorResponse author;
 
 
@@ -29,7 +28,6 @@ public class PostDetailResponse {
                               PostType type,
                               Integer views,
                               ZonedDateTime createdAt,
-                              ZonedDateTime updatedAt,
                               AuthorResponse author) {
         this.id = id;
         this.title = title;
@@ -37,7 +35,6 @@ public class PostDetailResponse {
         this.type = type;
         this.views = views;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.author = author;
     }
 
@@ -49,7 +46,6 @@ public class PostDetailResponse {
                 .type(postInfo.getType())
                 .views(postInfo.getViews())
                 .createdAt(postInfo.getCreatedAt())
-                .updatedAt(postInfo.getUpdatedAt())
                 .author(AuthorResponse.from(postInfo))
                 .build();
     }

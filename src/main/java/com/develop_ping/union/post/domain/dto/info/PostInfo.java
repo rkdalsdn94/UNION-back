@@ -23,7 +23,6 @@ public class PostInfo {
     private String profileImage;
     private String univName;
     private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
 
     @Builder
     public PostInfo(Long id,
@@ -36,8 +35,7 @@ public class PostInfo {
                     String nickname,
                     String profileImage,
                     String univName,
-                    ZonedDateTime createdAt,
-                    ZonedDateTime updatedAt
+                    ZonedDateTime createdAt
     ) {
         this.id = id;
         this.title = title;
@@ -50,7 +48,6 @@ public class PostInfo {
         this.profileImage = profileImage;
         this.univName = univName;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public static PostInfo from(Post post) {
@@ -66,7 +63,6 @@ public class PostInfo {
                 .profileImage(post.getUser().getProfileImage())
                 .univName(post.getUser().getUnivName())
                 .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
                 .build();
     }
 }

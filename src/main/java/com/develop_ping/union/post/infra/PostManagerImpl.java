@@ -2,13 +2,18 @@ package com.develop_ping.union.post.infra;
 
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.domain.PostManager;
+import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.post.exception.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PostManagerImpl implements PostManager {
     private final PostRepository postRepository;
 
@@ -34,5 +39,11 @@ public class PostManagerImpl implements PostManager {
     @Override
     public void delete(Post post) {
         postRepository.delete(post);
+    }
+
+    @Override
+    public Page<Post> findByPostType(PostType postType, Pageable pageable) {
+        log.info("[ CALL: PostManager.findByPostType() ] postType: {}", postType);
+        return postRepository.findByType(postType, pageable);
     }
 }
