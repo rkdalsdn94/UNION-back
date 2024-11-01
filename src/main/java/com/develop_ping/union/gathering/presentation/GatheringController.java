@@ -9,7 +9,6 @@ import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringListResponse;
-import com.develop_ping.union.gathering.presentation.dto.response.GatheringResponse;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,106 +23,94 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/gatherings")
 public class GatheringController {
 
     private final GatheringService gatheringService;
 
-    @GetMapping("/gathering")
-    public Slice<GatheringListResponse> getGathering(
+    @GetMapping
+    public ResponseEntity<Slice<GatheringListResponse>> getGatheringList(
         @RequestParam(value = "sortType", defaultValue = "LATEST") SortType sortType,
         @RequestParam(value = "latitude", defaultValue = "37.556016") Double latitude,
         @RequestParam(value = "longitude", defaultValue = "126.972355") Double longitude,
-        @PageableDefault(size = 3, page = 0) Pageable pageable
+        @PageableDefault(size = 3) Pageable pageable
     ) {
-        log.info("모임 리스트 조회 컨트롤러 진입 - sortType: {}, latitude: {}, longitude: {}, pageable: {}",
-            sortType, latitude, longitude, pageable);
+        log.info("모임 리스트 조회 요청 - sortType: {}, latitude: {}, longitude: {}, pageable: {}", sortType, latitude, longitude, pageable);
 
         Slice<GatheringListInfo> gatheringList = gatheringService.getGatheringList(
             GatheringListCommand.of(sortType, latitude, longitude, pageable)
         );
+        Slice<GatheringListResponse> response = gatheringList.map(GatheringListResponse::from);
 
-        return ResponseEntity.ok(gatheringList.map(GatheringListResponse::from)).getBody();
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/gathering")
-    public Long createGathering(
+    @PostMapping
+    public ResponseEntity<Long> createGathering(
         @AuthenticationPrincipal User user,
         @Valid @RequestBody GatheringRequest request
     ) {
-        log.info("모임 생성 컨트롤러 진입: {}", request);
+        log.info("모임 생성 요청 - userId: {}, request: {}", user.getId(), request);
 
-        Long userId = user.getId();
-        GatheringInfo gathering = gatheringService.createGathering(request.toCommand(), userId);
-        GatheringResponse response = GatheringResponse.of(gathering);
-
-        return ResponseEntity.ok(response.getId()).getBody();
+        GatheringInfo gathering = gatheringService.createGathering(request.toCommand(), user);
+        return ResponseEntity.ok(gathering.getId());
     }
 
-    @GetMapping("/gathering/{gatheringId}")
+    @GetMapping("/{gatheringId}")
     public ResponseEntity<GatheringDetailResponse> getGatheringDetail(
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
-        log.info("모임 상세 조회 컨트롤러 진입: {}", gatheringId);
+        log.info("모임 상세 조회 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
 
-        Long userId = user.getId();
-        GatheringDetailInfo gatheringDetailInfo = gatheringService.getGatheringDetail(gatheringId, userId);
+        GatheringDetailInfo gatheringDetailInfo = gatheringService.getGatheringDetail(gatheringId, user);
         GatheringDetailResponse response = GatheringDetailResponse.of(gatheringDetailInfo);
 
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/gathering/{gatheringId}")
+    @PutMapping("/{gatheringId}")
     public ResponseEntity<Void> updateGathering(
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId,
         @Valid @RequestBody GatheringRequest request
     ) {
-        log.info("모임 수정 컨트롤러 진입: {}", gatheringId);
+        log.info("모임 수정 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
 
-        Long userId = user.getId();
-        GatheringInfo gatheringInfo = gatheringService.updateGathering(gatheringId, request.toCommand(), userId);
-
-        log.info("모임 수정 완료: {}", gatheringInfo.getId());
+        gatheringService.updateGathering(gatheringId, request.toCommand(), user);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/gathering/{gatheringId}")
+    @DeleteMapping("/{gatheringId}")
     public ResponseEntity<Void> deleteGathering(
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
-        log.info("모임 삭제 컨트롤러 진입: {}", gatheringId);
+        log.info("모임 삭제 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
 
-        Long userId = user.getId();
-        gatheringService.deleteGathering(gatheringId, userId);
-
+        gatheringService.deleteGathering(gatheringId, user);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/gathering/{gatheringId}/participants")
+    @PostMapping("/{gatheringId}/participants")
     public ResponseEntity<Void> joinGathering(
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
-        log.info("모임 참가 컨트롤러 진입: {}", gatheringId);
+        log.info("모임 가입 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
 
-        Long userId = user.getId();
-        gatheringService.joinGathering(gatheringId, userId);
-
+        gatheringService.joinGathering(gatheringId, user);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/gathering/{gatheringId}/exit")
+    @DeleteMapping("/{gatheringId}/exit")
     public ResponseEntity<Void> exitGathering(
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
-        log.info("모임 탈퇴 컨트롤러 진입: {}", gatheringId);
+        log.info("모임 나가기 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
 
-        Long userId = user.getId();
-        gatheringService.exitGathering(gatheringId, userId);
-
+        gatheringService.exitGathering(gatheringId, user);
         return ResponseEntity.ok().build();
     }
 }

@@ -13,8 +13,8 @@ public interface GatheringManager {
     GatheringInfo getGatheringDetail(Long gatheringId);
     Slice<Gathering> getGatheringList(GatheringSortStrategy strategy, GatheringListCommand command);
     Gathering findById(Long gatheringId);
-    void deleteGathering(Long gatheringId);
-    Optional<Gathering> findWithPessimisticLockById(Long gatheringId);
+    void deleteGathering(Gathering gathering);
+    Gathering findWithPessimisticLockById(Long gatheringId);
 
     // 유저 탈퇴시
     //  이 유저가 가입된 모임 목록을 조회

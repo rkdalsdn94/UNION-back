@@ -12,8 +12,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Slf4j
 @Component
 @Transactional(readOnly = true)
@@ -34,9 +32,7 @@ public class GatheringManagerImpl implements GatheringManager {
     public GatheringInfo getGatheringDetail(Long gatheringId) {
         log.info("모임 상세 조회 ManagerImpl 클래스 : {}", gatheringId);
 
-        // 조회수 증가
         gatheringRepository.incrementViewCount(gatheringId);
-
         return GatheringInfo.of(gatheringRepository.findById(gatheringId)
                                                    .orElseThrow(() -> new GatheringNotFoundException(gatheringId)));
     }
@@ -55,12 +51,13 @@ public class GatheringManagerImpl implements GatheringManager {
     }
 
     @Override
-    public void deleteGathering(Long gatheringId) {
-        gatheringRepository.deleteById(gatheringId);
+    public void deleteGathering(Gathering gathering) {
+        gatheringRepository.delete(gathering);
     }
 
     @Override
-    public Optional<Gathering> findWithPessimisticLockById(Long gatheringId) {
-        return gatheringRepository.findWithPessimisticLockById(gatheringId);
+    public Gathering findWithPessimisticLockById(Long gatheringId) {
+        return gatheringRepository.findWithPessimisticLockById(gatheringId)
+                                  .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
     }
 }

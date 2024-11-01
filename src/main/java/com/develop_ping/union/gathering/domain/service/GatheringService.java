@@ -5,15 +5,16 @@ import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
+import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.data.domain.Slice;
 
 public interface GatheringService {
-
-    GatheringInfo createGathering(GatheringCommand command, Long userId);
-    GatheringDetailInfo getGatheringDetail(Long gatheringId, Long userId);
-    GatheringInfo updateGathering(Long gatheringId, GatheringCommand command, Long userId);
+    GatheringInfo createGathering(GatheringCommand command, User user);
+    GatheringDetailInfo getGatheringDetail(Long gatheringId, User user);
+    void updateGathering(Long gatheringId, GatheringCommand command, User user);
     Slice<GatheringListInfo> getGatheringList(GatheringListCommand request);
-    void deleteGathering(Long gatheringId, Long userId);
-    void joinGathering(Long gatheringId, Long userId);
-    void exitGathering(Long gatheringId, Long userId);
+    void deleteGathering(Long gatheringId, User user);
+    void joinGathering(Long gatheringId, User user);
+
+    void exitGathering(Long gatheringId, User user);
 }

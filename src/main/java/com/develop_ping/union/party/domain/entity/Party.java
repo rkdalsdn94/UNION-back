@@ -1,11 +1,11 @@
 package com.develop_ping.union.party.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
+import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.boot.model.internal.ForeignKeyType;
 
 @Getter
 @Entity
@@ -18,18 +18,27 @@ public class Party extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false,
+        foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
+    )
+    private User user;
 
-    private Long gatheringId;
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gathering_id", nullable = false,
+        foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
+    )
+    private Gathering gathering;
 
     @Enumerated(EnumType.STRING)
     private PartyRole role;
 
     @Builder
-    private Party(Long id, Long userId, Long gatheringId, PartyRole role) {
+    private Party(Long id, User user, Gathering gathering, PartyRole role) {
         this.id = id;
-        this.userId = userId;
-        this.gatheringId = gatheringId;
+        this.user = user;
+        this.gathering = gathering;
         this.role = role;
     }
 }

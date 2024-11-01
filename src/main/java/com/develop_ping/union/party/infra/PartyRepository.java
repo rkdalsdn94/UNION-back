@@ -2,6 +2,8 @@ package com.develop_ping.union.party.infra;
 
 import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
+import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,18 +12,18 @@ import java.util.Optional;
 
 public interface PartyRepository extends JpaRepository<Party, Long> {
 
-    Optional<Party> findByGatheringIdAndUserId(Long id, Long userId);
-    Optional<Party> findByGatheringId(Long gatheringId);
-    void deleteByGatheringId(Long gatheringId);
-    boolean existsByGatheringIdAndUserId(Long gatheringId, Long userId);
+    Optional<Party> findByGatheringAndUser(Gathering gathering, User user);
+    Optional<Party> findByGathering(Gathering gathering);
+    void deleteByGathering(Gathering gathering);
+    boolean existsByGatheringAndUser(Gathering gathering, User user);
 
-    // 주최자 닉네임을 GatheringId와 Role 기준으로 조회
-    @Query("SELECT u.nickname FROM Party p JOIN User u ON p.userId = u.id WHERE p.gatheringId = :gatheringId AND p.role = :role")
-    String findOwnerNicknameByGatheringIdAndRole(@Param("gatheringId") Long gatheringId, @Param("role") PartyRole role);
+    // 주최자 닉네임을 Gathering과 Role 기준으로 조회
+    @Query("SELECT u.nickname FROM Party p JOIN p.user u WHERE p.gathering = :gathering AND p.role = :role")
+    String findOwnerNicknameByGatheringAndRole(@Param("gathering") Gathering gathering, @Param("role") PartyRole role);
 
     // 주최자 여부 확인
-    boolean existsByGatheringIdAndUserIdAndRole(Long gatheringId, Long userId, PartyRole role);
+    boolean existsByGatheringAndUserAndRole(Gathering gathering, User user, PartyRole role);
 
     // 모임 참여자 삭제 - 나가기 기능
-    void deleteByGatheringIdAndUserId(Long gatheringId, Long userId);
+    void deleteByGatheringAndUser(Gathering gathering, User user);
 }
