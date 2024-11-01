@@ -21,4 +21,7 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 
     // 주최자 여부 확인
     boolean existsByGatheringIdAndUserIdAndRole(Long gatheringId, Long userId, PartyRole role);
+
+    // 모임 참여자 삭제 - 나가기 기능
+    void deleteByGatheringIdAndUserId(Long gatheringId, Long userId);
 }

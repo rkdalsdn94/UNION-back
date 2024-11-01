@@ -16,4 +16,10 @@ public interface PartyManager {
 
     // 주최자인지 여부 확인
     boolean existsByGatheringIdAndUserIdAndRole(Long gatheringId, Long userId, PartyRole role);
+
+    // 모임 참여 여부 확인
+    boolean existsByGatheringIdAndUserId(Long gatheringId, Long userId);
+
+    // 모임 참여자 삭제 - 나가기 기능
+    void deleteByGatheringIdAndUserId(Long gatheringId, Long userId);
 }

@@ -6,11 +6,9 @@ import com.develop_ping.union.auth.exception.OauthNotPreparedException;
 import com.develop_ping.union.comment.exception.CommentNotFoundException;
 import com.develop_ping.union.comment.exception.CommentPermissionDeniedException;
 import com.develop_ping.union.comment.exception.CommenterMismatchException;
-import com.develop_ping.union.gathering.exception.ParticipantLimitExceededException;
+import com.develop_ping.union.gathering.exception.*;
 import com.develop_ping.union.party.exception.AlreadyJoinedException;
-import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
-import com.develop_ping.union.gathering.exception.GatheringPermissionDeniedException;
-import com.develop_ping.union.gathering.exception.GatheringValidationException;
+import com.develop_ping.union.party.exception.ParticipationNotFoundException;
 import com.develop_ping.union.post.exception.PostNotFoundException;
 import com.develop_ping.union.post.exception.PostPermissionDeniedException;
 import com.develop_ping.union.s3.exception.ImageUploadFailedException;
@@ -199,5 +197,21 @@ public class ErrorHandlingController {
         log.error("모임 인원이 가득 찼습니다.");
         log.error("message: {}", e.getMessage());
         return buildError(ErrorCode.PARTICIPANT_LIMIT_EXCEEDED);
+    }
+
+    @ExceptionHandler(ParticipationNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ErrorResponse handleParticipationNotFoundException(ParticipationNotFoundException e) {
+        log.error("참여하지 않은 모임입니다.");
+        log.error("message: {}", e.getMessage());
+        return buildError(ErrorCode.PARTICIPATION_NOT_FOUND);
+    }
+
+    @ExceptionHandler(OwnerCannotExitException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    protected ErrorResponse handleOwnerCannotExitException(OwnerCannotExitException e) {
+        log.error("주최자는 모임에서 나갈 수 없습니다.");
+        log.error("message: {}", e.getMessage());
+        return buildError(ErrorCode.OWNER_CANNOT_EXIT);
     }
 }

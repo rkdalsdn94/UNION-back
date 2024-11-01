@@ -69,6 +69,16 @@ public class PartyManagerImpl implements PartyManager {
         return partyRepository.existsByGatheringIdAndUserIdAndRole(gatheringId, userId, role);
     }
 
+    @Override
+    public boolean existsByGatheringIdAndUserId(Long gatheringId, Long userId) {
+        return partyRepository.existsByGatheringIdAndUserId(gatheringId, userId);
+    }
+
+    @Override
+    public void deleteByGatheringIdAndUserId(Long gatheringId, Long userId) {
+        partyRepository.deleteByGatheringIdAndUserId(gatheringId, userId);
+    }
+
     // TODO: 도메인 로직으로 내리는 것이 좋을까?
     private void validateJoinConditions(Long gatheringId, Long userId, Gathering gathering) {
         if (partyRepository.existsByGatheringIdAndUserId(gatheringId, userId)) {

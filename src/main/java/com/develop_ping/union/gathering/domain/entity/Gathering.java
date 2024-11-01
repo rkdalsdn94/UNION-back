@@ -89,6 +89,10 @@ public class Gathering extends AuditingFields {
         this.currentMember++;
     }
 
+    public void decrementCurrentMember() {
+        this.currentMember--;
+    }
+
     @Override
     public String toString() {
         return "Gathering{" +

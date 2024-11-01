@@ -113,4 +113,17 @@ public class GatheringController {
 
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/gathering/{gatheringId}/exit")
+    public ResponseEntity<Void> exitGathering(
+        @AuthenticationPrincipal User user,
+        @PathVariable("gatheringId") Long gatheringId
+    ) {
+        log.info("모임 탈퇴 컨트롤러 진입: {}", gatheringId);
+
+        Long userId = user.getId();
+        gatheringService.exitGathering(gatheringId, userId);
+
+        return ResponseEntity.ok().build();
+    }
 }

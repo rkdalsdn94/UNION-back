@@ -10,10 +10,12 @@ import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
 import com.develop_ping.union.gathering.domain.GatheringSortStrategyFactory;
 import com.develop_ping.union.gathering.exception.GatheringPermissionDeniedException;
+import com.develop_ping.union.gathering.exception.OwnerCannotExitException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
 import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
+import com.develop_ping.union.party.exception.ParticipationNotFoundException;
 import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GatheringServiceImpl implements GatheringService {
 
     private final GatheringManager gatheringManager;
@@ -112,6 +115,29 @@ public class GatheringServiceImpl implements GatheringService {
         log.info("모임 참가 joinGathering ServiceImpl 클래스 : gatheringId {}, userId {}", gatheringId, userId);
 
         partyManager.joinGathering(gatheringId, userId);
+    }
+
+    @Override
+    @Transactional
+    public void exitGathering(Long gatheringId, Long userId) {
+
+        Gathering gathering = gatheringManager.findById(gatheringId);
+
+        if (partyManager.existsByGatheringIdAndUserIdAndRole(gatheringId, userId, PartyRole.OWNER)) {
+            throw new OwnerCannotExitException("주최자는 모임에서 나갈 수 없습니다.");
+        }
+
+
+        if (!partyManager.existsByGatheringIdAndUserId(gathering.getId(), userId)) {
+            throw new ParticipationNotFoundException("참여하지 않은 모임입니다.");
+        }
+
+
+//        if ()
+
+//        Gathering gathering = gatheringManager.findById(gatheringId);
+        gathering.decrementCurrentMember();
+        partyManager.deleteByGatheringIdAndUserId(gatheringId, userId);
     }
 
     // TODO: 추후 도메인으로 이동할 수 메서드가 있는지 확인
