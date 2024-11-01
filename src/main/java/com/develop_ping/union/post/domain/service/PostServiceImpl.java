@@ -61,7 +61,7 @@ public class PostServiceImpl implements PostService {
 
         Post updatedPost = postManager.save(post);
 
-        log.info("[ Updated Post! ] post id: {}", updatedPost.getId());
+        log.info("[ Post Update Completed! ] post id: {}", updatedPost.getId());
         return PostInfo.from(updatedPost);
     }
 
@@ -74,7 +74,7 @@ public class PostServiceImpl implements PostService {
         Post post = postManager.validatePostOwner(user.getId(), command.getId());
 
         postManager.delete(post);
-        log.info("[ Deleted Post! ]");
+        log.info("[ Post Delete Completed! ]");
     }
 
     @Override
@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
 
         List<String> photos = photoManager.findPostPhotos(post.getId());
 
-        log.info("[ Found Post! ] post id: {}", post.getId());
+        log.info("[ Post Retrieval Completed! ] post id: {}", post.getId());
         return PostInfo.of(post, photos);
     }
 
@@ -98,7 +98,7 @@ public class PostServiceImpl implements PostService {
 
         Page<Post> posts = findPostsByCriterion(command);
 
-        log.info("[ Found Posts! ] total elements: {}", posts.getTotalElements());
+        log.info("[ Posts Retrieval Completed! ] total elements: {}", posts.getTotalElements());
         return posts.map(PostListInfo::from);
     }
 

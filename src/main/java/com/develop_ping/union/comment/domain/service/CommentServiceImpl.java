@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment updatedComment = commentManager.save(comment);
 
-        log.info("[ Updated Comment! ] comment id: {}", updatedComment.getId());
+        log.info("[ Comment Update Completed! ] comment id: {}", updatedComment.getId());
         return CommentInfo.of(updatedComment);
     }
 
@@ -80,7 +80,7 @@ public class CommentServiceImpl implements CommentService {
         // TODO: 근데 자식 댓글인 경우에는 그냥 삭제하기 -> hard delete??? 되나..?
 
         commentManager.delete(comment);
-        log.info("[ Deleted Comment! ] comment id: {}", comment.getId());
+        log.info("[ Comment Delete Completed! ]");
     }
 
     @Override
@@ -95,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
 
         // TODO: rootComments 랑 children 을 각각 for문이나 stream 돌려서 User deleted 확인 + blockUsers 확인해서 제외(null처리)해주기
 
-        log.info("[ Found Comments! ]");
+        log.info("[ Comments Retrieval Completed! ]");
         return CommentListInfo.of(rootComments);
     }
 

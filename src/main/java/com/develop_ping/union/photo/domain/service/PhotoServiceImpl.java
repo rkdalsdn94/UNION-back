@@ -39,7 +39,7 @@ public class PhotoServiceImpl implements PhotoService {
 
         List<Photo> photos = photoManager.savePhotos(command.getTargetId(), command.getTargetType(), urls);
 
-        photos.forEach(photo -> log.info(photo.toString()));
+        log.info("[ Photos Save Completed! ] photos: {}", photos);
     }
 
     private void validateGatheringOwner(Long userId, Long gatheringId) {
