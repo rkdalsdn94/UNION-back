@@ -7,11 +7,15 @@ import com.develop_ping.union.post.domain.dto.info.PostInfo;
 import com.develop_ping.union.post.domain.dto.info.PostListInfo;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.exception.PostPermissionDeniedException;
+import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostManager postManager;
+    private final UserManager userManager;
 
     @Override
     @Transactional
@@ -88,9 +93,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<PostListInfo> getPostsByPage(PostListCommand command) {
+    public Page<PostListInfo> getPosts(PostListCommand command) {
         log.info("[ CALL: PostService.getPostsByPage() ]");
-        Page<Post> posts = postManager.findByPostType(command.getPostType(), command.getPageable());
+
+        Page<Post> posts = findPostsByCriterion(command);
 
         log.info("[ Found Posts! ] total elements: {}", posts.getTotalElements());
         return posts.map(PostListInfo::from);
@@ -100,5 +106,25 @@ public class PostServiceImpl implements PostService {
         if (!user.getId().equals(post.getUser().getId())) {
             throw new PostPermissionDeniedException(user.getId(), post.getId());
         }
+    }
+
+    private Page<Post> findPostsByCriterion(PostListCommand command) {
+        log.info("[ Finding Posts By {} ]", command.getCriterion());
+
+        Pageable pageable = PageRequest.of(
+                command.getPage(),
+                command.getSize(),
+                Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        return
+            switch (command.getCriterion()) {
+                case BOARD -> postManager.findByPostType(command.getPostType(), pageable);
+                case MY -> postManager.findByUser(command.getUser(), pageable);
+                case USER -> {
+                    User user = userManager.findByToken(command.getUserToken());
+                    yield postManager.findByUser(user, pageable);
+                }
+                default -> null;
+            };
     }
 }

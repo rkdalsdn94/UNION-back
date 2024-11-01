@@ -1,5 +1,6 @@
 package com.develop_ping.union.post.presentation;
 
+import com.develop_ping.union.post.domain.Criterion;
 import com.develop_ping.union.post.domain.dto.command.PostCommand;
 import com.develop_ping.union.post.domain.dto.command.PostListCommand;
 import com.develop_ping.union.post.domain.dto.info.PostInfo;
@@ -12,9 +13,6 @@ import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -88,11 +86,41 @@ public class PostController {
                                               @AuthenticationPrincipal User user) {
         log.info("[ CALL: PostController.getPostList() ]");
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        log.info("[ Pageable successfully created ]");
+        // 게시판을 기준으로 조회
+        Criterion criterion = Criterion.BOARD;
 
-        PostListCommand command = PostListCommand.of(user, type, pageable);
-        Page<PostListInfo> postListInfoPage = postService.getPostsByPage(command);
+        PostListCommand command = PostListCommand.boardOf(user, type, page, size, criterion);
+        Page<PostListInfo> postListInfoPage = postService.getPosts(command);
+
+        return postListInfoPage.map(PostListResponse::from);
+    }
+
+    @GetMapping("/user/my/posts")
+    public Page<PostListResponse> getMyPostList(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "3") int size,
+                                                @AuthenticationPrincipal User user) {
+        log.info("[ CALL: PostController.getPostList() ]");
+
+        // 사용자 기준으로 조회
+        Criterion criterion = Criterion.MY;
+
+        PostListCommand command = PostListCommand.myOf(user, page, size, criterion);
+        Page<PostListInfo> postListInfoPage = postService.getPosts(command);
+
+        return postListInfoPage.map(PostListResponse::from);
+    }
+
+    @GetMapping("/user/{userToken}/posts")
+    public Page<PostListResponse> getUserPostList(@PathVariable("userToken") String userToken,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "3") int size) {
+        log.info("[ CALL: PostController.getPostList() ]");
+
+        // 특정 유저 기준으로 조회
+        Criterion criterion = Criterion.USER;
+
+        PostListCommand command = PostListCommand.userOf(page, size, userToken, criterion);
+        Page<PostListInfo> postListInfoPage = postService.getPosts(command);
 
         return postListInfoPage.map(PostListResponse::from);
     }

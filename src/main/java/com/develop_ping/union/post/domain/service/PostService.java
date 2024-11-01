@@ -11,5 +11,5 @@ public interface PostService {
     PostInfo updatePost(PostCommand command);
     void deletePost(PostCommand command);
     PostInfo getPost(PostCommand command);
-    Page<PostListInfo> getPostsByPage(PostListCommand command);
+    Page<PostListInfo> getPosts(PostListCommand command);
 }

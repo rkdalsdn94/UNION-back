@@ -4,6 +4,7 @@ import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.post.exception.PostNotFoundException;
+import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -45,5 +46,10 @@ public class PostManagerImpl implements PostManager {
     public Page<Post> findByPostType(PostType postType, Pageable pageable) {
         log.info("[ CALL: PostManager.findByPostType() ] postType: {}", postType);
         return postRepository.findByType(postType, pageable);
+    }
+
+    @Override
+    public Page<Post> findByUser(User user, Pageable pageable) {
+        return postRepository.findByUser(user, pageable);
     }
 }
