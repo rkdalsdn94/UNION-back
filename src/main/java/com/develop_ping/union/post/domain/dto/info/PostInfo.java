@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,6 +24,7 @@ public class PostInfo {
     private String profileImage;
     private String univName;
     private ZonedDateTime createdAt;
+    private List<String> photos;
 
     @Builder
     public PostInfo(Long id,
@@ -35,7 +37,8 @@ public class PostInfo {
                     String nickname,
                     String profileImage,
                     String univName,
-                    ZonedDateTime createdAt
+                    ZonedDateTime createdAt,
+                    List<String> photos
     ) {
         this.id = id;
         this.title = title;
@@ -48,6 +51,7 @@ public class PostInfo {
         this.profileImage = profileImage;
         this.univName = univName;
         this.createdAt = createdAt;
+        this.photos = photos;
     }
 
     public static PostInfo from(Post post) {
@@ -63,6 +67,23 @@ public class PostInfo {
                 .profileImage(post.getUser().getProfileImage())
                 .univName(post.getUser().getUnivName())
                 .createdAt(post.getCreatedAt())
+                .build();
+    }
+
+    public static PostInfo of(Post post, List<String> photos) {
+        return PostInfo.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .type(post.getType())
+                .thumbnail(post.getThumbnail())
+                .views(post.getViews())
+                .token(post.getUser().getToken())
+                .nickname(post.getUser().getNickname())
+                .profileImage(post.getUser().getProfileImage())
+                .univName(post.getUser().getUnivName())
+                .createdAt(post.getCreatedAt())
+                .photos(photos)
                 .build();
     }
 }

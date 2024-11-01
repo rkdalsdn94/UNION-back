@@ -28,4 +28,24 @@ public class PhotoManagerImpl implements PhotoManager {
 
         return photoRepository.saveAll(photos);
     }
+
+    @Override
+    public List<String> findPostPhotos(Long targetId) {
+        TargetType targetType = TargetType.POST;
+
+        return photoRepository.findByTargetIdAndTargetType(targetId, targetType)
+                .stream()
+                .map(Photo::getUrl)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findGatheringPhotos(Long targetId) {
+        TargetType targetType = TargetType.GATHERING;
+
+        return photoRepository.findByTargetIdAndTargetType(targetId, targetType)
+                .stream()
+                .map(Photo::getUrl)
+                .collect(Collectors.toList());
+    }
 }

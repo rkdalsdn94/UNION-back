@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -19,6 +20,7 @@ public class PostDetailResponse {
     private Integer views;
     private ZonedDateTime createdAt;
     private AuthorResponse author;
+    private List<String> photos;
 
 
     @Builder
@@ -28,7 +30,8 @@ public class PostDetailResponse {
                               PostType type,
                               Integer views,
                               ZonedDateTime createdAt,
-                              AuthorResponse author) {
+                              AuthorResponse author,
+                              List<String> photos) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -36,6 +39,7 @@ public class PostDetailResponse {
         this.views = views;
         this.createdAt = createdAt;
         this.author = author;
+        this.photos = photos;
     }
 
     public static PostDetailResponse from(PostInfo postInfo) {
@@ -47,6 +51,7 @@ public class PostDetailResponse {
                 .views(postInfo.getViews())
                 .createdAt(postInfo.getCreatedAt())
                 .author(AuthorResponse.from(postInfo))
+                .photos(postInfo.getPhotos())
                 .build();
     }
 

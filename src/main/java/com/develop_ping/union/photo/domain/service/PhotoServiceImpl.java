@@ -3,6 +3,9 @@ package com.develop_ping.union.photo.domain.service;
 import com.develop_ping.union.photo.domain.PhotoManager;
 import com.develop_ping.union.photo.domain.dto.PhotoCommand;
 import com.develop_ping.union.photo.domain.entity.Photo;
+import com.develop_ping.union.post.domain.PostManager;
+import com.develop_ping.union.post.domain.entity.Post;
+import com.develop_ping.union.post.exception.PostPermissionDeniedException;
 import com.develop_ping.union.s3.infra.S3Manager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,7 @@ import java.util.List;
 public class PhotoServiceImpl implements PhotoService {
     private final PhotoManager photoManager;
     private final S3Manager s3Manager;
+    private final PostManager postManager;
 
     @Override
     public void savePhotos(PhotoCommand command) {
@@ -43,6 +47,6 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     private void validatePostOwner(Long userId, Long postId) {
-        // TODO: userId로 postId의 owner인지 확인
+        postManager.validatePostOwner(userId, postId);
     }
 }

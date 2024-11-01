@@ -4,6 +4,7 @@ import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.post.exception.PostNotFoundException;
+import com.develop_ping.union.post.exception.PostPermissionDeniedException;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,20 +20,17 @@ public class PostManagerImpl implements PostManager {
     private final PostRepository postRepository;
 
     @Override
-    @Transactional
     public Post saveAndFlush(Post post) {
         return postRepository.saveAndFlush(post);
     }
 
     @Override
-    @Transactional
     public Post findById(Long id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> new PostNotFoundException(id));
     }
 
     @Override
-    @Transactional
     public Post save(Post post) {
         return postRepository.save(post);
     }
@@ -56,5 +54,16 @@ public class PostManagerImpl implements PostManager {
     @Override
     public Page<Post> findPostsByUserComments(User user, Pageable pageable) {
         return postRepository.findPostsByUserComments(user, pageable);
+    }
+
+    @Override
+    public Post validatePostOwner(Long userId, Long postId) {
+        Post post = findById(postId);
+
+        if (!userId.equals(post.getUser().getId())) {
+            throw new PostPermissionDeniedException(userId, post.getId());
+        }
+
+        return post;
     }
 }

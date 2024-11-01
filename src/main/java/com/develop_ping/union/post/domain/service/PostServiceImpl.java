@@ -1,15 +1,14 @@
 package com.develop_ping.union.post.domain.service;
 
+import com.develop_ping.union.photo.domain.PhotoManager;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.dto.command.PostCommand;
 import com.develop_ping.union.post.domain.dto.command.PostListCommand;
 import com.develop_ping.union.post.domain.dto.info.PostInfo;
 import com.develop_ping.union.post.domain.dto.info.PostListInfo;
 import com.develop_ping.union.post.domain.entity.Post;
-import com.develop_ping.union.post.exception.PostPermissionDeniedException;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 public class PostServiceImpl implements PostService {
     private final PostManager postManager;
     private final UserManager userManager;
+    private final PhotoManager photoManager;
 
     @Override
     @Transactional
@@ -50,10 +53,8 @@ public class PostServiceImpl implements PostService {
     public PostInfo updatePost(PostCommand command) {
         log.info("[ CALL: PostService.updatePost() ] post id: {}", command.getId());
 
-        Post post = postManager.findById(command.getId());
         User user = command.getUser();
-
-        validatePostOwner(user, post);
+        Post post = postManager.validatePostOwner(user.getId(), command.getId());
 
         post.updateTitle(command.getTitle());
         post.updateContent(command.getContent());
@@ -69,17 +70,14 @@ public class PostServiceImpl implements PostService {
     public void deletePost(PostCommand command) {
         log.info("[ CALL: PostService.deletePost() ] post id: {}", command.getId());
 
-        Post post = postManager.findById(command.getId());
         User user = command.getUser();
-
-        validatePostOwner(user, post);
+        Post post = postManager.validatePostOwner(user.getId(), command.getId());
 
         postManager.delete(post);
         log.info("[ Deleted Post! ]");
     }
 
     @Override
-    @Transactional
     public PostInfo getPost(PostCommand command) {
         log.info("[ CALL: PostService.getPost() ] post id: {}", command.getId());
 
@@ -88,8 +86,10 @@ public class PostServiceImpl implements PostService {
         post.incrementViews();
         postManager.save(post);
 
+        List<String> photos = photoManager.findPostPhotos(post.getId());
+
         log.info("[ Found Post! ] post id: {}", post.getId());
-        return PostInfo.from(post);
+        return PostInfo.of(post, photos);
     }
 
     @Override
@@ -100,12 +100,6 @@ public class PostServiceImpl implements PostService {
 
         log.info("[ Found Posts! ] total elements: {}", posts.getTotalElements());
         return posts.map(PostListInfo::from);
-    }
-
-    private void validatePostOwner(User user, Post post) {
-        if (!user.getId().equals(post.getUser().getId())) {
-            throw new PostPermissionDeniedException(user.getId(), post.getId());
-        }
     }
 
     private Page<Post> findPostsByCriterion(PostListCommand command) {

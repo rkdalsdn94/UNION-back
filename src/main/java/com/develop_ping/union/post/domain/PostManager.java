@@ -14,4 +14,5 @@ public interface PostManager {
     Page<Post> findByPostType(PostType postType, Pageable pageable);
     Page<Post> findByUser(User user, Pageable pageable);
     Page<Post> findPostsByUserComments(User user, Pageable pageable);
+    Post validatePostOwner(Long userId, Long postId);
 }
