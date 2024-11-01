@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.time.ZonedDateTime;
 
 @Getter
-public class WebSocketInfo {
+public class ChatInfo {
     private final String content;
     private final String senderName;
     private final String senderProfileImage;
@@ -16,7 +16,7 @@ public class WebSocketInfo {
     private final Long targetId;
 
     @Builder
-    private WebSocketInfo(String content, String senderName, String senderProfileImage, String senderToken, ZonedDateTime createdAt, Long targetId) {
+    private ChatInfo(String content, String senderName, String senderProfileImage, String senderToken, ZonedDateTime createdAt, Long targetId) {
         this.content = content;
         this.senderName = senderName;
         this.senderProfileImage = senderProfileImage;
@@ -25,8 +25,8 @@ public class WebSocketInfo {
         this.targetId = targetId;
     }
 
-    public static WebSocketInfo from (Chat chat) {
-        return WebSocketInfo.builder()
+    public static ChatInfo from (Chat chat) {
+        return ChatInfo.builder()
                 .content(chat.getContent())
                 .senderName(chat.getUser().getNickname())
                 .senderProfileImage(chat.getUser().getProfileImage())

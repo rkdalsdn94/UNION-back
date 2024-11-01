@@ -1,6 +1,6 @@
 package com.develop_ping.union.chat.presentation.dto.response;
 
-import com.develop_ping.union.chat.domain.dto.WebSocketInfo;
+import com.develop_ping.union.chat.domain.dto.ChatInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class ChatResponse {
         this.createdAt = createdAt;
     }
 
-    public static ChatResponse from (WebSocketInfo info) {
+    public static ChatResponse from (ChatInfo info) {
         return ChatResponse.builder()
                 .senderName(info.getSenderName())
                 .senderToken(info.getSenderToken())

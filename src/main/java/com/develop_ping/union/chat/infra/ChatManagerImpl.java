@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -16,26 +18,14 @@ public class ChatManagerImpl implements ChatManager {
     private final ChatRepository chatRepository;
 
     @Override
-    public Chat createPrivateChat(User sender, Long chatroomId, String content) {
-        log.info("개인 채팅 생성 시도: 사용자 ID - {}, 채팅방 ID - {}", sender.getId(), chatroomId);
-
-        Chat chat = Chat.of(sender, chatroomId, ChatroomType.PRIVATE, content);
-        Chat savedChat = chatRepository.save(chat);
-
-        log.info("개인 채팅 생성 완료: 채팅 ID - {}, 사용자 ID - {}, 채팅방 ID - {}", savedChat.getId(), sender.getId(), chatroomId);
-
-        return savedChat;
+    public Chat save(Chat chat) {
+        log.info("채팅 생성 : 사용자 ID - {}, 채팅방 ID - {}", chat.getUser().getId(), chat.getTargetId());
+        return chatRepository.save(chat);
     }
 
     @Override
-    public Chat createGatheringChat(User sender, Long gatheringId, String content) {
-        log.info("모임 채팅 생성 시도: 사용자 ID - {}, 모임 ID - {}", sender.getId(), gatheringId);
-
-        Chat chat = Chat.of(sender, gatheringId, ChatroomType.GATHERING, content);
-        Chat savedChat = chatRepository.save(chat);
-
-        log.info("모임 채팅 생성 완료: 채팅 ID - {}, 사용자 ID - {}, 모임 ID - {}", savedChat.getId(), sender.getId(), gatheringId);
-
-        return savedChat;
+    public List<Chat> findChatByTargetIdAndChatroomType(Long targetId, ChatroomType chatroomType) {
+        log.info("채팅 내역 조회 : 채팅방 타입 - {}, 채팅방 ID - {}", chatroomType, targetId);
+        return chatRepository.findByTargetIdAndChatroomType(targetId, chatroomType);
     }
 }
