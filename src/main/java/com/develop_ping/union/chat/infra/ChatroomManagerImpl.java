@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -36,5 +38,11 @@ public class ChatroomManagerImpl implements ChatroomManager {
                     log.info("기존 채팅 내역이 없습니다.");
                     return null;
                 });
+    }
+
+    @Override
+    public List<Chatroom> findAllChatroomUserInvolved(User user) {
+        log.info("해당 유저가 포함된 모든 개인 채팅방 검색 : user ID - {}", user.getId());
+        return chatroomRepository.findBySenderOrReceiver(user, user);
     }
 }

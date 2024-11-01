@@ -3,12 +3,14 @@ package com.develop_ping.union.chat.infra;
 import com.develop_ping.union.chat.domain.ChatManager;
 import com.develop_ping.union.chat.domain.dto.WebSocketCommand;
 import com.develop_ping.union.chat.domain.entity.Chat;
+import com.develop_ping.union.chat.domain.entity.Chatroom;
 import com.develop_ping.union.chat.domain.entity.ChatroomType;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -27,5 +29,18 @@ public class ChatManagerImpl implements ChatManager {
     public List<Chat> findChatByTargetIdAndChatroomType(Long targetId, ChatroomType chatroomType) {
         log.info("채팅 내역 조회 : 채팅방 타입 - {}, 채팅방 ID - {}", chatroomType, targetId);
         return chatRepository.findByTargetIdAndChatroomType(targetId, chatroomType);
+    }
+
+    @Override
+    public List<Chat> findLatestChatInAllChatroom(List<Chatroom> chatrooms, ChatroomType chatroomType) {
+        log.info("각 채팅방에서 마지막 채팅을 조회");
+        List<Chat> latestChats = new ArrayList<>();
+
+        for (Chatroom chatroom : chatrooms) {
+            chatRepository.findTopByTargetIdAndChatroomTypeOrderByCreatedAtDesc(chatroom.getId(), chatroomType)
+                    .ifPresent(latestChats::add);
+        }
+
+        return latestChats;
     }
 }

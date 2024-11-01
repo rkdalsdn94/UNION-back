@@ -46,4 +46,17 @@ public class ChatController {
         log.info("모임 채팅 내역 조회 완료");
         return ResponseEntity.ok(chatResponses);
     }
+
+    @GetMapping("/private")
+    public ResponseEntity<List<ChatResponse>> readPrivateChatroom (@AuthenticationPrincipal User user){
+        log.info("개인 채팅방 목록 불러오기 확인");
+
+        List<ChatInfo> chatInfos = chatService.readPrivateChatroom(user);
+        List<ChatResponse> chatResponses = chatInfos.stream()
+                .map(ChatResponse::from)
+                .toList();
+
+        log.info("모임 채팅 내역 조회 완료");
+        return ResponseEntity.ok(chatResponses);
+    }
 }

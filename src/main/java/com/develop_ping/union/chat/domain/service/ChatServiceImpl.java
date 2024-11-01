@@ -54,4 +54,15 @@ public class ChatServiceImpl implements ChatService{
                 .map(ChatInfo::from)
                 .toList();
     }
+
+    @Override
+    public List<ChatInfo> readPrivateChatroom(User user) {
+        log.info("개인 채팅방 목록 불러오기");
+        List<Chatroom> chatrooms = chatroomManager.findAllChatroomUserInvolved(user);
+        List<Chat> chats = chatManager.findLatestChatInAllChatroom(chatrooms, ChatroomType.PRIVATE);
+
+        return chats.stream()
+                .map(ChatInfo::from)
+                .toList();
+    }
 }
