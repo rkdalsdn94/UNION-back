@@ -26,4 +26,16 @@ public class ChatManagerImpl implements ChatManager {
 
         return savedChat;
     }
+
+    @Override
+    public Chat createGatheringChat(User sender, Long gatheringId, String content) {
+        log.info("모임 채팅 생성 시도: 사용자 ID - {}, 모임 ID - {}", sender.getId(), gatheringId);
+
+        Chat chat = Chat.of(sender, gatheringId, ChatroomType.GATHERING, content);
+        Chat savedChat = chatRepository.save(chat);
+
+        log.info("모임 채팅 생성 완료: 채팅 ID - {}, 사용자 ID - {}, 모임 ID - {}", savedChat.getId(), sender.getId(), gatheringId);
+
+        return savedChat;
+    }
 }

@@ -5,4 +5,6 @@ import com.develop_ping.union.user.domain.entity.User;
 
 public interface ChatManager {
     Chat createPrivateChat (User sender, Long chatroomId, String content);
+
+    Chat createGatheringChat (User sender, Long gatheringId, String content);
 }

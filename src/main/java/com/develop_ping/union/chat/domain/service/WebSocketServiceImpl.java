@@ -33,6 +33,11 @@ public class WebSocketServiceImpl implements WebSocketService{
 
     @Override
     public WebSocketInfo sendGatheringMessage(WebSocketCommand command) {
-        return null;
+        log.info("모임 메시지 전송 요청 서비스 시작");
+        User sender = userManager.findByNickname(command.getSenderNickname());
+        Chat chat = chatManager.createGatheringChat(sender, command.getGatheringId(), command.getContent());
+        log.info("모임 메시지 전송 요청 서비스 완료");
+
+        return WebSocketInfo.from(chat);
     }
 }

@@ -2,6 +2,7 @@ package com.develop_ping.union.chat.presentation;
 
 import com.develop_ping.union.chat.domain.dto.WebSocketInfo;
 import com.develop_ping.union.chat.domain.service.WebSocketService;
+import com.develop_ping.union.chat.presentation.dto.request.GatheringChatRequest;
 import com.develop_ping.union.chat.presentation.dto.request.PrivateChatRequest;
 import com.develop_ping.union.chat.presentation.dto.response.ChatResponse;
 import com.develop_ping.union.user.domain.entity.User;
@@ -28,5 +29,17 @@ public class WebSocketController {
         log.info("메시지 전송 준비 완료: 보낸 사람 - {}", chatResponse.getSenderName());
         messagingTemplate.convertAndSend("/topic/private" + webSocketInfo.getTargetId(), chatResponse);
         log.info("메시지 전송 완료: 경로 - /topic/private{}", webSocketInfo.getTargetId());
+    }
+
+    @MessageMapping("/gathering")
+    public void receiveGatheringMessage (GatheringChatRequest request) {
+        log.info("모임 메시지 수신: 사용자 이름 - {}", request.getSenderNickname());
+
+        WebSocketInfo webSocketInfo = webSocketService.sendGatheringMessage(request.toCommand());
+        ChatResponse chatResponse = ChatResponse.from(webSocketInfo);
+
+        log.info("메시지 전송 준비 완료: 보낸 사람 - {}", chatResponse.getSenderName());
+        messagingTemplate.convertAndSend("/topic/private/" + webSocketInfo.getTargetId(), chatResponse);
+        log.info("메시지 전송 완료: 경로 - /topic/private/{}", webSocketInfo.getTargetId());
     }
 }
