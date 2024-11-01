@@ -38,7 +38,7 @@ public class WebSocketController {
         ChatResponse chatResponse = ChatResponse.from(chatInfo);
 
         log.info("메시지 전송 준비 완료: 보낸 사람 - {}", chatResponse.getSenderName());
-        messagingTemplate.convertAndSend("/topic/private/" + chatInfo.getTargetId(), chatResponse);
-        log.info("메시지 전송 완료: 경로 - /topic/private/{}", chatInfo.getTargetId());
+        messagingTemplate.convertAndSend("/topic/gathering/" + chatInfo.getTargetId(), chatResponse);
+        log.info("메시지 전송 완료: 경로 - /topic/gathering/{}", chatInfo.getTargetId());
     }
 }
