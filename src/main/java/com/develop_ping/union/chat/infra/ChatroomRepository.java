@@ -1,8 +1,12 @@
 package com.develop_ping.union.chat.infra;
 
 import com.develop_ping.union.chat.domain.entity.Chatroom;
+import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ChatroomRepository extends JpaRepository<Chatroom, Long> {
+import java.util.Optional;
 
+public interface ChatroomRepository extends JpaRepository<Chatroom, Long> {
+    // 유저 1이 sender, 유저 2가 receiver이거나 반대인 경우의 채팅방을 찾는 메서드
+    Optional<Chatroom> findBySenderAndReceiverOrReceiverAndSender(User sender1, User receiver1, User sender2, User receiver2);
 }

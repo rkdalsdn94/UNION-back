@@ -3,11 +3,12 @@ package com.develop_ping.union.user.presentation.dto.request;
 import com.develop_ping.union.user.domain.dto.UserCommand;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RegisterRequest {
     @NotNull
     private String oauthUserToken;

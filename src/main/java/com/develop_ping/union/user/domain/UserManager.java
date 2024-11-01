@@ -9,6 +9,8 @@ public interface UserManager {
 
     User findByToken(String token);
 
+    User findByNickname(String nickname);
+
     User save(User user);
 
     void delete(User user);
