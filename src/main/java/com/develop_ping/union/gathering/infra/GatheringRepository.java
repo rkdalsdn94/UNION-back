@@ -1,6 +1,7 @@
 package com.develop_ping.union.gathering.infra;
 
 import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -76,4 +77,10 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT g FROM Gathering g WHERE g.id = :gatheringId")
     Optional<Gathering> findWithPessimisticLockById(@Param("gatheringId") Long gatheringId);
+
+    @Query("""
+    SELECT g FROM Gathering g JOIN g.parties p
+    WHERE p.user = :user AND p.role = 'owner' ORDER BY g.id DESC
+    """)
+    Slice<Gathering> findByUserAsOwner(@Param("user") User user, Pageable pageable);
 }

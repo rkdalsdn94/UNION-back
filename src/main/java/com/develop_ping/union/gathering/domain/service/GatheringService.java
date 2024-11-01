@@ -6,6 +6,7 @@ import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.user.domain.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface GatheringService {
@@ -17,4 +18,6 @@ public interface GatheringService {
     void joinGathering(Long gatheringId, User user);
 
     void exitGathering(Long gatheringId, User user);
+
+    Slice<GatheringListInfo> getMyGatheringList(User user, Pageable pageable);
 }

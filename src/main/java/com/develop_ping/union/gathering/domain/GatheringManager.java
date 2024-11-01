@@ -3,9 +3,9 @@ package com.develop_ping.union.gathering.domain;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.user.domain.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-
-import java.util.Optional;
 
 public interface GatheringManager {
 
@@ -15,6 +15,8 @@ public interface GatheringManager {
     Gathering findById(Long gatheringId);
     void deleteGathering(Gathering gathering);
     Gathering findWithPessimisticLockById(Long gatheringId);
+
+    Slice<Gathering> getMyGatheringList(User user, Pageable pageable);
 
     // 유저 탈퇴시
     //  이 유저가 가입된 모임 목록을 조회

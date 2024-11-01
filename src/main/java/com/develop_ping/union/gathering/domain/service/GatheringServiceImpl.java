@@ -17,6 +17,7 @@ import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,6 +118,14 @@ public class GatheringServiceImpl implements GatheringService {
 
         gathering.decrementCurrentMember();
         gatheringManager.deleteGathering(gathering);
+    }
+
+    @Override
+    public Slice<GatheringListInfo> getMyGatheringList(User user, Pageable pageable) {
+        log.info("\n내가 생성한 모임 리스트 조회 getMyGatheringList ServiceImpl 클래스 : userId {}, pageable {}", user.getId(), pageable);
+
+        Slice<Gathering> gatheringList = gatheringManager.getMyGatheringList(user, pageable);
+        return GatheringListInfo.of(gatheringList);
     }
 
     private GatheringDetailInfo buildGatheringDetailInfo(

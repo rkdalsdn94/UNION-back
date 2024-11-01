@@ -113,4 +113,17 @@ public class GatheringController {
         gatheringService.exitGathering(gatheringId, user);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/my")
+    public ResponseEntity<Slice<GatheringListResponse>> getMyGatheringList(
+        @AuthenticationPrincipal User user,
+        @PageableDefault(size = 5) Pageable pageable
+    ) {
+        log.info("내가 생성한 모임 리스트 조회 요청 - userId: {}, pageable: {}", user.getId(), pageable);
+
+        Slice<GatheringListInfo> gatheringList = gatheringService.getMyGatheringList(user, pageable);
+        Slice<GatheringListResponse> response = gatheringList.map(GatheringListResponse::from);
+
+        return ResponseEntity.ok(response);
+    }
 }
