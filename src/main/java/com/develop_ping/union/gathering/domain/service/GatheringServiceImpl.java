@@ -1,18 +1,17 @@
 package com.develop_ping.union.gathering.domain.service;
 
 import com.develop_ping.union.gathering.domain.GatheringManager;
+import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
+import com.develop_ping.union.gathering.domain.GatheringSortStrategyFactory;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
-import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
-import com.develop_ping.union.gathering.domain.GatheringSortStrategyFactory;
 import com.develop_ping.union.gathering.exception.OwnerCannotExitException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
-import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.exception.ParticipationNotFoundException;
 import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.user.domain.entity.User;
@@ -89,8 +88,6 @@ public class GatheringServiceImpl implements GatheringService {
         Gathering gathering = gatheringManager.findById(gatheringId);
 
         gathering.validateOwner(user);
-
-        partyManager.deleteParty(gathering);
         gatheringManager.deleteGathering(gathering);
     }
 
@@ -114,15 +111,12 @@ public class GatheringServiceImpl implements GatheringService {
             throw new OwnerCannotExitException("주최자는 모임에서 나갈 수 없습니다.");
         }
 
-        Party party = partyManager.findByGatheringAndUser(gathering, user);
-
         if (!partyManager.existsByGatheringAndUser(gathering, user)) {
             throw new ParticipationNotFoundException("참여하지 않은 모임입니다.");
         }
 
-        gathering.removeParty(party);
         gathering.decrementCurrentMember();
-        partyManager.deleteByGatheringAndUser(gathering, user);
+        gatheringManager.deleteGathering(gathering);
     }
 
     private GatheringDetailInfo buildGatheringDetailInfo(

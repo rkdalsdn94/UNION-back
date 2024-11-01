@@ -64,7 +64,7 @@ public class GatheringController {
         log.info("모임 상세 조회 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
 
         GatheringDetailInfo gatheringDetailInfo = gatheringService.getGatheringDetail(gatheringId, user);
-        GatheringDetailResponse response = GatheringDetailResponse.of(gatheringDetailInfo);
+        GatheringDetailResponse response = GatheringDetailResponse.from(gatheringDetailInfo);
 
         return ResponseEntity.ok(response);
     }

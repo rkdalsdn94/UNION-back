@@ -60,7 +60,7 @@ public class GatheringDetailResponse {
         this.isOwner = isOwner;
     }
 
-    public static GatheringDetailResponse of(GatheringDetailInfo gatheringInfo) {
+    public static GatheringDetailResponse from(GatheringDetailInfo gatheringInfo) {
         return GatheringDetailResponse.builder()
                                 .id(gatheringInfo.getId())
                                 .title(gatheringInfo.getTitle())

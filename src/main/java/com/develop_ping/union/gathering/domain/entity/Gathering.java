@@ -74,16 +74,6 @@ public class Gathering extends AuditingFields {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gathering", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Party> parties = new ArrayList<>();
 
-    public void addParty(Party party) {
-        this.parties.add(party);
-        party.setGathering(this);
-    }
-
-    public void removeParty(Party party) {
-        this.parties.remove(party);
-        party.setGathering(null);
-    }
-
     public void updateGathering(Gathering entity) {
         this.title = entity.getTitle();
         this.content = entity.getContent();
