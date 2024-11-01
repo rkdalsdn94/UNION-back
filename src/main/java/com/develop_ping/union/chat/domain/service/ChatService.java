@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ChatService {
     List<ChatInfo> readPrivateChat (User user, String userToken);
+    List<ChatInfo> readGatheringChat (User user, Long gatheringId);
 }

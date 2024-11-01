@@ -20,12 +20,30 @@ public class ChatController {
     private final ChatService chatService;
 
     @GetMapping("/private/{userToken}")
-    public ResponseEntity<List<ChatResponse>> readPrivateChat (@AuthenticationPrincipal User user, @PathVariable String userToken) {
+    public ResponseEntity<List<ChatResponse>> readPrivateChat (@AuthenticationPrincipal User user,
+                                                               @PathVariable String userToken) {
+        log.info("개인 채팅 내역 조회 확인");
+
         List<ChatInfo> chatInfos = chatService.readPrivateChat(user, userToken);
         List<ChatResponse> chatResponses = chatInfos.stream()
                 .map(ChatResponse::from)
                 .toList();
 
+        log.info("개인 채팅 내역 조회 완료");
+        return ResponseEntity.ok(chatResponses);
+    }
+
+    @GetMapping("/gathering/{gatheringId}")
+    public ResponseEntity<List<ChatResponse>> readGatheringChat (@AuthenticationPrincipal User user,
+                                                                 @PathVariable Long gatheringId) {
+        log.info("모임 채팅 내역 조회 확인");
+
+        List<ChatInfo> chatInfos = chatService.readGatheringChat(user, gatheringId);
+        List<ChatResponse> chatResponses = chatInfos.stream()
+                .map(ChatResponse::from)
+                .toList();
+
+        log.info("모임 채팅 내역 조회 완료");
         return ResponseEntity.ok(chatResponses);
     }
 }
