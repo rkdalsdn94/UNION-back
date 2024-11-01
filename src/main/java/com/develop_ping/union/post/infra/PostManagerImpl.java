@@ -52,4 +52,9 @@ public class PostManagerImpl implements PostManager {
     public Page<Post> findByUser(User user, Pageable pageable) {
         return postRepository.findByUser(user, pageable);
     }
+
+    @Override
+    public Page<Post> findPostsByUserComments(User user, Pageable pageable) {
+        return postRepository.findPostsByUserComments(user, pageable);
+    }
 }

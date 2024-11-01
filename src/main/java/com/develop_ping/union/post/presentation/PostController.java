@@ -21,10 +21,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/board")
 public class PostController {
     private final PostService postService;
 
-    @PostMapping("/board/{boardType}")
+    @PostMapping("/{boardType}")
     public ResponseEntity<PostCreationResponse> createPost(@PathVariable("boardType") PostType type,
                                                            @RequestBody PostCreateRequest request,
                                                            @AuthenticationPrincipal User user) {
@@ -39,7 +40,20 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/board/{boardType}/{postId}")
+    @GetMapping("/{boardType}/{postId}")
+    public ResponseEntity<PostDetailResponse> getPost(@PathVariable("boardType") PostType type,
+                                                      @PathVariable("postId") Long postId,
+                                                      @AuthenticationPrincipal User user) {
+        log.info("[ CALL: PostController.getPost() ] with postId: {}", postId);
+
+        PostCommand command = PostCommand.of(user, postId);
+        PostInfo info = postService.getPost(command);
+        PostDetailResponse response = PostDetailResponse.from(info);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{boardType}/{postId}")
     public ResponseEntity<PostUpdateResponse> updatePost(@PathVariable("boardType") PostType type,
                                                          @PathVariable("postId") Long postId,
                                                          @RequestBody PostUpdateRequest request,
@@ -54,7 +68,7 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/board/{boardType}/{postId}")
+    @DeleteMapping("/{boardType}/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable("boardType") PostType type,
                                            @PathVariable("postId") Long postId,
                                            @AuthenticationPrincipal User user) {
@@ -64,64 +78,5 @@ public class PostController {
         postService.deletePost(PostCommand.of(user, postId));
 
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/board/{boardType}/{postId}")
-    public ResponseEntity<PostDetailResponse> getPost(@PathVariable("boardType") PostType type,
-                                                      @PathVariable("postId") Long postId,
-                                                      @AuthenticationPrincipal User user) {
-        log.info("[ CALL: PostController.getPost() ] with postId: {}", postId);
-
-        PostCommand command = PostCommand.of(user, postId);
-        PostInfo info = postService.getPost(command);
-        PostDetailResponse response = PostDetailResponse.from(info);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/board/{boardType}")
-    public Page<PostListResponse> getPostList(@PathVariable("boardType") PostType type,
-                                              @RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "3") int size,
-                                              @AuthenticationPrincipal User user) {
-        log.info("[ CALL: PostController.getPostList() ]");
-
-        // 게시판을 기준으로 조회
-        Criterion criterion = Criterion.BOARD;
-
-        PostListCommand command = PostListCommand.boardOf(user, type, page, size, criterion);
-        Page<PostListInfo> postListInfoPage = postService.getPosts(command);
-
-        return postListInfoPage.map(PostListResponse::from);
-    }
-
-    @GetMapping("/user/my/posts")
-    public Page<PostListResponse> getMyPostList(@RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "3") int size,
-                                                @AuthenticationPrincipal User user) {
-        log.info("[ CALL: PostController.getPostList() ]");
-
-        // 사용자 기준으로 조회
-        Criterion criterion = Criterion.MY;
-
-        PostListCommand command = PostListCommand.myOf(user, page, size, criterion);
-        Page<PostListInfo> postListInfoPage = postService.getPosts(command);
-
-        return postListInfoPage.map(PostListResponse::from);
-    }
-
-    @GetMapping("/user/{userToken}/posts")
-    public Page<PostListResponse> getUserPostList(@PathVariable("userToken") String userToken,
-                                                  @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "3") int size) {
-        log.info("[ CALL: PostController.getPostList() ]");
-
-        // 특정 유저 기준으로 조회
-        Criterion criterion = Criterion.USER;
-
-        PostListCommand command = PostListCommand.userOf(page, size, userToken, criterion);
-        Page<PostListInfo> postListInfoPage = postService.getPosts(command);
-
-        return postListInfoPage.map(PostListResponse::from);
     }
 }

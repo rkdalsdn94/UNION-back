@@ -1,5 +1,6 @@
 package com.develop_ping.union.post.domain.entity;
 
+import com.develop_ping.union.comment.domain.entity.Comment;
 import com.develop_ping.union.common.base.AuditingFields;
 import com.develop_ping.union.post.domain.dto.command.PostCommand;
 import com.develop_ping.union.user.domain.entity.User;
@@ -8,6 +9,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +39,9 @@ public class Post extends AuditingFields {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     private Post(String title,

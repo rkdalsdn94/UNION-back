@@ -120,11 +120,15 @@ public class PostServiceImpl implements PostService {
             switch (command.getCriterion()) {
                 case BOARD -> postManager.findByPostType(command.getPostType(), pageable);
                 case MY -> postManager.findByUser(command.getUser(), pageable);
+                case MY_COMMENT -> postManager.findPostsByUserComments(command.getUser(), pageable);
                 case USER -> {
                     User user = userManager.findByToken(command.getUserToken());
                     yield postManager.findByUser(user, pageable);
                 }
-                default -> null;
+                case USER_COMMENT -> {
+                    User user = userManager.findByToken(command.getUserToken());
+                    yield postManager.findPostsByUserComments(user, pageable);
+                }
             };
     }
 }
