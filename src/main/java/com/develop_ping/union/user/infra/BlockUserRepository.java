@@ -5,10 +5,12 @@ import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Repository
 public interface BlockUserRepository extends JpaRepository<BlockUser, Long> {
 
     // 1. 차단하기 (BlockUser 엔티티를 save 메서드로 저장하면 됨)
