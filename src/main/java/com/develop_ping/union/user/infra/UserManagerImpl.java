@@ -39,6 +39,7 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findByNickname(String nickname) {
         log.info("닉네임으로 사용자 검색 시도: {}", nickname);
         return userRepository.findByNicknameAndDeletedIsFalse(nickname)

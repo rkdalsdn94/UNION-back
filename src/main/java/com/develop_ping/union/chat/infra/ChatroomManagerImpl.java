@@ -23,7 +23,7 @@ public class ChatroomManagerImpl implements ChatroomManager {
         Chatroom chatroom = chatroomRepository.findBySenderAndReceiverOrReceiverAndSender(sender, receiver, receiver, sender)
                 .orElseGet(() -> {
                     log.info("기존 채팅방이 존재하지 않음. 새로운 채팅방 생성 중...");
-                    return Chatroom.of(sender, receiver);
+                    return chatroomRepository.save(Chatroom.of(sender, receiver));
                 });
 
         log.info("개인 채팅방 조회 또는 생성 완료: 개인 채팅방 ID - {}", chatroom.getId());
