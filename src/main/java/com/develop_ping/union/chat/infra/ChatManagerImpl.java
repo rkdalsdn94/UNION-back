@@ -9,6 +9,7 @@ import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,18 +21,21 @@ public class ChatManagerImpl implements ChatManager {
     private final ChatRepository chatRepository;
 
     @Override
+    @Transactional
     public Chat save(Chat chat) {
         log.info("채팅 생성 : 사용자 ID - {}, 채팅방 ID - {}", chat.getUser().getId(), chat.getTargetId());
         return chatRepository.save(chat);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Chat> findChatByTargetIdAndChatroomType(Long targetId, ChatroomType chatroomType) {
         log.info("채팅 내역 조회 : 채팅방 타입 - {}, 채팅방 ID - {}", chatroomType, targetId);
         return chatRepository.findByTargetIdAndChatroomType(targetId, chatroomType);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Chat> findLatestChatInAllChatroom(List<Chatroom> chatrooms, ChatroomType chatroomType) {
         log.info("각 채팅방에서 마지막 채팅을 조회");
         List<Chat> latestChats = new ArrayList<>();

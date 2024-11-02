@@ -6,6 +6,7 @@ import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class ChatroomManagerImpl implements ChatroomManager {
     private final ChatroomRepository chatroomRepository;
     @Override
+    @Transactional
     public Long findOrMakeChatroom(User sender, User receiver) {
         log.info("개인 채팅방 조회 또는 생성 시도: 발신자 ID - {}, 수신자 ID - {}", sender.getId(), receiver.getId());
 
@@ -30,6 +32,7 @@ public class ChatroomManagerImpl implements ChatroomManager {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Chatroom findChatroomTwoUserBothInvolved(User user, User targetUser) {
         log.info("개인 채팅방 조회 시도: user ID - {}, targetUser ID - {}", user.getId(), targetUser.getId());
 
@@ -41,6 +44,7 @@ public class ChatroomManagerImpl implements ChatroomManager {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Chatroom> findAllChatroomUserInvolved(User user) {
         log.info("해당 유저가 포함된 모든 개인 채팅방 검색 : user ID - {}", user.getId());
         return chatroomRepository.findBySenderOrReceiver(user, user);

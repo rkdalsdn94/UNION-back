@@ -7,6 +7,7 @@ import com.develop_ping.union.user.exception.BlockRelationshipNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ public class BlockUserManagerImpl implements BlockUserManager {
     private final BlockUserRepository blockUserRepository;
 
     @Override
+    @Transactional
     public void blockUser(User blockingUser, User blockedUser) {
         log.info("유저 [{}]가 유저 [{}]를 차단합니다.", blockingUser.getNickname(), blockedUser.getNickname());
         BlockUser user = BlockUser.of(blockingUser, blockedUser);
@@ -28,6 +30,7 @@ public class BlockUserManagerImpl implements BlockUserManager {
     }
 
     @Override
+    @Transactional
     public void unblockUser(User blockingUser, User blockedUser) {
         if (existsByBlockingUserAndBlockedUser(blockingUser, blockedUser)) {
             log.info("유저 [{}]가 유저 [{}]의 차단을 해제합니다.", blockingUser.getNickname(), blockedUser.getNickname());
@@ -40,6 +43,7 @@ public class BlockUserManagerImpl implements BlockUserManager {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> findAllBlockedUser(User user) {
         log.info("유저 [{}]가 차단한 유저 목록을 조회합니다.", user.getNickname());
         List<BlockUser> blockUserList = blockUserRepository.findByBlockingUser(user);
@@ -51,6 +55,7 @@ public class BlockUserManagerImpl implements BlockUserManager {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> findAllBlockedOrBlockingUser(User user) {
         log.info("유저 [{}]와 차단 관계에 있는 모든 유저를 조회합니다.", user.getNickname());
         List<BlockUser> blockedUsers = blockUserRepository.findByBlockingUser(user);
@@ -69,6 +74,7 @@ public class BlockUserManagerImpl implements BlockUserManager {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByBlockingUserAndBlockedUser(User blockingUser, User blockedUser) {
         log.info("유저 [{}]가 유저 [{}]를 차단했는지 여부를 확인합니다.", blockingUser.getNickname(), blockedUser.getNickname());
         boolean exists = blockUserRepository.existsByBlockingUserAndBlockedUser(blockingUser, blockedUser);
@@ -81,6 +87,7 @@ public class BlockUserManagerImpl implements BlockUserManager {
     }
 
     @Override
+    @Transactional
     public void deletedByUserInvolved(User user) {
         log.info("유저와 관련된 차단 기록 삭제 시도: 유저 ID = {}", user.getId());
         blockUserRepository.deleteByUserInvolved(user);
