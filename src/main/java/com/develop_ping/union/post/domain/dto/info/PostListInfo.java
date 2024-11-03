@@ -22,8 +22,8 @@ public class PostListInfo {
     private String univName;
     private ZonedDateTime createdAt;
     private Integer views;
-    private Integer postLikes;
-    private Integer CommentCount;
+    private long postLikes;
+    private long commentCount;
 
     @Builder
     private PostListInfo(Long id,
@@ -36,8 +36,8 @@ public class PostListInfo {
                         String univName,
                         ZonedDateTime createdAt,
                         Integer views,
-                        Integer postLikes,
-                        Integer CommentCount) {
+                        long postLikes,
+                        long commentCount) {
         this.id = id;
         this.title = title;
         this.contentPreview = contentPreview;
@@ -49,16 +49,15 @@ public class PostListInfo {
         this.createdAt = createdAt;
         this.views = views;
         this.postLikes = postLikes;
-        this.CommentCount = CommentCount;
+        this.commentCount = commentCount;
     }
 
-    public static PostListInfo from(Post post) {
+    public static PostListInfo of(Post post, long postLikes, long commentCount) {
         // content가 20자를 초과할 경우 '...' 추가
         String contentPreview = post.getContent().length() > 20
                 ? post.getContent().substring(0, 20) + "..."
                 : post.getContent();
 
-        // TODO: postLikes, CommentCount 추가
         return PostListInfo.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -69,8 +68,8 @@ public class PostListInfo {
                 .univName(post.getUser().getUnivName())
                 .createdAt(post.getCreatedAt())
                 .views(post.getViews())
-                .postLikes(0)
-                .CommentCount(0)
+                .postLikes(postLikes)
+                .commentCount(commentCount)
                 .build();
     }
 }

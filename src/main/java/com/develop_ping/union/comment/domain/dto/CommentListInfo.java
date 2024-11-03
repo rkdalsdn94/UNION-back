@@ -13,19 +13,22 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentListInfo {
     private List<CommentInfo> comments;
+    private long commentCount;
 
     @Builder
-    private CommentListInfo(List<CommentInfo> comments) {
+    private CommentListInfo(List<CommentInfo> comments, long commentCount) {
         this.comments = comments;
+        this.commentCount = commentCount;
     }
 
-    public static CommentListInfo of(List<Comment> rootComments) {
+    public static CommentListInfo of(List<Comment> rootComments, long commentCount) {
         List<CommentInfo> commentInfos = rootComments.stream()
                 .map(CommentInfo::of)
                 .collect(Collectors.toList());
 
         return CommentListInfo.builder()
                 .comments(commentInfos)
+                .commentCount(commentCount)
                 .build();
     }
 }

@@ -95,8 +95,10 @@ public class CommentServiceImpl implements CommentService {
 
         // TODO: rootComments 랑 children 을 각각 for문이나 stream 돌려서 User deleted 확인 + blockUsers 확인해서 제외(null처리)해주기
 
+        long count = commentManager.countByPostId(post.getId());
+
         log.info("[ Comments Retrieval Completed! ]");
-        return CommentListInfo.of(rootComments);
+        return CommentListInfo.of(rootComments, count);
     }
 
     private void validateCommentOwner(User user, Comment comment) {

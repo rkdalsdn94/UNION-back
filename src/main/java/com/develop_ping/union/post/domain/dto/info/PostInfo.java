@@ -57,16 +57,6 @@ public class PostInfo {
     public static PostInfo from(Post post) {
         return PostInfo.builder()
                 .id(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .type(post.getType())
-                .thumbnail(post.getThumbnail())
-                .views(post.getViews())
-                .token(post.getUser().getToken())
-                .nickname(post.getUser().getNickname())
-                .profileImage(post.getUser().getProfileImage())
-                .univName(post.getUser().getUnivName())
-                .createdAt(post.getCreatedAt())
                 .build();
     }
 

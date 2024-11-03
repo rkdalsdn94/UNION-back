@@ -18,8 +18,8 @@ public class PostListResponse {
     private ZonedDateTime createdAt;
     private AuthorResponse author;
     private Integer views;
-    private Integer postLikes;
-    private Integer commentCount;
+    private long postLikes;
+    private long commentCount;
 
     @Builder
     public PostListResponse(Long id,
@@ -29,8 +29,8 @@ public class PostListResponse {
                             ZonedDateTime createdAt,
                             AuthorResponse author,
                             Integer views,
-                            Integer postLikes,
-                            Integer commentCount) {
+                            long postLikes,
+                            long commentCount) {
         this.id = id;
         this.title = title;
         this.contentPreview = contentPreview;

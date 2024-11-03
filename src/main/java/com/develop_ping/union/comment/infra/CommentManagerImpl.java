@@ -36,4 +36,9 @@ public class CommentManagerImpl implements CommentManager {
     public List<Comment> findByPostIdAndParentIsNull(Long postId) {
         return commentRepository.findByPostIdAndParentIsNull(postId);
     }
+
+    @Override
+    public long countByPostId(Long postId) {
+        return commentRepository.countByPostId(postId);
+    }
 }

@@ -1,5 +1,6 @@
 package com.develop_ping.union.post.domain.service;
 
+import com.develop_ping.union.comment.domain.CommentManager;
 import com.develop_ping.union.photo.domain.PhotoManager;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.dto.command.PostCommand;
@@ -27,6 +28,7 @@ public class PostServiceImpl implements PostService {
     private final PostManager postManager;
     private final UserManager userManager;
     private final PhotoManager photoManager;
+    private final CommentManager commentManager;
 
     @Override
     @Transactional
@@ -78,6 +80,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public PostInfo getPost(PostCommand command) {
         log.info("[ CALL: PostService.getPost() ] post id: {}", command.getId());
 
@@ -93,13 +96,20 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PostListInfo> getPosts(PostListCommand command) {
         log.info("[ CALL: PostService.getPostsByPage() ]");
 
         Page<Post> posts = findPostsByCriterion(command);
 
         log.info("[ Posts Retrieval Completed! ] total elements: {}", posts.getTotalElements());
-        return posts.map(PostListInfo::from);
+
+        // TODO: 캐싱 또는 배치 작업으로 postLikes, commentCount 계산하기
+        return posts.map(post -> {
+            long postLikes = 0L;
+            long commentCount = commentManager.countByPostId(post.getId());
+            return PostListInfo.of(post, postLikes, commentCount);
+        });
     }
 
     private Page<Post> findPostsByCriterion(PostListCommand command) {

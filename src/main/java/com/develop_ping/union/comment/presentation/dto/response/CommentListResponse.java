@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentListResponse {
     private List<CommentDetailResponse> comments;
+    private long commentCount;
 
     @Builder
-    private CommentListResponse(List<CommentDetailResponse> comments) {
+    private CommentListResponse(List<CommentDetailResponse> comments, long commentCount) {
         this.comments = comments;
+        this.commentCount = commentCount;
     }
 
     public static CommentListResponse from(CommentListInfo listInfo) {
@@ -26,6 +28,7 @@ public class CommentListResponse {
 
         return CommentListResponse.builder()
                 .comments(responseList)
+                .commentCount(listInfo.getCommentCount())
                 .build();
     }
 }

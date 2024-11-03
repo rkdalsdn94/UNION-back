@@ -22,7 +22,6 @@ public class PostDetailResponse {
     private AuthorResponse author;
     private List<String> photos;
 
-
     @Builder
     public PostDetailResponse(Long id,
                               String title,

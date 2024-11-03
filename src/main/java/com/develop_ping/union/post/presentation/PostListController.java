@@ -38,7 +38,7 @@ public class PostListController {
         return postListInfoPage.map(PostListResponse::from);
     }
 
-    @GetMapping("/user/my/post")
+    @GetMapping("/user/my/posts")
     public Page<PostListResponse> getMyPostList(@RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "3") int size,
                                                 @AuthenticationPrincipal User user) {
@@ -68,7 +68,7 @@ public class PostListController {
         return postListInfoPage.map(PostListResponse::from);
     }
 
-    @GetMapping("/user/{userToken}/post")
+    @GetMapping("/user/{userToken}/posts")
     public Page<PostListResponse> getUserPostList(@PathVariable("userToken") String userToken,
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "3") int size) {

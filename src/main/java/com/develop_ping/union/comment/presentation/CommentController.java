@@ -52,6 +52,7 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
+    // 개발 확인용 API (단일 댓글 내용 조회)
     @GetMapping("/comment/{commentId}")
     public ResponseEntity<CommentDetailResponse> getComment(@PathVariable("commentId") Long commentId) {
         log.info("[ CALL: CommentController.getComment() ] with commentId: {}", commentId);
