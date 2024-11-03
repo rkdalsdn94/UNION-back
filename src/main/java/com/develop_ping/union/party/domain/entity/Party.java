@@ -5,7 +5,6 @@ import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.boot.model.internal.ForeignKeyType;
 
 @Getter
 @Entity

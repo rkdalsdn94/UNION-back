@@ -13,19 +13,6 @@ import java.util.Optional;
 public interface PartyRepository extends JpaRepository<Party, Long> {
 
     Optional<Party> findByGatheringAndUser(Gathering gathering, User user);
-    Optional<Party> findByGathering(Gathering gathering);
-    void deleteByGathering(Gathering gathering);
     boolean existsByGatheringAndUser(Gathering gathering, User user);
-
-    // 주최자 닉네임을 Gathering과 Role 기준으로 조회
-    @Query("SELECT u.nickname FROM Party p JOIN p.user u WHERE p.gathering = :gathering AND p.role = :role")
-    String findOwnerNicknameByGatheringAndRole(@Param("gathering") Gathering gathering, @Param("role") PartyRole role);
-
-    // 주최자 여부 확인
-    boolean existsByGatheringAndUserAndRole(Gathering gathering, User user, PartyRole role);
-
-    // 모임 참여자 삭제 - 나가기 기능
-    void deleteByGatheringAndUser(Gathering gathering, User user);
-
-    Optional<Party> findByGatheringId(Long gatheringId);
+    Optional<Party> findByGatheringIdAndRole(Long gatheringId, PartyRole partyRole);
 }

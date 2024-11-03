@@ -55,7 +55,11 @@ public class GatheringServiceImpl implements GatheringService {
 
         Gathering gathering = gatheringManager.findById(gatheringId);
 
-        Party ownerParty = partyManager.findOwnerByGathering(gatheringId);
+        // TODO: 조회수 증가 부분 성능 이슈 신경쓰기
+        gathering.incrementViews();
+        gatheringManager.save(gathering);
+
+        Party ownerParty = partyManager.findOwnerByGatheringIdAndRole(gatheringId, PartyRole.OWNER);
         User owner = ownerParty.getUser();
         boolean isOwner = gathering.isOwner(user);
 
@@ -122,7 +126,7 @@ public class GatheringServiceImpl implements GatheringService {
     @Override
     @Transactional
     public void exitGathering(Long gatheringId, User user) {
-        log.info("\n모임 나가기 exitGathering ServiceImpl 클래스 : gatheringID {}, user {}", gatheringId, user.getId());
+        log.info("\n모임 나가기 (exitGathering) ServiceImpl 클래스 : gatheringID {}, user {}", gatheringId, user.getId());
 
         Gathering gathering = gatheringManager.findById(gatheringId);
 

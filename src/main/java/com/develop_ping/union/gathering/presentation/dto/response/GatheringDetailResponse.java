@@ -1,9 +1,6 @@
 package com.develop_ping.union.gathering.presentation.dto.response;
 
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
-import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
-import com.develop_ping.union.post.domain.dto.info.PostInfo;
-import com.develop_ping.union.post.presentation.dto.response.PostDetailResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
