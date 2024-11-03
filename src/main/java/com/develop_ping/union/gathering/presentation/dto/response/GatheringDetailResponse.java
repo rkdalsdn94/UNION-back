@@ -1,8 +1,13 @@
 package com.develop_ping.union.gathering.presentation.dto.response;
 
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
+import com.develop_ping.union.post.domain.dto.info.PostInfo;
+import com.develop_ping.union.post.presentation.dto.response.PostDetailResponse;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 
@@ -24,6 +29,7 @@ public class GatheringDetailResponse {
     private final Long likes;
     private final Long views;
     private final boolean isOwner;
+    private final AuthorResponse author;
 
     @Builder
     private GatheringDetailResponse(
@@ -41,7 +47,8 @@ public class GatheringDetailResponse {
         ZonedDateTime createdAt,
         String userNickname,
         Long likes,
-        boolean isOwner
+        boolean isOwner,
+        AuthorResponse author
     ) {
         this.id = id;
         this.title = title;
@@ -58,25 +65,56 @@ public class GatheringDetailResponse {
         this.userNickname = userNickname;
         this.likes = likes;
         this.isOwner = isOwner;
+        this.author = author;
     }
 
     public static GatheringDetailResponse from(GatheringDetailInfo gatheringInfo) {
         return GatheringDetailResponse.builder()
-                                .id(gatheringInfo.getId())
-                                .title(gatheringInfo.getTitle())
-                                .content(gatheringInfo.getContent())
-                                .maxMember(gatheringInfo.getMaxMember())
-                                .currentMember(gatheringInfo.getCurrentMember())
-                                .address(gatheringInfo.getAddress())
-                                .latitude(gatheringInfo.getLatitude())
-                                .longitude(gatheringInfo.getLongitude())
-                                .eupMyeonDong(gatheringInfo.getEupMyeonDong())
-                                .gatheringDateTime(gatheringInfo.getGatheringDateTime())
-                                .views(gatheringInfo.getViews())
-                                .createdAt(gatheringInfo.getCreatedAt())
-                                .userNickname(gatheringInfo.getUserNickname())
-                                .likes(gatheringInfo.getLikes())
-                                .isOwner(gatheringInfo.isOwner())
-                                .build();
+                                      .id(gatheringInfo.getGatheringInfo().getId())
+                                      .title(gatheringInfo.getGatheringInfo().getTitle())
+                                      .content(gatheringInfo.getGatheringInfo().getContent())
+                                      .maxMember(gatheringInfo.getGatheringInfo().getMaxMember())
+                                      .currentMember(gatheringInfo.getGatheringInfo().getCurrentMember())
+                                      .address(gatheringInfo.getGatheringInfo().getAddress())
+                                      .latitude(gatheringInfo.getGatheringInfo().getLatitude())
+                                      .longitude(gatheringInfo.getGatheringInfo().getLongitude())
+                                      .eupMyeonDong(gatheringInfo.getGatheringInfo().getEupMyeonDong())
+                                      .gatheringDateTime(gatheringInfo.getGatheringInfo().getGatheringDateTime())
+                                      .views(gatheringInfo.getGatheringInfo().getViews())
+                                      .createdAt(gatheringInfo.getGatheringInfo().getCreatedAt())
+                                      .userNickname(gatheringInfo.getUser().getNickname())
+                                      .likes(gatheringInfo.getLikes())
+                                      .isOwner(gatheringInfo.isOwner())
+                                      .author(AuthorResponse.from(gatheringInfo))
+                                      .build();
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AuthorResponse {
+        private String token;
+        private String nickname;
+        private String profileImage;
+        private String univName;
+
+        @Builder
+        private AuthorResponse(String token,
+                               String nickname,
+                               String profileImage,
+                               String univName) {
+            this.token = token;
+            this.nickname = nickname;
+            this.profileImage = profileImage;
+            this.univName = univName;
+        }
+
+        public static GatheringDetailResponse.AuthorResponse from(GatheringDetailInfo info) {
+            return AuthorResponse.builder()
+                                 .token(info.getUser().getToken())
+                                 .nickname(info.getUser().getUnivName())
+                                 .profileImage(info.getUser().getProfileImage())
+                                 .univName(info.getUser().getUnivName())
+                                 .build();
+        }
     }
 }

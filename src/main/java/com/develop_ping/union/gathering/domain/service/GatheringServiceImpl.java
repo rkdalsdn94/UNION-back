@@ -12,6 +12,9 @@ import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.exception.OwnerCannotExitException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
+import com.develop_ping.union.party.domain.entity.Party;
+import com.develop_ping.union.party.domain.entity.PartyRole;
+import com.develop_ping.union.party.exception.AlreadyJoinedException;
 import com.develop_ping.union.party.exception.ParticipationNotFoundException;
 import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.user.domain.entity.User;
@@ -52,12 +55,15 @@ public class GatheringServiceImpl implements GatheringService {
 
         Gathering gathering = gatheringManager.findById(gatheringId);
 
-        GatheringInfo gatheringInfo = gatheringManager.getGatheringDetail(gathering.getId());
+        Party ownerParty = partyManager.findOwnerByGathering(gatheringId);
+        User owner = ownerParty.getUser();
         boolean isOwner = gathering.isOwner(user);
-        String ownerNickname = gathering.getOwnerNickname();
+
         Long likeCount = reactionManager.selectLikeCount(gathering.getId());
 
-        return buildGatheringDetailInfo(gatheringInfo, ownerNickname, likeCount, isOwner);
+        GatheringInfo gatheringInfo = GatheringInfo.of(gathering);
+
+        return buildGatheringDetailInfo(gatheringInfo, owner, likeCount, isOwner);
     }
 
     @Override
@@ -98,7 +104,19 @@ public class GatheringServiceImpl implements GatheringService {
         log.info("모임 참가 joinGathering ServiceImpl 클래스 : gatheringId {}, user {}", gatheringId, user.getId());
 
         Gathering gathering = gatheringManager.findWithPessimisticLockById(gatheringId);
-        partyManager.joinGathering(gathering, user);
+        Party party = Party.builder()
+                           .gathering(gathering)
+                           .user(user)
+                           .role(PartyRole.PARTICIPANT)
+                           .build();
+
+        if (partyManager.existsByGatheringAndUser(gathering, user)) {
+            throw new AlreadyJoinedException("이미 해당 모임에 참여하셨습니다.");
+        }
+
+        gathering.getParties().add(party);
+        gathering.incrementCurrentMember();
+        gatheringManager.save(gathering);
     }
 
     @Override
@@ -112,12 +130,13 @@ public class GatheringServiceImpl implements GatheringService {
             throw new OwnerCannotExitException("주최자는 모임에서 나갈 수 없습니다.");
         }
 
-        if (!partyManager.existsByGatheringAndUser(gathering, user)) {
-            throw new ParticipationNotFoundException("참여하지 않은 모임입니다.");
-        }
+        Party party = partyManager.findByGatheringAndUser(gathering, user)
+                                  .orElseThrow(() -> new ParticipationNotFoundException("참여하지 않은 모임입니다."));
 
+        // 현재 모임 인원 수 감소
         gathering.decrementCurrentMember();
-        gatheringManager.deleteGathering(gathering);
+        gathering.getParties().remove(party);
+        gatheringManager.save(gathering);
     }
 
     @Override
@@ -129,7 +148,13 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     private GatheringDetailInfo buildGatheringDetailInfo(
-        GatheringInfo gatheringInfo, String nickname, Long likeCount, boolean isOwner) {
-        return GatheringDetailInfo.of(gatheringInfo, nickname, likeCount, isOwner);
+        GatheringInfo gatheringInfo, User user, Long likes, boolean isOwner
+    ) {
+        return GatheringDetailInfo.builder()
+                                  .gatheringInfo(gatheringInfo)
+                                  .user(user)
+                                  .likes(likes)
+                                  .isOwner(isOwner)
+                                  .build();
     }
 }

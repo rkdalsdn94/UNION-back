@@ -26,4 +26,6 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 
     // 모임 참여자 삭제 - 나가기 기능
     void deleteByGatheringAndUser(Gathering gathering, User user);
+
+    Optional<Party> findByGatheringId(Long gatheringId);
 }

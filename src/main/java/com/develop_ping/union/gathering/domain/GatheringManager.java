@@ -10,7 +10,6 @@ import org.springframework.data.domain.Slice;
 public interface GatheringManager {
 
     GatheringInfo save(Gathering gathering);
-    GatheringInfo getGatheringDetail(Long gatheringId);
     Slice<Gathering> getGatheringList(GatheringSortStrategy strategy, GatheringListCommand command);
     Gathering findById(Long gatheringId);
     void deleteGathering(Gathering gathering);

@@ -1,6 +1,5 @@
 package com.develop_ping.union.party.infra;
 
-import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.ParticipantLimitExceededException;
@@ -9,16 +8,19 @@ import com.develop_ping.union.party.domain.dto.PartyInfo;
 import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
 import com.develop_ping.union.party.exception.AlreadyJoinedException;
+import com.develop_ping.union.party.exception.ParticipationNotFoundException;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class PartyManagerImpl implements PartyManager {
-
-    private final PartyRepository partyRepository;
-    private final GatheringManager gatheringManager;
+ private final PartyRepository partyRepository;
 
     @Override
     public PartyInfo createParty(Gathering gathering, User user) {
@@ -33,54 +35,34 @@ public class PartyManagerImpl implements PartyManager {
     }
 
     @Override
-    public Party findByGatheringAndUser(Gathering gathering, User user) {
-        return partyRepository.findByGatheringAndUser(gathering, user)
-                              .orElseThrow(() -> new GatheringNotFoundException(gathering.getId()));
-    }
-
-    @Override
-    public void deleteParty(Gathering gathering) {
-        partyRepository.deleteByGathering(gathering);
-    }
-
-    @Override
-    public void joinGathering(Gathering gathering, User user) {
-        gathering.incrementCurrentMember();
-        validateJoinConditions(gathering, user);
-
-        Party party = Party.builder()
-                           .gathering(gathering)
-                           .user(user)
-                           .role(PartyRole.PARTICIPANT)
-                           .build();
-
-        partyRepository.save(party);
-        gatheringManager.save(gathering);
-    }
-
-    @Override
-    public String findOwnerNicknameByGathering(Gathering gathering) {
-        return partyRepository.findOwnerNicknameByGatheringAndRole(gathering, PartyRole.OWNER);
-    }
-
-    @Override
-    public boolean existsByGatheringAndUserAndRole(Gathering gathering, User user, PartyRole role) {
-        return partyRepository.existsByGatheringAndUserAndRole(gathering, user, role);
-    }
-
-    @Override
     public boolean existsByGatheringAndUser(Gathering gathering, User user) {
         return partyRepository.existsByGatheringAndUser(gathering, user);
     }
 
     @Override
-    public void deleteByGatheringAndUser(Gathering gathering, User user) {
+    public void exitGathering(Gathering gathering, User user) {
+        log.info("\n모임 참여자 삭제 - 나가기 기능 PartyManagerImpl 클래스 : gathering: {}, user: {}", gathering.getId(), user.getId());
+
+        partyRepository.findByGatheringAndUser(gathering, user)
+                                    .orElseThrow(() -> new ParticipationNotFoundException("참여 정보가 없습니다."));
+
         partyRepository.deleteByGatheringAndUser(gathering, user);
     }
 
     @Override
-    public void delete(Party party) {
-        partyRepository.delete(party);
+    public Party findOwnerByGathering(Long gatheringId) {
+        return partyRepository.findByGatheringId(gatheringId)
+                              .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
+    }
+
+    @Override
+    public Optional<Party> findByGatheringAndUser(Gathering gathering, User user) {
+        return partyRepository.findByGatheringAndUser(gathering, user);
+    }
+
+    @Override
+    public void save(Party party) {
+        partyRepository.save(party);
     }
 
     // TODO: 도메인 로직으로 이동 고려
