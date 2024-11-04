@@ -1,6 +1,7 @@
 package com.develop_ping.union.post.presentation.dto.response;
 
 import com.develop_ping.union.post.domain.dto.info.PostListInfo;
+import com.develop_ping.union.post.domain.entity.PostType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostListResponse {
     private Long id;
+    private PostType type;
     private String title;
     private String contentPreview;
     private String thumbnail;
@@ -23,6 +25,7 @@ public class PostListResponse {
 
     @Builder
     public PostListResponse(Long id,
+                            PostType type,
                             String title,
                             String contentPreview,
                             String thumbnail,
@@ -32,6 +35,7 @@ public class PostListResponse {
                             long postLikes,
                             long commentCount) {
         this.id = id;
+        this.type = type;
         this.title = title;
         this.contentPreview = contentPreview;
         this.thumbnail = thumbnail;
@@ -45,6 +49,7 @@ public class PostListResponse {
     public static PostListResponse from(PostListInfo info) {
         return PostListResponse.builder()
                 .id(info.getId())
+                .type(info.getType())
                 .title(info.getTitle())
                 .contentPreview(info.getContentPreview())
                 .thumbnail(info.getThumbnail())

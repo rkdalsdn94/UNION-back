@@ -13,9 +13,9 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostListInfo {
     private Long id;
+    private PostType type;
     private String title;
     private String contentPreview;
-    private PostType type;
     private String thumbnail;
     private String nickname;
     private String profileImage;
@@ -27,21 +27,21 @@ public class PostListInfo {
 
     @Builder
     private PostListInfo(Long id,
-                        String title,
-                        String contentPreview,
-                        PostType type,
-                        String thumbnail,
-                        String nickname,
-                        String profileImage,
-                        String univName,
-                        ZonedDateTime createdAt,
-                        Integer views,
-                        long postLikes,
-                        long commentCount) {
+                         PostType type,
+                         String title,
+                         String contentPreview,
+                         String thumbnail,
+                         String nickname,
+                         String profileImage,
+                         String univName,
+                         ZonedDateTime createdAt,
+                         Integer views,
+                         long postLikes,
+                         long commentCount) {
         this.id = id;
+        this.type = type;
         this.title = title;
         this.contentPreview = contentPreview;
-        this.type = type;
         this.thumbnail = thumbnail;
         this.nickname = nickname;
         this.profileImage = profileImage;
@@ -60,6 +60,7 @@ public class PostListInfo {
 
         return PostListInfo.builder()
                 .id(post.getId())
+                .type(post.getType())
                 .title(post.getTitle())
                 .contentPreview(contentPreview)
                 .thumbnail(post.getThumbnail())
