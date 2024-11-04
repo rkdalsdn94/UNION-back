@@ -11,4 +11,7 @@ public interface ReactionManager {
 
     Long likePost(User user, Long postId);
     Long likeGathering(User user, Long gatheringId);
+
+    long countLikesByPost(Long targetId);
+    long countLikesByGathering(Long targetId);
 }

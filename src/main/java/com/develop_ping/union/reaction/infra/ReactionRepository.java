@@ -9,9 +9,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
-
     @Query("SELECT COUNT(r) FROM Reaction r WHERE r.type = :type AND r.targetId = :gatheringId")
     long countByTypeAndGatheringId(@Param("type") ReactionType type, @Param("gatheringId") Long gatheringId);
 
     boolean existsByUserIdAndTypeAndId(Long userId, ReactionType type, Long gatheringId);
+
+    long countByTypeAndTargetId(ReactionType type, Long targetId);
 }

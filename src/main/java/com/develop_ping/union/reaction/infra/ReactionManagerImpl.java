@@ -37,6 +37,15 @@ public class ReactionManagerImpl implements ReactionManager {
         return saveReaction(user, gatheringId, type);
     }
 
+    @Override
+    public long countLikesByPost(Long targetId) {
+        return reactionRepository.countByTypeAndTargetId(ReactionType.POST, targetId);
+    }
+
+    @Override
+    public long countLikesByGathering(Long targetId) {
+        return reactionRepository.countByTypeAndTargetId(ReactionType.GATHERING, targetId);
+    }
 
     private Long saveReaction(User user, Long targetId, ReactionType type) {
         Reaction reaction = reactionRepository.save(Reaction.of(user, targetId, type));
