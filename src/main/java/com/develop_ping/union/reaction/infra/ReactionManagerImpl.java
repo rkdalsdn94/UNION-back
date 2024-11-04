@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -45,6 +47,16 @@ public class ReactionManagerImpl implements ReactionManager {
     @Override
     public long countLikesByGathering(Long targetId) {
         return reactionRepository.countByTypeAndTargetId(ReactionType.GATHERING, targetId);
+    }
+
+    @Override
+    public List<Reaction> findLikesByPost(Long targetId) {
+        return reactionRepository.findByTypeAndTargetId(ReactionType.POST, targetId);
+    }
+
+    @Override
+    public List<Reaction> findLikesByGathering(Long targetId) {
+        return reactionRepository.findByTypeAndTargetId(ReactionType.GATHERING, targetId);
     }
 
     private Long saveReaction(User user, Long targetId, ReactionType type) {
