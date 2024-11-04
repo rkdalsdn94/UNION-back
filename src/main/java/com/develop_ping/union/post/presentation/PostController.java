@@ -1,10 +1,8 @@
 package com.develop_ping.union.post.presentation;
 
-import com.develop_ping.union.post.domain.Criterion;
 import com.develop_ping.union.post.domain.dto.command.PostCommand;
-import com.develop_ping.union.post.domain.dto.command.PostListCommand;
 import com.develop_ping.union.post.domain.dto.info.PostInfo;
-import com.develop_ping.union.post.domain.dto.info.PostListInfo;
+import com.develop_ping.union.post.domain.dto.info.PostReactionInfo;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.post.domain.service.PostService;
 import com.develop_ping.union.post.presentation.dto.request.*;
@@ -12,7 +10,6 @@ import com.develop_ping.union.post.presentation.dto.response.*;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -78,5 +75,25 @@ public class PostController {
         postService.deletePost(PostCommand.of(user, postId));
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/like/{postId}")
+    public ResponseEntity<Boolean> likePost(@PathVariable("postId") Long postId,
+                                            @AuthenticationPrincipal User user) {
+        log.info("[ CALL: PostController.likePost() ] with postId: {}", postId);
+        log.info("[ USER ID: {} ]", user.getId());
+
+        return ResponseEntity.ok(postService.likePost(PostCommand.of(user, postId)));
+    }
+
+    @GetMapping("/likes/{postId}")
+    public ResponseEntity<PostReactionResponse> getPostLikes(@PathVariable("postId") Long postId,
+                                                             @AuthenticationPrincipal User user) {
+        log.info("[ CALL: PostController.getPostLikes() ] with postId: {}", postId);
+
+        PostReactionInfo info = postService.getPostLikes(PostCommand.of(user, postId));
+        PostReactionResponse response = PostReactionResponse.from(info);
+
+        return ResponseEntity.ok(response);
     }
 }

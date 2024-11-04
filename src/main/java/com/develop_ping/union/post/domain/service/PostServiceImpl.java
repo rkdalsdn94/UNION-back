@@ -3,11 +3,11 @@ package com.develop_ping.union.post.domain.service;
 import com.develop_ping.union.comment.domain.CommentManager;
 import com.develop_ping.union.photo.domain.PhotoManager;
 import com.develop_ping.union.post.domain.PostManager;
-import com.develop_ping.union.post.domain.dto.command.PostCommand;
-import com.develop_ping.union.post.domain.dto.command.PostListCommand;
-import com.develop_ping.union.post.domain.dto.info.PostInfo;
-import com.develop_ping.union.post.domain.dto.info.PostListInfo;
+import com.develop_ping.union.post.domain.dto.command.*;
+import com.develop_ping.union.post.domain.dto.info.*;
 import com.develop_ping.union.post.domain.entity.Post;
+import com.develop_ping.union.reaction.domain.ReactionManager;
+import com.develop_ping.union.reaction.domain.entity.ReactionType;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +29,7 @@ public class PostServiceImpl implements PostService {
     private final UserManager userManager;
     private final PhotoManager photoManager;
     private final CommentManager commentManager;
+    private final ReactionManager reactionManager;
 
     @Override
     @Transactional
@@ -106,10 +107,33 @@ public class PostServiceImpl implements PostService {
 
         // TODO: 캐싱 또는 배치 작업으로 postLikes, commentCount 계산하기
         return posts.map(post -> {
-            long postLikes = 0L;
+            long postLikes = reactionManager.countLikesByPost(post.getId());
             long commentCount = commentManager.countByPostId(post.getId());
             return PostListInfo.of(post, postLikes, commentCount);
         });
+    }
+
+    @Override
+    @Transactional
+    public boolean likePost(PostCommand command) {
+        log.info("[ CALL: PostService.likePost() ] post id: {}", command.getId());
+
+        return reactionManager.likePost(command.getUser(), command.getId()) != null;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostReactionInfo getPostLikes(PostCommand command) {
+        log.info("[ CALL: PostService.getPostLikes() ] post id: {}", command.getId());
+
+        long likes = reactionManager.countLikesByPost(command.getId());
+        boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(
+                command.getUser().getId(),
+                ReactionType.POST,
+                command.getId()
+        );
+
+        return PostReactionInfo.of(likes, isLiked);
     }
 
     private Page<Post> findPostsByCriterion(PostListCommand command) {
