@@ -153,4 +153,12 @@ public class Gathering extends AuditingFields {
                ", gatheringDateTime=" + gatheringDateTime +
                '}';
     }
+
+    public boolean isFull() {
+        return this.currentMember >= this.maxMember;
+    }
+
+    public void close() {
+        this.recruited = true;
+    }
 }

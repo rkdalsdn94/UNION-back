@@ -145,6 +145,11 @@ public class GatheringServiceImpl implements GatheringService {
 
         gathering.getParties().add(party);
         gathering.incrementCurrentMember();
+
+        if (gathering.isFull()) {
+            gathering.close();
+        }
+
         gatheringManager.save(gathering);
     }
 
