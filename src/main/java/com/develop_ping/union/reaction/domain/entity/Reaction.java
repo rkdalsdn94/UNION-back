@@ -1,6 +1,7 @@
 package com.develop_ping.union.reaction.domain.entity;
 
 import com.develop_ping.union.common.base.AuditingFields;
+import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,17 +18,31 @@ public class Reaction extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false,
+            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT)
+    )
+    private User user;
 
-    @Column
+    @Column(nullable = false)
+    private Long targetId;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ReactionType type;
 
     @Builder
-    private Reaction(Long id, Long userId, ReactionType type) {
-        this.id = id;
-        this.userId = userId;
+    private Reaction(User user, Long targetId, ReactionType type) {
+        this.user = user;
+        this.targetId = targetId;
         this.type = type;
+    }
+
+    public static Reaction of(User user, Long targetId, ReactionType type) {
+        return Reaction.builder()
+                .user(user)
+                .targetId(targetId)
+                .type(type)
+                .build();
     }
 }
