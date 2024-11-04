@@ -11,7 +11,6 @@ import lombok.*;
 @Table(name = "parties")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Party extends AuditingFields {
-    // TODO: 연관 관계 고민
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -40,6 +40,7 @@ public class GatheringController {
         Slice<GatheringListInfo> gatheringList = gatheringService.getGatheringList(
             GatheringListCommand.of(sortType, latitude, longitude, pageable)
         );
+
         Slice<GatheringListResponse> response = gatheringList.map(GatheringListResponse::from);
 
         return ResponseEntity.ok(response);

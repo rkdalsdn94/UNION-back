@@ -8,7 +8,6 @@ import com.develop_ping.union.user.domain.entity.User;
 import java.util.List;
 
 public interface ReactionManager {
-    Long selectLikeCount(Long gatheringId);
 
     boolean existsByUserIdAndTypeAndId(Long userId, ReactionType type, Long gatheringId);
 

@@ -1,5 +1,6 @@
 package com.develop_ping.union.photo.domain.service;
 
+import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.photo.domain.PhotoManager;
 import com.develop_ping.union.photo.domain.dto.PhotoCommand;
 import com.develop_ping.union.photo.domain.entity.Photo;
@@ -20,6 +21,7 @@ public class PhotoServiceImpl implements PhotoService {
     private final PhotoManager photoManager;
     private final S3Manager s3Manager;
     private final PostManager postManager;
+    private final PartyManager partyManager;
 
     @Override
     public void savePhotos(PhotoCommand command) {
@@ -43,7 +45,7 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     private void validateGatheringOwner(Long userId, Long gatheringId) {
-        // TODO: userId로 gatheringId의 owner인지 확인
+        partyManager.validateOwner(userId, gatheringId);
     }
 
     private void validatePostOwner(Long userId, Long postId) {

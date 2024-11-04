@@ -9,6 +9,7 @@ import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.OwnerCannotExitException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
@@ -65,7 +66,8 @@ public class GatheringServiceImpl implements GatheringService {
         gatheringManager.save(gathering);
 
         // 모임 주최자 정보
-        Party ownerParty = partyManager.findOwnerByGatheringIdAndRole(gatheringId, PartyRole.OWNER);
+        Party ownerParty = partyManager.findOwnerByGatheringIdAndRole(gatheringId, PartyRole.OWNER)
+                                       .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
         User owner = ownerParty.getUser();
         boolean isOwner = gathering.isOwner(user);
 
@@ -73,7 +75,7 @@ public class GatheringServiceImpl implements GatheringService {
         boolean isJoined = partyManager.existsByGatheringAndUser(gathering, user);
 
         // 좋아요 수
-        Long likes = reactionManager.selectLikeCount(gathering.getId());
+        Long likes = reactionManager.countLikesByGathering(gathering.getId());
 
         // 사용자가 좋아요를 눌렀는지 여부
         boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(user.getId(), ReactionType.GATHERING, gatheringId);
@@ -112,8 +114,8 @@ public class GatheringServiceImpl implements GatheringService {
         log.info("\n모임 리스트 getGatheringList 조회 ServiceImpl 클래스 : {}", command);
 
         GatheringSortStrategy strategy = strategyFactory.getStrategy(command.getSortType());
-        Slice<Gathering> gatheringList = gatheringManager.getGatheringList(strategy, command);
-        return GatheringListInfo.of(gatheringList);
+
+        return gatheringManager.getGatheringList(strategy, command);
     }
 
     @Override

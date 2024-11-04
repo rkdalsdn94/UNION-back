@@ -2,6 +2,7 @@ package com.develop_ping.union.gathering.domain;
 
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Slice;
 public interface GatheringManager {
 
     GatheringInfo save(Gathering gathering);
-    Slice<Gathering> getGatheringList(GatheringSortStrategy strategy, GatheringListCommand command);
+    Slice<GatheringListInfo> getGatheringList(GatheringSortStrategy strategy, GatheringListCommand command);
     Gathering findById(Long gatheringId);
     void deleteGathering(Gathering gathering);
     Gathering findWithPessimisticLockById(Long gatheringId);

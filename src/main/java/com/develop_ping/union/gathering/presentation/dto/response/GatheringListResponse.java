@@ -1,8 +1,10 @@
 package com.develop_ping.union.gathering.presentation.dto.response;
 
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 
@@ -16,16 +18,24 @@ public class GatheringListResponse {
     private final String eupMyeonDong;
     private final ZonedDateTime gatheringDateTime;
     private final Long views;
+    private final Double latitude;
+    private final Double longitude;
+    private final AuthorResponse author;
+    private final String thumbnail;
 
     @Builder
-    private GatheringListResponse (
+    private GatheringListResponse(
         Long id,
         String title,
         Integer maxMember,
         Integer currentMember,
         String eupMyeonDong,
         ZonedDateTime gatheringDateTime,
-        Long views
+        Long views,
+        Double latitude,
+        Double longitude,
+        AuthorResponse author,
+        String thumbnail
     ) {
         this.id = id;
         this.title = title;
@@ -34,18 +44,55 @@ public class GatheringListResponse {
         this.eupMyeonDong = eupMyeonDong;
         this.gatheringDateTime = gatheringDateTime;
         this.views = views;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.author = author;
+        this.thumbnail = thumbnail;
     }
 
     // GatheringListInfo를 GatheringListResponse로 변환하는 정적 메서드
-    public static GatheringListResponse from(GatheringListInfo gatheringInfo) {
+    public static GatheringListResponse from(GatheringListInfo gatheringListInfo) {
         return GatheringListResponse.builder()
-                                    .id(gatheringInfo.getId())
-                                    .title(gatheringInfo.getTitle())
-                                    .maxMember(gatheringInfo.getMaxMember())
-                                    .currentMember(gatheringInfo.getCurrentMember())
-                                    .eupMyeonDong(gatheringInfo.getEupMyeonDong())
-                                    .gatheringDateTime(gatheringInfo.getGatheringDateTime())
-                                    .views(gatheringInfo.getViews())
+                                    .id(gatheringListInfo.getId())
+                                    .title(gatheringListInfo.getTitle())
+                                    .maxMember(gatheringListInfo.getMaxMember())
+                                    .currentMember(gatheringListInfo.getCurrentMember())
+                                    .eupMyeonDong(gatheringListInfo.getEupMyeonDong())
+                                    .gatheringDateTime(gatheringListInfo.getGatheringDateTime())
+                                    .views(gatheringListInfo.getViews())
+                                    .latitude(gatheringListInfo.getPlace().getLatitude())
+                                    .longitude(gatheringListInfo.getPlace().getLongitude())
+                                    .author(AuthorResponse.from(gatheringListInfo))
+                                    .thumbnail(gatheringListInfo.getThumbnail())
                                     .build();
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AuthorResponse {
+        private String token;
+        private String nickname;
+        private String profileImage;
+        private String univName;
+
+        @Builder
+        private AuthorResponse(String token,
+                               String nickname,
+                               String profileImage,
+                               String univName) {
+            this.token = token;
+            this.nickname = nickname;
+            this.profileImage = profileImage;
+            this.univName = univName;
+        }
+
+        public static AuthorResponse from(GatheringListInfo info) {
+            return AuthorResponse.builder()
+                                 .token(info.getUser().getToken())
+                                 .nickname(info.getUser().getNickname())
+                                 .profileImage(info.getUser().getProfileImage())
+                                 .univName(info.getUser().getUnivName())
+                                 .build();
+        }
     }
 }

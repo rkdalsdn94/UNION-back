@@ -2,6 +2,7 @@ package com.develop_ping.union.gathering.domain.dto.response;
 
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.domain.entity.Place;
+import com.develop_ping.union.user.domain.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.domain.Slice;
@@ -19,16 +20,22 @@ public class GatheringListInfo {
     private final String eupMyeonDong;
     private final ZonedDateTime gatheringDateTime;
     private final Long views;
+    private final String thumbnail;
+    private final Place place;
+    private final User user;
 
     @Builder
-    private GatheringListInfo (
+    private GatheringListInfo(
         Long id,
         String title,
         Integer maxMember,
         Integer currentMember,
         String eupMyeonDong,
         ZonedDateTime gatheringDateTime,
-        Long views
+        Long views,
+        Place place,
+        User user,
+        String thumbnail
     ) {
         this.id = id;
         this.title = title;
@@ -37,23 +44,43 @@ public class GatheringListInfo {
         this.eupMyeonDong = eupMyeonDong;
         this.gatheringDateTime = gatheringDateTime;
         this.views = views;
+        this.place = place;
+        this.user = user;
+        this.thumbnail = thumbnail;
     }
 
-    // Gathering 엔티티를 GatheringListInfo로 변환하는 정적 메서드
-    public static GatheringListInfo from(Gathering gathering) {
+    public static GatheringListInfo from(Gathering gathering, User user) {
         return GatheringListInfo.builder()
                                 .id(gathering.getId())
                                 .title(gathering.getTitle())
                                 .maxMember(gathering.getMaxMember())
                                 .currentMember(gathering.getCurrentMember())
-                                .eupMyeonDong(Optional.ofNullable(gathering.getPlace()).map(Place::getEupMyeonDong).orElse(null))
+                                .eupMyeonDong(Optional.ofNullable(gathering.getPlace())
+                                                      .map(Place::getEupMyeonDong)
+                                                      .orElse(null))
                                 .gatheringDateTime(gathering.getGatheringDateTime())
                                 .views(gathering.getViews())
+                                .place(gathering.getPlace())
+                                .user(user)
+                                .thumbnail(gathering.getThumbnail())
                                 .build();
     }
 
     // Slice<Gathering>을 받아 Slice<GatheringListInfo>로 변환하는 메서드
     public static Slice<GatheringListInfo> of(Slice<Gathering> gatherings) {
-        return gatherings.map(GatheringListInfo::from);
+        return gatherings.map(gathering -> GatheringListInfo.builder()
+                                                            .id(gathering.getId())
+                                                            .title(gathering.getTitle())
+                                                            .maxMember(gathering.getMaxMember())
+                                                            .currentMember(gathering.getCurrentMember())
+                                                            .eupMyeonDong(Optional.ofNullable(gathering.getPlace())
+                                                                                  .map(Place::getEupMyeonDong)
+                                                                                  .orElse(null))
+                                                            .gatheringDateTime(gathering.getGatheringDateTime())
+                                                            .views(gathering.getViews())
+                                                            .place(gathering.getPlace())
+                                                            .user(gathering.getOwner())
+                                                            .thumbnail(gathering.getThumbnail())
+                                                            .build());
     }
 }

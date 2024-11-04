@@ -18,11 +18,6 @@ public class ReactionManagerImpl implements ReactionManager {
 
     private final ReactionRepository reactionRepository;
 
-    @Override
-    public Long selectLikeCount(Long gatheringId) {
-        return reactionRepository.countByTypeAndGatheringId(ReactionType.GATHERING, gatheringId);
-    }
-
     // 좋아요 기능
     @Override
     public boolean existsByUserIdAndTypeAndId(Long userId, ReactionType type, Long gatheringId) {

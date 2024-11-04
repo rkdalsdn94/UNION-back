@@ -4,11 +4,14 @@ import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.entity.Party;
+import com.develop_ping.union.party.domain.entity.PartyRole;
 import com.develop_ping.union.user.domain.entity.User;
+import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GatheringManagerImpl implements GatheringManager {
 
     private final GatheringRepository gatheringRepository;
+    private final PartyManager partyManager;
 
     @Override
     public GatheringInfo save(Gathering gathering) {
@@ -33,12 +37,18 @@ public class GatheringManagerImpl implements GatheringManager {
     }
 
     @Override
-    public Slice<Gathering> getGatheringList(
+    public Slice<GatheringListInfo> getGatheringList(
         GatheringSortStrategy strategy, GatheringListCommand command
     ) {
         log.info("\n모임 리스트 조회 ManagerImpl 클래스 : {}", command);
 
-        return strategy.applySort(gatheringRepository, command, command.getPageable());
+        Slice<Gathering> gatheringList = strategy.applySort(gatheringRepository, command, command.getPageable());
+
+        return gatheringList.map(gathering -> {
+            Party owner = partyManager.findOwnerByGatheringIdAndRole(gathering.getId(), PartyRole.OWNER)
+                                      .orElseThrow(() -> new UserNotFoundException("Owner not found"));
+            return GatheringListInfo.from(gathering, owner.getUser());
+        });
     }
 
     @Override

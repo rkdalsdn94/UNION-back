@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface PartyManager {
 
+    Party findByGatheringId(Long gatheringId);
     PartyInfo createParty(Gathering gathering, User user);
     boolean existsByGatheringAndUser(Gathering gathering, User user);
 
@@ -17,5 +18,7 @@ public interface PartyManager {
 
     void save(Party party);
 
-    Party findOwnerByGatheringIdAndRole(Long gatheringId, PartyRole partyRole);
+    Optional<Party> findOwnerByGatheringIdAndRole(Long gatheringId, PartyRole partyRole);
+
+    Party validateOwner(Long userId, Long gatheringId);
 }

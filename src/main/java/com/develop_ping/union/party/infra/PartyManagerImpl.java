@@ -2,12 +2,10 @@ package com.develop_ping.union.party.infra;
 
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
-import com.develop_ping.union.gathering.exception.ParticipantLimitExceededException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
 import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
-import com.develop_ping.union.party.exception.AlreadyJoinedException;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +19,12 @@ import java.util.Optional;
 public class PartyManagerImpl implements PartyManager {
 
     private final PartyRepository partyRepository;
+
+    @Override
+    public Party findByGatheringId(Long gatheringId) {
+        return partyRepository.findById(gatheringId)
+                              .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
+    }
 
     @Override
     public PartyInfo createParty(Gathering gathering, User user) {
@@ -50,8 +54,19 @@ public class PartyManagerImpl implements PartyManager {
     }
 
     @Override
-    public Party findOwnerByGatheringIdAndRole(Long gatheringId, PartyRole partyRole) {
-        return partyRepository.findByGatheringIdAndRole(gatheringId, partyRole)
-                              .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
+    public Optional<Party> findOwnerByGatheringIdAndRole(Long gatheringId, PartyRole partyRole) {
+        return Optional.ofNullable(partyRepository.findByGatheringIdAndRole(gatheringId, partyRole)
+                                                  .orElseThrow(() -> new GatheringNotFoundException(gatheringId)));
+    }
+
+    @Override
+    public Party validateOwner(Long userId, Long gatheringId) {
+        Party party = findByGatheringId(gatheringId);
+
+        if (!party.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("Owner가 아닙니다.");
+        }
+
+        return party;
     }
 }
