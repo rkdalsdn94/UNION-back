@@ -22,7 +22,6 @@ public class GatheringDetailResponse {
     private final Double longitude;
     private final String eupMyeonDong;
     private final ZonedDateTime gatheringDateTime;
-    private final String userNickname;
     private final ZonedDateTime createdAt;
     private final Long likes;
     private final Long views;
@@ -47,7 +46,6 @@ public class GatheringDetailResponse {
         ZonedDateTime gatheringDateTime,
         Long views,
         ZonedDateTime createdAt,
-        String userNickname,
         Long likes,
         boolean isOwner,
         boolean isLiked,
@@ -68,7 +66,6 @@ public class GatheringDetailResponse {
         this.gatheringDateTime = gatheringDateTime;
         this.views = views;
         this.createdAt = createdAt;
-        this.userNickname = userNickname;
         this.likes = likes;
         this.isOwner = isOwner;
         this.isLiked = isLiked;
@@ -92,7 +89,6 @@ public class GatheringDetailResponse {
                                       .gatheringDateTime(gatheringDetailInfo.getGatheringInfo().getGatheringDateTime())
                                       .views(gatheringDetailInfo.getGatheringInfo().getViews())
                                       .createdAt(gatheringDetailInfo.getGatheringInfo().getCreatedAt())
-                                      .userNickname(gatheringDetailInfo.getUser().getNickname())
                                       .likes(gatheringDetailInfo.getLikes())
                                       .isOwner(gatheringDetailInfo.isOwner())
                                       .isLiked(gatheringDetailInfo.isLiked())
@@ -125,7 +121,7 @@ public class GatheringDetailResponse {
         public static GatheringDetailResponse.AuthorResponse from(GatheringDetailInfo info) {
             return AuthorResponse.builder()
                                  .token(info.getUser().getToken())
-                                 .nickname(info.getUser().getUnivName())
+                                 .nickname(info.getUser().getNickname())
                                  .profileImage(info.getUser().getProfileImage())
                                  .univName(info.getUser().getUnivName())
                                  .build();

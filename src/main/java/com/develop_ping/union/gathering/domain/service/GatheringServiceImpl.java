@@ -158,7 +158,8 @@ public class GatheringServiceImpl implements GatheringService {
     public void exitGathering(Long gatheringId, User user) {
         log.info("\n모임 나가기 (exitGathering) ServiceImpl 클래스 : gatheringID {}, user {}", gatheringId, user.getId());
 
-        Gathering gathering = gatheringManager.findById(gatheringId);
+        // TODO: `모임 참가하기`와 `모임 나가기`가 동시에 발생할 경우 락을 기다리게 되는 상황이 자주 발생할 수 있음 (낙관락으로 해결 가능)
+        Gathering gathering = gatheringManager.findWithPessimisticLockById(gatheringId);
 
         if (gathering.isOwner(user)) {
             throw new OwnerCannotExitException("주최자는 모임에서 나갈 수 없습니다.");
@@ -169,6 +170,10 @@ public class GatheringServiceImpl implements GatheringService {
 
         // 현재 모임 인원 수 감소
         gathering.decrementCurrentMember();
+        if (!gathering.isFull()) {
+            gathering.open();
+        }
+
         gathering.getParties().remove(party);
         gatheringManager.save(gathering);
     }

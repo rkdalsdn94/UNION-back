@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class GatheringManagerImpl implements GatheringManager {
 
     private final GatheringRepository gatheringRepository;
-    private final PartyManager partyManager;
 
     @Override
     public GatheringInfo save(Gathering gathering) {

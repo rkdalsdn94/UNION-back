@@ -161,4 +161,8 @@ public class Gathering extends AuditingFields {
     public void close() {
         this.recruited = true;
     }
+
+    public void open() {
+        this.recruited = false;
+    }
 }
