@@ -14,10 +14,13 @@ public interface ReactionManager {
 
     Long likePost(User user, Long postId);
     Long likeGathering(User user, Long gatheringId);
+    Long likeComment(User user, Long commentId);
 
-    long countLikesByPost(Long targetId);
-    long countLikesByGathering(Long targetId);
+    long countLikesByPost(Long postId);
+    long countLikesByGathering(Long gatheringId);
+    long countLikesByComment(Long commentId);
 
-    List<Reaction> findLikesByPost(Long targetId);
-    List<Reaction> findLikesByGathering(Long targetId);
+    List<Reaction> findLikesByPost(Long postId);
+    List<Reaction> findLikesByGathering(Long gatheringId);
+    List<Reaction> findLikesByComment(Long commentId);
 }
