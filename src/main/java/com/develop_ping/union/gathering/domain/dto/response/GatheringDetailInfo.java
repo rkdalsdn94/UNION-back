@@ -15,6 +15,7 @@ public class GatheringDetailInfo {
     private final boolean isOwner;
     private final boolean isLiked;
     private final List<String> photos;
+    private final boolean isJoined;
 
     @Builder
     private GatheringDetailInfo(
@@ -23,7 +24,8 @@ public class GatheringDetailInfo {
         Long likes,
         boolean isOwner,
         boolean isLiked,
-        List<String> photos
+        List<String> photos,
+        boolean isJoined
     ) {
         this.gatheringInfo = gatheringInfo;
         this.user = user;
@@ -31,15 +33,21 @@ public class GatheringDetailInfo {
         this.isOwner = isOwner;
         this.isLiked = isLiked;
         this.photos = photos;
+        this.isJoined = isJoined;
     }
 
-    public static GatheringDetailInfo of(GatheringInfo gatheringInfo, User user, Long likes, boolean isOwner) {
+    public static GatheringDetailInfo of(
+        GatheringInfo gatheringInfo, User user, Long likes,
+        boolean isOwner, List<String> photos, boolean isJoined
+    ) {
         return GatheringDetailInfo.builder()
                                   .gatheringInfo(gatheringInfo)
                                   .user(user)
                                   .likes(likes)
                                   .isLiked(false)
                                   .isOwner(isOwner)
+                                  .photos(photos)
+                                  .isJoined(isJoined)
                                   .build();
     }
 }

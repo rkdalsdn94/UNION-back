@@ -69,6 +69,9 @@ public class GatheringServiceImpl implements GatheringService {
         User owner = ownerParty.getUser();
         boolean isOwner = gathering.isOwner(user);
 
+        // 모임 참가 여부
+        boolean isJoined = partyManager.existsByGatheringAndUser(gathering, user);
+
         // 좋아요 수
         Long likes = reactionManager.selectLikeCount(gathering.getId());
 
@@ -88,6 +91,7 @@ public class GatheringServiceImpl implements GatheringService {
                                   .isOwner(isOwner)
                                   .isLiked(isLiked)
                                   .photos(photos)
+                                  .isJoined(isJoined)
                                   .build();
     }
 

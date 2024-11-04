@@ -2,29 +2,29 @@
 INSERT INTO gatherings
 (
     current_member, latitude, longitude, views, max_member, created_at, gathering_date_time,
-    updated_at, address, content, title, eup_myeon_dong
+    updated_at, address, content, title, eup_myeon_dong, recruited
 )
 VALUES
     (5, 37.5665, 126.9780, 10, 10, DATE_SUB(NOW(), INTERVAL 9 HOUR), DATE_ADD(NOW(), INTERVAL 1 HOUR),
-     NOW(), '서울 중구 명동', '첫 번째 모임 설명', '첫 번째 모임', '명동'),
+     NOW(), '서울 중구 명동', '첫 번째 모임 설명', '첫 번째 모임', '명동', false),
     (2, 36.3504, 127.3845, 100, 5, DATE_SUB(NOW(), INTERVAL 8 HOUR), DATE_ADD(NOW(), INTERVAL 2 HOUR),
-     NOW(), '대전 서구 둔산동', '두 번째 모임 설명', '두 번째 모임', '둔산동'),
+     NOW(), '대전 서구 둔산동', '두 번째 모임 설명', '두 번째 모임', '둔산동', false),
     (8, 35.8722, 128.6025, 1, 20, DATE_SUB(NOW(), INTERVAL 7 HOUR), DATE_ADD(NOW(), INTERVAL 3 HOUR),
-     NOW(), '대구 수성구 수성동', '세 번째 모임 설명', '세 번째 모임', '수성동'),
+     NOW(), '대구 수성구 수성동', '세 번째 모임 설명', '세 번째 모임', '수성동', false),
     (3, 35.1796, 129.0756, 5, 15, DATE_SUB(NOW(), INTERVAL 6 HOUR), DATE_ADD(NOW(), INTERVAL 4 HOUR),
-     NOW(), '부산 해운대구 해운대해변로', '네 번째 모임 설명', '네 번째 모임', '해운대동'),
+     NOW(), '부산 해운대구 해운대해변로', '네 번째 모임 설명', '네 번째 모임', '해운대동', true),
     (1, 35.1595, 126.8526, 2, 4, DATE_SUB(NOW(), INTERVAL 5 HOUR), DATE_ADD(NOW(), INTERVAL 5 HOUR),
-     NOW(), '광주 북구 용봉동', '다섯 번째 모임 설명', '다섯 번째 모임', '용봉동'),
+     NOW(), '광주 북구 용봉동', '다섯 번째 모임 설명', '다섯 번째 모임', '용봉동', true),
     (6, 35.5384, 129.3114, 15, 12, DATE_SUB(NOW(), INTERVAL 4 HOUR), DATE_ADD(NOW(), INTERVAL 6 HOUR),
-     NOW(), '울산 남구 삼산동', '여섯 번째 모임 설명', '여섯 번째 모임', '삼산동'),
+     NOW(), '울산 남구 삼산동', '여섯 번째 모임 설명', '여섯 번째 모임', '삼산동', false),
     (4, 33.4996, 126.5312, 22, 8, DATE_SUB(NOW(), INTERVAL 3 HOUR), DATE_ADD(NOW(), INTERVAL 7 HOUR),
-     NOW(), '제주 제주시 연동', '일곱 번째 모임 설명', '일곱 번째 모임', '연동'),
+     NOW(), '제주 제주시 연동', '일곱 번째 모임 설명', '일곱 번째 모임', '연동', true),
     (7, 37.4563, 126.7052, 0, 10, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_ADD(NOW(), INTERVAL 8 HOUR),
-     NOW(), '인천 중구 을왕동', '여덟 번째 모임 설명', '여덟 번째 모임', '을왕동'),
+     NOW(), '인천 중구 을왕동', '여덟 번째 모임 설명', '여덟 번째 모임', '을왕동', true),
     (2, 37.2751, 127.0097, 1, 6, DATE_SUB(NOW(), INTERVAL 1 HOUR), DATE_ADD(NOW(), INTERVAL 9 HOUR),
-     NOW(), '경기 성남시 분당구', '아홉 번째 모임 설명', '아홉 번째 모임', '분당동'),
+     NOW(), '경기 성남시 분당구', '아홉 번째 모임 설명', '아홉 번째 모임', '분당동', false),
     (9, 35.1798, 128.1076, 7, 20, NOW(), DATE_ADD(NOW(), INTERVAL 10 HOUR),
-     NOW(), '경남 김해시 내외동', '열 번째 모임 설명', '열 번째 모임', '내외동');
+     NOW(), '경남 김해시 내외동', '열 번째 모임 설명', '열 번째 모임', '내외동', false);
 
 -- 파티 더미 데이터
 INSERT INTO parties (gathering_id, user_id, role, created_at, updated_at)

@@ -44,6 +44,7 @@ public class Gathering extends AuditingFields {
         this.gatheringDateTime = gatheringDateTime;
         this.place = place;
         this.views = 0L;
+        this.recruited = false;
     }
 
     @Id
@@ -68,8 +69,11 @@ public class Gathering extends AuditingFields {
     @Column(name = "gathering_date_time", nullable = false)
     private ZonedDateTime gatheringDateTime;
 
-    @Column(name = "views")
+    @Column(name = "views", nullable = false)
     private Long views;
+
+    @Column(name = "recruited", nullable = false)
+    private boolean recruited;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gathering", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Party> parties = new ArrayList<>();

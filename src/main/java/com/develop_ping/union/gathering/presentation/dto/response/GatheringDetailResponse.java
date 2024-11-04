@@ -29,7 +29,9 @@ public class GatheringDetailResponse {
     private final boolean isOwner;
     private final boolean isLiked;
     private final AuthorResponse author;
+    private final boolean recruited;
     private final List<String> photos;
+    private final boolean isJoined;
 
     @Builder
     private GatheringDetailResponse(
@@ -50,7 +52,9 @@ public class GatheringDetailResponse {
         boolean isOwner,
         boolean isLiked,
         AuthorResponse author,
-        List<String> photos
+        List<String> photos,
+        boolean recruited,
+        boolean isJoined
     ) {
         this.id = id;
         this.title = title;
@@ -70,27 +74,32 @@ public class GatheringDetailResponse {
         this.isLiked = isLiked;
         this.author = author;
         this.photos = photos;
+        this.recruited = recruited;
+        this.isJoined = isJoined;
     }
 
-    public static GatheringDetailResponse from(GatheringDetailInfo gatheringInfo) {
+    public static GatheringDetailResponse from(GatheringDetailInfo gatheringDetailInfo) {
         return GatheringDetailResponse.builder()
-                                      .id(gatheringInfo.getGatheringInfo().getId())
-                                      .title(gatheringInfo.getGatheringInfo().getTitle())
-                                      .content(gatheringInfo.getGatheringInfo().getContent())
-                                      .maxMember(gatheringInfo.getGatheringInfo().getMaxMember())
-                                      .currentMember(gatheringInfo.getGatheringInfo().getCurrentMember())
-                                      .address(gatheringInfo.getGatheringInfo().getAddress())
-                                      .latitude(gatheringInfo.getGatheringInfo().getLatitude())
-                                      .longitude(gatheringInfo.getGatheringInfo().getLongitude())
-                                      .eupMyeonDong(gatheringInfo.getGatheringInfo().getEupMyeonDong())
-                                      .gatheringDateTime(gatheringInfo.getGatheringInfo().getGatheringDateTime())
-                                      .views(gatheringInfo.getGatheringInfo().getViews())
-                                      .createdAt(gatheringInfo.getGatheringInfo().getCreatedAt())
-                                      .userNickname(gatheringInfo.getUser().getNickname())
-                                      .likes(gatheringInfo.getLikes())
-                                      .isOwner(gatheringInfo.isOwner())
-                                      .isLiked(gatheringInfo.isLiked())
-                                      .author(AuthorResponse.from(gatheringInfo))
+                                      .id(gatheringDetailInfo.getGatheringInfo().getId())
+                                      .title(gatheringDetailInfo.getGatheringInfo().getTitle())
+                                      .content(gatheringDetailInfo.getGatheringInfo().getContent())
+                                      .maxMember(gatheringDetailInfo.getGatheringInfo().getMaxMember())
+                                      .currentMember(gatheringDetailInfo.getGatheringInfo().getCurrentMember())
+                                      .address(gatheringDetailInfo.getGatheringInfo().getAddress())
+                                      .latitude(gatheringDetailInfo.getGatheringInfo().getLatitude())
+                                      .longitude(gatheringDetailInfo.getGatheringInfo().getLongitude())
+                                      .eupMyeonDong(gatheringDetailInfo.getGatheringInfo().getEupMyeonDong())
+                                      .gatheringDateTime(gatheringDetailInfo.getGatheringInfo().getGatheringDateTime())
+                                      .views(gatheringDetailInfo.getGatheringInfo().getViews())
+                                      .createdAt(gatheringDetailInfo.getGatheringInfo().getCreatedAt())
+                                      .userNickname(gatheringDetailInfo.getUser().getNickname())
+                                      .likes(gatheringDetailInfo.getLikes())
+                                      .isOwner(gatheringDetailInfo.isOwner())
+                                      .isLiked(gatheringDetailInfo.isLiked())
+                                      .author(AuthorResponse.from(gatheringDetailInfo))
+                                      .photos(gatheringDetailInfo.getPhotos())
+                                      .recruited(gatheringDetailInfo.getGatheringInfo().isRecruited())
+                                      .isJoined(gatheringDetailInfo.isJoined())
                                       .build();
     }
 

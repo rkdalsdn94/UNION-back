@@ -23,6 +23,7 @@ public class GatheringInfo {
     private final ZonedDateTime gatheringDateTime;
     private final Long views;
     private final ZonedDateTime createdAt;
+    private final boolean recruited;
 
     @Builder
     private GatheringInfo(
@@ -37,7 +38,8 @@ public class GatheringInfo {
         String eupMyeonDong,
         ZonedDateTime gatheringDateTime,
         Long views,
-        ZonedDateTime createdAt
+        ZonedDateTime createdAt,
+        boolean recruited
     ) {
         this.id = id;
         this.title = title;
@@ -51,6 +53,7 @@ public class GatheringInfo {
         this.gatheringDateTime = gatheringDateTime;
         this.views = views;
         this.createdAt = createdAt;
+        this.recruited = recruited;
     }
 
     public static GatheringInfo of(Gathering gathering) {
@@ -67,6 +70,7 @@ public class GatheringInfo {
                             .gatheringDateTime(gathering.getGatheringDateTime())
                             .views(gathering.getViews())
                             .createdAt(gathering.getCreatedAt())
+                            .recruited(gathering.isRecruited())
                             .build();
     }
 }
