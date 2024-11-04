@@ -15,4 +15,9 @@ public class ReactionManagerImpl implements ReactionManager {
     public Long selectLikeCount(Long gatheringId) {
         return reactionRepository.countByTypeAndGatheringId(ReactionType.GATHERING, gatheringId);
     }
+
+    @Override
+    public boolean existsByUserIdAndTypeAndId(Long userId, ReactionType type, Long gatheringId) {
+        return reactionRepository.existsByUserIdAndTypeAndId(userId, type, gatheringId);
+    }
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 public class GatheringDetailResponse {
@@ -26,7 +27,9 @@ public class GatheringDetailResponse {
     private final Long likes;
     private final Long views;
     private final boolean isOwner;
+    private final boolean isLiked;
     private final AuthorResponse author;
+    private final List<String> photos;
 
     @Builder
     private GatheringDetailResponse(
@@ -45,7 +48,9 @@ public class GatheringDetailResponse {
         String userNickname,
         Long likes,
         boolean isOwner,
-        AuthorResponse author
+        boolean isLiked,
+        AuthorResponse author,
+        List<String> photos
     ) {
         this.id = id;
         this.title = title;
@@ -62,7 +67,9 @@ public class GatheringDetailResponse {
         this.userNickname = userNickname;
         this.likes = likes;
         this.isOwner = isOwner;
+        this.isLiked = isLiked;
         this.author = author;
+        this.photos = photos;
     }
 
     public static GatheringDetailResponse from(GatheringDetailInfo gatheringInfo) {
@@ -82,6 +89,7 @@ public class GatheringDetailResponse {
                                       .userNickname(gatheringInfo.getUser().getNickname())
                                       .likes(gatheringInfo.getLikes())
                                       .isOwner(gatheringInfo.isOwner())
+                                      .isLiked(gatheringInfo.isLiked())
                                       .author(AuthorResponse.from(gatheringInfo))
                                       .build();
     }

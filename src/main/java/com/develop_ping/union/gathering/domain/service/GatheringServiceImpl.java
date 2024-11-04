@@ -16,7 +16,9 @@ import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
 import com.develop_ping.union.party.exception.AlreadyJoinedException;
 import com.develop_ping.union.party.exception.ParticipationNotFoundException;
+import com.develop_ping.union.photo.domain.PhotoManager;
 import com.develop_ping.union.reaction.domain.ReactionManager;
+import com.develop_ping.union.reaction.domain.entity.ReactionType;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -35,6 +39,7 @@ public class GatheringServiceImpl implements GatheringService {
     private final PartyManager partyManager;
     private final ReactionManager reactionManager;
     private final GatheringSortStrategyFactory strategyFactory;
+    private final PhotoManager photoManager;
 
     @Transactional
     public GatheringInfo createGathering(GatheringCommand command, User user) {
@@ -55,19 +60,35 @@ public class GatheringServiceImpl implements GatheringService {
 
         Gathering gathering = gatheringManager.findById(gatheringId);
 
-        // TODO: 조회수 증가 부분 성능 이슈 신경쓰기
+        // 조회수 증가
         gathering.incrementViews();
         gatheringManager.save(gathering);
 
+        // 모임 주최자 정보
         Party ownerParty = partyManager.findOwnerByGatheringIdAndRole(gatheringId, PartyRole.OWNER);
         User owner = ownerParty.getUser();
         boolean isOwner = gathering.isOwner(user);
 
-        Long likeCount = reactionManager.selectLikeCount(gathering.getId());
+        // 좋아요 수
+        Long likes = reactionManager.selectLikeCount(gathering.getId());
 
+        // 사용자가 좋아요를 눌렀는지 여부
+        boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(user.getId(), ReactionType.GATHERING, gatheringId);
+
+        // 모임 사진 정보
+        List<String> photos = photoManager.findGatheringPhotos(gatheringId);
+
+        // GatheringInfo 생성
         GatheringInfo gatheringInfo = GatheringInfo.of(gathering);
 
-        return buildGatheringDetailInfo(gatheringInfo, owner, likeCount, isOwner);
+        return GatheringDetailInfo.builder()
+                                  .gatheringInfo(gatheringInfo)
+                                  .user(owner)
+                                  .likes(likes)
+                                  .isOwner(isOwner)
+                                  .isLiked(isLiked)
+                                  .photos(photos)
+                                  .build();
     }
 
     @Override
@@ -149,16 +170,5 @@ public class GatheringServiceImpl implements GatheringService {
 
         Slice<Gathering> gatheringList = gatheringManager.getMyGatheringList(user, pageable);
         return GatheringListInfo.of(gatheringList);
-    }
-
-    private GatheringDetailInfo buildGatheringDetailInfo(
-        GatheringInfo gatheringInfo, User user, Long likes, boolean isOwner
-    ) {
-        return GatheringDetailInfo.builder()
-                                  .gatheringInfo(gatheringInfo)
-                                  .user(user)
-                                  .likes(likes)
-                                  .isOwner(isOwner)
-                                  .build();
     }
 }
