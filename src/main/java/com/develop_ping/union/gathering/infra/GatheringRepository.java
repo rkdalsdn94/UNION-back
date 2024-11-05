@@ -78,8 +78,9 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
     @Query("SELECT g FROM Gathering g WHERE g.id = :gatheringId")
     Optional<Gathering> findWithPessimisticLockById(@Param("gatheringId") Long gatheringId);
 
+    // FETCH JOIN을 이용하여 모임 게시글과 파티 정보를 함께 조회(N + 1 문제 해결)
     @Query("""
-    SELECT g FROM Gathering g JOIN g.parties p
+    SELECT g FROM Gathering g JOIN FETCH g.parties p
     WHERE p.user = :user AND p.role = 'owner' ORDER BY g.id DESC
     """)
     Slice<Gathering> findByUserAsOwner(@Param("user") User user, Pageable pageable);
