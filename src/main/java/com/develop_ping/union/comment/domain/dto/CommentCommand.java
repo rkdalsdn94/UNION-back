@@ -1,17 +1,17 @@
 package com.develop_ping.union.comment.domain.dto;
 
 import com.develop_ping.union.user.domain.entity.User;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentCommand {
-    private Long id;
-    private String content;
-    private Long postId;
-    private User user;
-    private Long parentId;
-    private String parentNickname;
+    private final Long id;
+    private final String content;
+    private final Long postId;
+    private final User user;
+    private final Long parentId;
+    private final String parentNickname;
 
     @Builder
     public CommentCommand(Long id,

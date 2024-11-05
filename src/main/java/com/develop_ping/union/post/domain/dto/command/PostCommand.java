@@ -2,13 +2,10 @@ package com.develop_ping.union.post.domain.dto.command;
 
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.user.domain.entity.User;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCommand {
     private User user;
     private Long id;

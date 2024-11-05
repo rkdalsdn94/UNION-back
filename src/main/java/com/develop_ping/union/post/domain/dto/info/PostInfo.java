@@ -2,29 +2,26 @@ package com.develop_ping.union.post.domain.dto.info;
 
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.domain.entity.PostType;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostInfo {
-    private Long id;
-    private String title;
-    private String content;
-    private PostType type;
-    private String thumbnail;
-    private Integer views;
-    private String token;
-    private String nickname;
-    private String profileImage;
-    private String univName;
-    private ZonedDateTime createdAt;
-    private List<String> photos;
+    private final Long id;
+    private final String title;
+    private final String content;
+    private final PostType type;
+    private final String thumbnail;
+    private final Integer views;
+    private final String token;
+    private final String nickname;
+    private final String profileImage;
+    private final String univName;
+    private final ZonedDateTime createdAt;
+    private final List<String> photos;
 
     @Builder
     public PostInfo(Long id,

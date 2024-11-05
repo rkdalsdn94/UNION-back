@@ -28,6 +28,7 @@ public class Post extends AuditingFields {
     private String content;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private PostType type;
 
     @Column(nullable = true)

@@ -4,4 +4,5 @@ public enum PostType {
     FREE,
     MARKET,
     INFO,
+    ALL,
 }

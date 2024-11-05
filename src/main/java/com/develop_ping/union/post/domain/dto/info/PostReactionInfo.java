@@ -1,15 +1,12 @@
 package com.develop_ping.union.post.domain.dto.info;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostReactionInfo {
-    private long postLikes;
-    private boolean isLiked;
+    private final long postLikes;
+    private final boolean isLiked;
 
     @Builder
     private PostReactionInfo(long postLikes, boolean isLiked) {

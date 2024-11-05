@@ -97,4 +97,21 @@ public class PostListController {
 
         return postListInfoPage.map(PostListResponse::from);
     }
+
+    @GetMapping("/board/search/{boardType}")
+    public Page<PostListResponse> searchPostList(@PathVariable("boardType") PostType type,
+                                                 @RequestParam("keyword") String keyword,
+                                                 @RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "3") int size,
+                                                 @AuthenticationPrincipal User user) {
+        log.info("[ CALL: PostListController.searchPostList() ]");
+
+        // 검색 키워드를 기준으로 조회
+        Criterion criterion = Criterion.BOARD_SEARCH;
+
+        PostListCommand command = PostListCommand.searchOf(user, type, keyword, page, size, criterion);
+        Page<PostListInfo> postListInfoPage = postService.getPosts(command);
+
+        return postListInfoPage.map(PostListResponse::from);
+    }
 }

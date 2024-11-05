@@ -1,28 +1,25 @@
 package com.develop_ping.union.comment.domain.dto;
 
 import com.develop_ping.union.comment.domain.entity.Comment;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentInfo {
-    private Long id;
-    private String content;
-    private Long postId;
-    private Long parentId;
-    private String parentNickname;
-    private ZonedDateTime createdAt;
-    private String token;
-    private String nickname;
-    private String profileImage;
-    private String univName;
-    private List<CommentInfo> children;
+    private final Long id;
+    private final String content;
+    private final Long postId;
+    private final Long parentId;
+    private final String parentNickname;
+    private final ZonedDateTime createdAt;
+    private final String token;
+    private final String nickname;
+    private final String profileImage;
+    private final String univName;
+    private final List<CommentInfo> children;
 
     @Builder
     private CommentInfo(Long id,

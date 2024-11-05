@@ -66,4 +66,14 @@ public class PostManagerImpl implements PostManager {
 
         return post;
     }
+
+    @Override
+    public Page<Post> searchByTypeAndKeyword(PostType type, String keyword, Pageable pageable) {
+        return postRepository.searchByTypeAndKeyword(type, keyword, pageable);
+    }
+
+    @Override
+    public Page<Post> searchByKeyword(String keyword, Pageable pageable) {
+        return  postRepository.searchByKeyword(keyword, pageable);
+    }
 }

@@ -6,6 +6,7 @@ import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.dto.command.*;
 import com.develop_ping.union.post.domain.dto.info.*;
 import com.develop_ping.union.post.domain.entity.Post;
+import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.reaction.domain.entity.ReactionType;
 import com.develop_ping.union.user.domain.UserManager;
@@ -156,6 +157,12 @@ public class PostServiceImpl implements PostService {
                 case USER_COMMENT -> {
                     User user = userManager.findByToken(command.getUserToken());
                     yield postManager.findPostsByUserComments(user, pageable);
+                }
+                case BOARD_SEARCH -> {
+                    if (command.getPostType() == PostType.ALL) {
+                        yield postManager.searchByKeyword(command.getKeyword(), pageable);
+                    }
+                    yield postManager.searchByTypeAndKeyword(command.getPostType(), command.getKeyword(), pageable);
                 }
             };
     }

@@ -17,6 +17,7 @@ public class Photo extends AuditingFields {
     private Long targetId;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TargetType targetType;
 
     @Column(nullable = false)

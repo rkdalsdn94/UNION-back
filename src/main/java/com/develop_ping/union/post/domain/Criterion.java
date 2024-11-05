@@ -6,4 +6,5 @@ public enum Criterion {
     MY_COMMENT,
     USER,
     USER_COMMENT,
+    BOARD_SEARCH,
 }
