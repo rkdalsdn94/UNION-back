@@ -6,7 +6,9 @@ import com.develop_ping.union.user.domain.entity.User;
 import java.util.List;
 
 public interface ChatroomManager {
-    Long findOrMakeChatroom (User sender, User receiver);
+    Chatroom findOrMakeChatroom(User sender, User receiver);
     Chatroom findChatroomTwoUserBothInvolved(User user, User targetUser);
     List<Chatroom> findAllChatroomUserInvolved(User user);
+
+    Chatroom findChatroomById (Long chatroomId);
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PrivateChatRequest {
     @NotNull
-    private String receiverToken;
+    private Long chatroomId;
     @NotNull
     private String content;
     @NotNull
@@ -18,7 +18,7 @@ public class PrivateChatRequest {
 
     public WebSocketCommand toCommand() {
         return WebSocketCommand.builder()
-                .receiverToken(receiverToken)
+                .chatroomId(chatroomId)
                 .content(content)
                 .senderNickname(senderNickname)
                 .build();

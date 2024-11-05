@@ -1,9 +1,9 @@
 package com.develop_ping.union.chat.domain.service;
 
 import com.develop_ping.union.chat.domain.dto.WebSocketCommand;
-import com.develop_ping.union.chat.domain.dto.ChatInfo;
+import com.develop_ping.union.chat.domain.dto.MessageInfo;
 
 public interface WebSocketService {
-    ChatInfo sendPrivateMessage(WebSocketCommand command);
-    ChatInfo sendGatheringMessage(WebSocketCommand command);
+    MessageInfo sendPrivateMessage(WebSocketCommand command);
+    MessageInfo sendGatheringMessage(WebSocketCommand command);
 }

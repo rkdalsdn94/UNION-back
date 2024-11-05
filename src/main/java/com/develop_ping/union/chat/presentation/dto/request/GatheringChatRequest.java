@@ -19,7 +19,7 @@ public class GatheringChatRequest {
 
     public WebSocketCommand toCommand() {
         return WebSocketCommand.builder()
-                .gatheringId(gatheringId)
+                .chatroomId(gatheringId)
                 .content(content)
                 .senderNickname(senderNickname)
                 .build();

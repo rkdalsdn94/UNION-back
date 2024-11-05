@@ -2,6 +2,7 @@ package com.develop_ping.union.chat.infra;
 
 import com.develop_ping.union.chat.domain.ChatroomManager;
 import com.develop_ping.union.chat.domain.entity.Chatroom;
+import com.develop_ping.union.chat.exception.ChatroomNotFoundException;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +18,8 @@ public class ChatroomManagerImpl implements ChatroomManager {
     private final ChatroomRepository chatroomRepository;
     @Override
     @Transactional
-    public Long findOrMakeChatroom(User sender, User receiver) {
-        log.info("개인 채팅방 조회 또는 생성 시도: 발신자 ID - {}, 수신자 ID - {}", sender.getId(), receiver.getId());
+    public Chatroom findOrMakeChatroom(User sender, User receiver) {
+        log.info("개인 채팅방 조회 : 발신자 ID - {}, 수신자 ID - {}", sender.getId(), receiver.getId());
 
         Chatroom chatroom = chatroomRepository.findBySenderAndReceiverOrReceiverAndSender(sender, receiver, receiver, sender)
                 .orElseGet(() -> {
@@ -28,7 +29,7 @@ public class ChatroomManagerImpl implements ChatroomManager {
 
         log.info("개인 채팅방 조회 또는 생성 완료: 개인 채팅방 ID - {}", chatroom.getId());
 
-        return chatroom.getId();
+        return chatroom;
     }
 
     @Override
@@ -48,5 +49,14 @@ public class ChatroomManagerImpl implements ChatroomManager {
     public List<Chatroom> findAllChatroomUserInvolved(User user) {
         log.info("해당 유저가 포함된 모든 개인 채팅방 검색 : user ID - {}", user.getId());
         return chatroomRepository.findBySenderOrReceiver(user, user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Chatroom findChatroomById(Long chatroomId) {
+        log.info("채팅방 검색 : 채팅방 ID - {}", chatroomId);
+
+        return chatroomRepository.findById(chatroomId)
+                .orElseThrow(() -> new ChatroomNotFoundException(chatroomId));
     }
 }
