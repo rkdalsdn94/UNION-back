@@ -10,6 +10,7 @@ import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
+import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class GatheringManagerImpl implements GatheringManager {
 
     private final GatheringRepository gatheringRepository;
     private final PartyManager partyManager;
+    private final UserManager userManager;
 
     @Override
     public GatheringInfo save(Gathering gathering) {
@@ -79,5 +81,15 @@ public class GatheringManagerImpl implements GatheringManager {
         log.info("\n내가 작성한 모임 리스트 조회 ManagerImpl 클래스 : {}", user.getId());
 
         return gatheringRepository.findByUserAsOwner(user, pageable);
+    }
+
+    @Override
+    public Slice<Gathering> getUserGatheringList(String userToken, Pageable pageable) {
+        log.info("\n특정 사용자의 모임 리스트 조회 ManagerImpl 클래스 : {}", userToken);
+
+        User findByTokenUserResult = userManager.findByToken(userToken);
+        log.info("\n사용자 토큰으로 유저 조회 완료 : User: {}", findByTokenUserResult);
+
+        return gatheringRepository.findByUserAsOwner(findByTokenUserResult, pageable);
     }
 }

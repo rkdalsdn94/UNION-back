@@ -187,4 +187,12 @@ public class GatheringServiceImpl implements GatheringService {
         Slice<Gathering> gatheringList = gatheringManager.getMyGatheringList(user, pageable);
         return GatheringListInfo.of(gatheringList);
     }
+
+    @Override
+    public Slice<GatheringListInfo> getUserGatheringList(String userToken, Pageable pageable) {
+        log.info("\n특정 사용자의 모임 리스트 조회 getUserGatheringList ServiceImpl 클래스 : userToken {}, pageable {}", userToken, pageable);
+
+        Slice<Gathering> gatheringList = gatheringManager.getUserGatheringList(userToken, pageable);
+        return GatheringListInfo.of(gatheringList);
+    }
 }

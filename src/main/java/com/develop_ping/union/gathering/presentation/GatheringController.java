@@ -127,4 +127,17 @@ public class GatheringController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/user/{userToken}")
+    public ResponseEntity<Slice<GatheringListResponse>> getUserGatheringList(
+        @PathVariable("userToken") String userToken,
+        @PageableDefault(size = 5) Pageable pageable
+    ) {
+        log.info("특정 사용자의 모임 리스트 조회 요청 - userToken: {}, pageable: {}", userToken, pageable);
+
+        Slice<GatheringListInfo> gatheringList = gatheringService.getUserGatheringList(userToken, pageable);
+        Slice<GatheringListResponse> response = gatheringList.map(GatheringListResponse::from);
+
+        return ResponseEntity.ok(response);
+    }
 }

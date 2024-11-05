@@ -20,4 +20,6 @@ public interface GatheringService {
     void exitGathering(Long gatheringId, User user);
 
     Slice<GatheringListInfo> getMyGatheringList(User user, Pageable pageable);
+
+    Slice<GatheringListInfo> getUserGatheringList(String userToken, Pageable pageable);
 }
