@@ -70,7 +70,7 @@ public class GatheringInfo {
                             .gatheringDateTime(gathering.getGatheringDateTime())
                             .views(gathering.getViews())
                             .createdAt(gathering.getCreatedAt())
-                            .recruited(gathering.isRecruited())
+                            .recruited(gathering.getRecruited())
                             .build();
     }
 }

@@ -9,6 +9,7 @@ import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringListResponse;
+import com.develop_ping.union.gathering.presentation.dto.response.GatheringResponse;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -137,6 +138,19 @@ public class GatheringController {
 
         Slice<GatheringListInfo> gatheringList = gatheringService.getUserGatheringList(userToken, pageable);
         Slice<GatheringListResponse> response = gatheringList.map(GatheringListResponse::from);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("{gatheringId}/recruited")
+    public ResponseEntity<GatheringResponse> recruitedGathering(
+        @AuthenticationPrincipal User user,
+        @PathVariable("gatheringId") Long gatheringId
+    ) {
+        log.info("모임 모집 완료 요청 - gatheringId: {}", gatheringId);
+
+        GatheringInfo gatheringInfo = gatheringService.recruitedGathering(gatheringId, user);
+        GatheringResponse response = GatheringResponse.from(gatheringInfo);
 
         return ResponseEntity.ok(response);
     }

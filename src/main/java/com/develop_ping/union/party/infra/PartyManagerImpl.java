@@ -2,6 +2,7 @@ package com.develop_ping.union.party.infra;
 
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
+import com.develop_ping.union.gathering.exception.GatheringPermissionDeniedException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
 import com.develop_ping.union.party.domain.entity.Party;
@@ -64,7 +65,7 @@ public class PartyManagerImpl implements PartyManager {
         Party party = findByGatheringId(gatheringId);
 
         if (!party.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("Owner가 아닙니다.");
+            throw new GatheringPermissionDeniedException(gatheringId, userId);
         }
 
         return party;

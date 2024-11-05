@@ -34,6 +34,7 @@ public enum ErrorCode {
     DUPLICATE_NICKNAME("DUPLICATE_NICKNAME", "이미 존재하는 닉네임입니다.", 409),
     ALREADY_JOINED("ALREADY_JOINED", "이미 가입되었습니다.", 409),
     PARTICIPANT_LIMIT_EXCEEDED("PARTICIPANT_LIMIT_EXCEEDED", "정원이 가득 찼습니다.", 409),
+    RECRUITMENT_ALREADY_COMPLETED("RECRUITMENT_ALREADY_COMPLETED", "모집이 이미 완료되었습니다.", 409),
 
     // 422 Unprocessable Entity
     IMAGE_UPLOAD_FAILED("IMAGE_UPLOAD_FAILED", "이미지 업로드에 실패하였습니다.", 422),

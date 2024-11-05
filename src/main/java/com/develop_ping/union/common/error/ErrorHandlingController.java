@@ -223,4 +223,12 @@ public class ErrorHandlingController {
         log.error("채팅방 ID : {}", e.getChatroomId());
         return buildError(ErrorCode.CHATROOM_NOT_FOUND);
     }
+
+    @ExceptionHandler(RecruitmentAlreadyCompletedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    protected ErrorResponse handleRecruitmentAlreadyCompletedException(RecruitmentAlreadyCompletedException e) {
+        log.error("이미 모집 완료된 모임입니다.");
+        log.error("message: {}", e.getMessage());
+        return buildError(ErrorCode.RECRUITMENT_ALREADY_COMPLETED);
+    }
 }

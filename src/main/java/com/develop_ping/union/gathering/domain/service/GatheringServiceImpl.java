@@ -195,4 +195,19 @@ public class GatheringServiceImpl implements GatheringService {
         Slice<Gathering> gatheringList = gatheringManager.getUserGatheringList(userToken, pageable);
         return GatheringListInfo.of(gatheringList);
     }
+
+    @Override
+    @Transactional
+    public GatheringInfo recruitedGathering(Long gatheringId, User user) {
+        log.info("\n모임 모집 완료 recruitedGathering ServiceImpl 클래스 : gatheringId {}", gatheringId);
+
+        Gathering gathering = gatheringManager.findById(gatheringId);
+        partyManager.validateOwner(user.getId(), gatheringId);
+
+        gathering.changeRecruitmentStatus();
+        gatheringManager.save(gathering);
+
+        log.info("\n모임 모집 완료 처리 완료 : true: 모집 완료, false: 모집 중 {}", gathering.getRecruited());
+        return GatheringInfo.of(gathering);
+    }
 }

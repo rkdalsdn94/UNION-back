@@ -18,6 +18,7 @@ public class GatheringResponse {
     private final Double latitude;
     private final Double longitude;
     private final ZonedDateTime gatheringDateTime;
+    private final boolean recruited;
 
     @Builder
     private GatheringResponse(
@@ -29,7 +30,8 @@ public class GatheringResponse {
         String address,
         Double latitude,
         Double longitude,
-        ZonedDateTime gatheringDateTime
+        ZonedDateTime gatheringDateTime,
+        boolean recruited
     ) {
         this.id = id;
         this.title = title;
@@ -40,9 +42,10 @@ public class GatheringResponse {
         this.latitude = latitude;
         this.longitude = longitude;
         this.gatheringDateTime = gatheringDateTime;
+        this.recruited = recruited;
     }
 
-    public static GatheringResponse of(GatheringInfo gathering) {
+    public static GatheringResponse from(GatheringInfo gathering) {
         return GatheringResponse.builder()
                                 .id(gathering.getId())
                                 .title(gathering.getTitle())
@@ -53,6 +56,7 @@ public class GatheringResponse {
                                 .latitude(gathering.getLatitude())
                                 .longitude(gathering.getLongitude())
                                 .gatheringDateTime(gathering.getGatheringDateTime())
+                                .recruited(gathering.isRecruited())
                                 .build();
     }
 }

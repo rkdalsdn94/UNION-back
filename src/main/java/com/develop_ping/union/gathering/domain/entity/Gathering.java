@@ -78,7 +78,7 @@ public class Gathering extends AuditingFields {
     private String thumbnail;
 
     @Column(name = "recruited", nullable = false)
-    private boolean recruited;
+    private Boolean recruited;  // false 모집되지 않음, true 모집 완료
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gathering", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Party> parties = new ArrayList<>();
@@ -169,5 +169,9 @@ public class Gathering extends AuditingFields {
 
     public void open() {
         this.recruited = false;
+    }
+
+    public void changeRecruitmentStatus() {
+        this.recruited = !this.recruited;
     }
 }
