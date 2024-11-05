@@ -149,14 +149,14 @@ public class PostServiceImpl implements PostService {
             switch (command.getCriterion()) {
                 case BOARD -> postManager.findByPostType(command.getPostType(), pageable);
                 case MY -> postManager.findByUser(command.getUser(), pageable);
-                case MY_COMMENT -> postManager.findPostsByUserComments(command.getUser(), pageable);
+                case MY_COMMENT -> postManager.findByUserComments(command.getUser(), pageable);
                 case USER -> {
                     User user = userManager.findByToken(command.getUserToken());
                     yield postManager.findByUser(user, pageable);
                 }
                 case USER_COMMENT -> {
                     User user = userManager.findByToken(command.getUserToken());
-                    yield postManager.findPostsByUserComments(user, pageable);
+                    yield postManager.findByUserComments(user, pageable);
                 }
                 case BOARD_SEARCH -> {
                     if (command.getPostType() == PostType.ALL) {
@@ -164,6 +164,7 @@ public class PostServiceImpl implements PostService {
                     }
                     yield postManager.searchByTypeAndKeyword(command.getPostType(), command.getKeyword(), pageable);
                 }
+                case HOME -> postManager.findPopularPosts(pageable);
             };
     }
 }

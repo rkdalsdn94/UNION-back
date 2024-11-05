@@ -47,10 +47,10 @@ public class PostListCommand {
                 .build();
     }
 
-    public static PostListCommand myOf(User user,
-                                       int page,
-                                       int size,
-                                       Criterion criterion) {
+    public static PostListCommand of(User user,
+                                     int page,
+                                     int size,
+                                     Criterion criterion) {
         return PostListCommand.builder()
                 .user(user)
                 .page(page)

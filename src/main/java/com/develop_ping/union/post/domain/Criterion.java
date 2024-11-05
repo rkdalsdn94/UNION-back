@@ -7,4 +7,5 @@ public enum Criterion {
     USER,
     USER_COMMENT,
     BOARD_SEARCH,
+    HOME,
 }

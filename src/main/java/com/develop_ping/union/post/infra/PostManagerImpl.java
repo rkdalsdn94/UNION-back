@@ -5,6 +5,7 @@ import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.post.exception.PostNotFoundException;
 import com.develop_ping.union.post.exception.PostPermissionDeniedException;
+import com.develop_ping.union.reaction.domain.entity.ReactionType;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class PostManagerImpl implements PostManager {
     private final PostRepository postRepository;
+
+    private final static long POPULAR_POST_REACTION_COUNT = 2;
 
     @Override
     public Post saveAndFlush(Post post) {
@@ -52,7 +55,7 @@ public class PostManagerImpl implements PostManager {
     }
 
     @Override
-    public Page<Post> findPostsByUserComments(User user, Pageable pageable) {
+    public Page<Post> findByUserComments(User user, Pageable pageable) {
         return postRepository.findPostsByUserComments(user, pageable);
     }
 
@@ -75,5 +78,10 @@ public class PostManagerImpl implements PostManager {
     @Override
     public Page<Post> searchByKeyword(String keyword, Pageable pageable) {
         return  postRepository.searchByKeyword(keyword, pageable);
+    }
+
+    @Override
+    public Page<Post> findPopularPosts(Pageable pageable) {
+        return postRepository.findPopularPosts(ReactionType.POST, POPULAR_POST_REACTION_COUNT, pageable);
     }
 }

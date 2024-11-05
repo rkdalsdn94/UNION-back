@@ -13,8 +13,9 @@ public interface PostManager {
     void delete(Post post);
     Page<Post> findByPostType(PostType postType, Pageable pageable);
     Page<Post> findByUser(User user, Pageable pageable);
-    Page<Post> findPostsByUserComments(User user, Pageable pageable);
+    Page<Post> findByUserComments(User user, Pageable pageable);
     Post validatePostOwner(Long userId, Long postId);
     Page<Post> searchByTypeAndKeyword(PostType type, String keyword, Pageable pageable);
     Page<Post> searchByKeyword(String keyword, Pageable pageable);
+    Page<Post> findPopularPosts(Pageable pageable);
 }

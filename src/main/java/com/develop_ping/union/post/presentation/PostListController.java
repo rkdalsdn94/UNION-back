@@ -47,7 +47,7 @@ public class PostListController {
         // 사용자 기준으로 조회
         Criterion criterion = Criterion.MY;
 
-        PostListCommand command = PostListCommand.myOf(user, page, size, criterion);
+        PostListCommand command = PostListCommand.of(user, page, size, criterion);
         Page<PostListInfo> postListInfoPage = postService.getPosts(command);
 
         return postListInfoPage.map(PostListResponse::from);
@@ -62,7 +62,7 @@ public class PostListController {
         // 사용자가 댓글을 단 게시글 조회
         Criterion criterion = Criterion.MY_COMMENT;
 
-        PostListCommand command = PostListCommand.myOf(user, page, size, criterion);
+        PostListCommand command = PostListCommand.of(user, page, size, criterion);
         Page<PostListInfo> postListInfoPage = postService.getPosts(command);
 
         return postListInfoPage.map(PostListResponse::from);
@@ -110,6 +110,21 @@ public class PostListController {
         Criterion criterion = Criterion.BOARD_SEARCH;
 
         PostListCommand command = PostListCommand.searchOf(user, type, keyword, page, size, criterion);
+        Page<PostListInfo> postListInfoPage = postService.getPosts(command);
+
+        return postListInfoPage.map(PostListResponse::from);
+    }
+
+    @GetMapping("/board/home")
+    public Page<PostListResponse> getHomePostList(@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "3") int size,
+                                                  @AuthenticationPrincipal User user) {
+        log.info("[ CALL: PostListController.getHomePostList() ]");
+
+        // 홈 화면(인기글) 기준으로 조회
+        Criterion criterion = Criterion.HOME;
+
+        PostListCommand command = PostListCommand.of(user, page, size, criterion);
         Page<PostListInfo> postListInfoPage = postService.getPosts(command);
 
         return postListInfoPage.map(PostListResponse::from);
