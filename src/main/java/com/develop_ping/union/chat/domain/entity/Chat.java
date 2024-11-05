@@ -19,7 +19,7 @@ public class Chat extends AuditingFields {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false)
@@ -45,6 +45,15 @@ public class Chat extends AuditingFields {
                 user(user)
                 .targetId(targetId)
                 .chatroomType(chatroomType)
+                .content(content)
+                .build();
+    }
+
+    public static Chat ofSystem (Long targetId, String content) {
+        return Chat.builder().
+                user(null)
+                .targetId(targetId)
+                .chatroomType(ChatroomType.GATHERING)
                 .content(content)
                 .build();
     }

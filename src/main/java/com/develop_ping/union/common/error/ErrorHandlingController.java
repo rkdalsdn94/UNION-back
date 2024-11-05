@@ -3,6 +3,7 @@ package com.develop_ping.union.common.error;
 
 import com.develop_ping.union.auth.exception.InvalidTokenException;
 import com.develop_ping.union.auth.exception.OauthNotPreparedException;
+import com.develop_ping.union.chat.exception.ChatroomNotFoundException;
 import com.develop_ping.union.comment.exception.CommentNotFoundException;
 import com.develop_ping.union.comment.exception.CommentPermissionDeniedException;
 import com.develop_ping.union.comment.exception.CommenterMismatchException;
@@ -213,5 +214,13 @@ public class ErrorHandlingController {
         log.error("주최자는 모임에서 나갈 수 없습니다.");
         log.error("message: {}", e.getMessage());
         return buildError(ErrorCode.OWNER_CANNOT_EXIT);
+    }
+
+    @ExceptionHandler(ChatroomNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ErrorResponse handleChatroomNotFoundException(ChatroomNotFoundException e) {
+        log.error("해당 채팅방을 찾을 수 없습니다.");
+        log.error("채팅방 ID : {}", e.getChatroomId());
+        return buildError(ErrorCode.CHATROOM_NOT_FOUND);
     }
 }

@@ -18,8 +18,11 @@ public class UserManagerImpl implements UserManager {
     @Transactional(readOnly = true)
     public User findById(Long userId) {
         log.info("사용자 ID로 검색 시도: {}", userId);
-        return userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId.toString()));
+
+        user.checkDeleted();
+        return user;
     }
 
     @Override

@@ -73,4 +73,12 @@ public class ChatController {
         log.info("모임 채팅방 목록 조회 완료");
         return ResponseEntity.ok(chatListResponses);
     }
+
+    @DeleteMapping("/private/{chatroomId}")
+    public ResponseEntity<Void> quitChatroom (@PathVariable Long chatroomId) {
+        log.info("개인 채팅방 나가기 요청 확인");
+
+        chatService.deleteChatroom(chatroomId);
+        return ResponseEntity.ok().build();
+    }
 }

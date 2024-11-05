@@ -34,18 +34,6 @@ public class ChatroomManagerImpl implements ChatroomManager {
 
     @Override
     @Transactional(readOnly = true)
-    public Chatroom findChatroomTwoUserBothInvolved(User user, User targetUser) {
-        log.info("개인 채팅방 조회 시도: user ID - {}, targetUser ID - {}", user.getId(), targetUser.getId());
-
-        return chatroomRepository.findBySenderAndReceiverOrReceiverAndSender(user, targetUser, targetUser, user)
-                .orElseGet(() -> {
-                    log.info("기존 채팅 내역이 없습니다.");
-                    return null;
-                });
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<Chatroom> findAllChatroomUserInvolved(User user) {
         log.info("해당 유저가 포함된 모든 개인 채팅방 검색 : user ID - {}", user.getId());
         return chatroomRepository.findBySenderOrReceiver(user, user);
@@ -58,5 +46,12 @@ public class ChatroomManagerImpl implements ChatroomManager {
 
         return chatroomRepository.findById(chatroomId)
                 .orElseThrow(() -> new ChatroomNotFoundException(chatroomId));
+    }
+
+    @Override
+    @Transactional
+    public void deleteChatroom(Chatroom chatroom) {
+        log.info("채팅방 삭제 : 채팅방 ID - {}", chatroom.getId());
+        chatroomRepository.delete(chatroom);
     }
 }

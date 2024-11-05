@@ -3,6 +3,7 @@ package com.develop_ping.union.user.domain.entity;
 import com.develop_ping.union.common.base.AuditingFields;
 import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.auth.domain.entity.RefreshToken;
+import com.develop_ping.union.user.exception.UserNotFoundException;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -69,6 +70,12 @@ public class User extends AuditingFields implements UserDetails {
                 .description(command.getDescription())
                 .deleted(false)
                 .build();
+    }
+
+    public void checkDeleted () {
+        if (this.deleted) {
+            throw new UserNotFoundException(this.nickname);
+        }
     }
 
     public void deleteUser () {
