@@ -26,9 +26,9 @@ public class MessageInfo {
     public static MessageInfo from (Chat chat) {
         return MessageInfo.builder()
                 .content(chat.getContent())
-                .senderName(chat.getUser().getNickname())
-                .senderProfileImage(chat.getUser().getProfileImage())
-                .senderToken(chat.getUser().getToken())
+                .senderName(chat.getUser() == null ? "System" : chat.getUser().getNickname())
+                .senderProfileImage(chat.getUser() == null ? "" : chat.getUser().getProfileImage())
+                .senderToken(chat.getUser() == null ? "" : chat.getUser().getToken())
                 .createdAt(chat.getCreatedAt())
                 .build();
     }
