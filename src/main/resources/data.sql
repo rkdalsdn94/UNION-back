@@ -64,3 +64,84 @@ VALUES
     (NOW(), NOW(), 'user3nick', 'User 3 description', 'https://example.com/user3.png', 'University 3', 'test3@test.com', 'token3', 'google', false),
     (NOW(), NOW(), 'user4nick', 'User 4 description', 'https://example.com/user4.png', 'University 4', 'test4@test.com', 'token4', 'google', false),
     (NOW(), NOW(), 'user5nick', 'User 5 description', 'https://example.com/user5.png', 'University 5', 'test5@test.com', 'token5', 'google', false);
+
+-- 게시글 더미 데이터
+INSERT INTO posts
+    (title, content, type, views, created_at, updated_at, user_id, thumbnail)
+VALUES
+    ('첫 번째 게시글', '첫 번째 게시글 내용입니다.', 'FREE', 10, NOW(), NOW(), 1,
+     'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
+    ('두 번째 게시글', '두 번째 게시글 내용입니다.', 'MARKET', 20, NOW(), NOW(), 2,
+     'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
+    ('세 번째 게시글', '세 번째 게시글 내용입니다.', 'INFO', 5, NOW(), NOW(), 3,
+     'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
+    ('네 번째 게시글', '네 번째 게시글 내용입니다.', 'FREE', 15, NOW(), NOW(), 4, NULL),
+    ('다섯 번째 게시글', '다섯 번째 게시글 내용입니다.', 'MARKET', 25, NOW(), NOW(), 5,
+     'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
+    ('여섯 번째 게시글', '여섯 번째 게시글 내용입니다.', 'INFO', 30, NOW(), NOW(), 1, NULL),
+    ('일곱 번째 게시글', '일곱 번째 게시글 내용입니다.', 'FREE', 18, NOW(), NOW(), 2,
+     'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
+    ('여덟 번째 게시글', '여덟 번째 게시글 내용입니다.', 'MARKET', 8, NOW(), NOW(), 3,
+     'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
+    ('아홉 번째 게시글', '아홉 번째 게시글 내용입니다.', 'INFO', 12, NOW(), NOW(), 4,
+     'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
+    ('열 번째 게시글', '열 번째 게시글 내용입니다.', 'FREE', 35, NOW(), NOW(), 5, NULL);
+
+-- 게시글 사진 더미 데이터
+INSERT INTO photos
+    (target_id, target_type, url, created_at, updated_at)
+VALUES
+    (1, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW()),
+    (2, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW()),
+    (3, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW()),
+    (3, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW()),
+    (5, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW()),
+    (7, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW()),
+    (8, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW()),
+    (9, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW()),
+    (9, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png', NOW(), NOW());
+
+-- 게시글 좋아요 더미 데이터
+INSERT INTO reactions
+(user_id, target_id, type, created_at, updated_at)
+VALUES
+    (1, 1, 'POST', NOW(), NOW()),
+    (2, 1, 'POST', NOW(), NOW()),
+    (3, 2, 'POST', NOW(), NOW()),
+    (4, 3, 'POST', NOW(), NOW()),
+    (5, 3, 'POST', NOW(), NOW()),
+    (1, 4, 'POST', NOW(), NOW()),
+    (2, 5, 'POST', NOW(), NOW()),
+    (3, 6, 'POST', NOW(), NOW()),
+    (4, 6, 'POST', NOW(), NOW()),
+    (5, 7, 'POST', NOW(), NOW());
+
+-- 댓글 더미 데이터
+INSERT INTO comments
+(content, post_id, user_id, parent_id, parent_nickname, created_at, updated_at)
+VALUES
+    ('첫 번째 게시글의 첫 번째 댓글입니다.', 1, 1, NULL, NULL, NOW(), NOW()),
+    ('첫 번째 게시글의 두 번째 댓글입니다.', 1, 2, NULL, NULL, NOW(), NOW()),
+    ('첫 번째 게시글의 첫 번째 댓글에 대한 대댓글입니다.', 1, 3, 1, 'user1nick', NOW(), NOW()),
+    ('두 번째 게시글의 첫 번째 댓글입니다.', 2, 4, NULL, NULL, NOW(), NOW()),
+    ('세 번째 게시글의 첫 번째 댓글입니다.', 3, 2, NULL, NULL, NOW(), NOW()),
+    ('네 번째 게시글의 첫 번째 댓글입니다.', 4, 5, NULL, NULL, NOW(), NOW()),
+    ('네 번째 게시글의 첫 번째 댓글에 대한 대댓글입니다.', 4, 3, 6, 'user5nick', NOW(), NOW()),
+    ('다섯 번째 게시글의 첫 번째 댓글입니다.', 5, 4, NULL, NULL, NOW(), NOW()),
+    ('여섯 번째 게시글의 첫 번째 댓글입니다.', 6, 1, NULL, NULL, NOW(), NOW()),
+    ('일곱 번째 게시글의 첫 번째 댓글입니다.', 7, 2, NULL, NULL, NOW(), NOW());
+
+-- 댓글 좋아요 더미 데이터
+INSERT INTO reactions
+    (user_id, target_id, type, created_at, updated_at)
+VALUES
+    (1, 1, 'COMMENT', NOW(), NOW()),
+    (2, 1, 'COMMENT', NOW(), NOW()),
+    (3, 2, 'COMMENT', NOW(), NOW()),
+    (4, 3, 'COMMENT', NOW(), NOW()),
+    (5, 3, 'COMMENT', NOW(), NOW()),
+    (1, 4, 'COMMENT', NOW(), NOW()),
+    (2, 5, 'COMMENT', NOW(), NOW()),
+    (3, 6, 'COMMENT', NOW(), NOW()),
+    (4, 6, 'COMMENT', NOW(), NOW()),
+    (5, 7, 'COMMENT', NOW(), NOW());
