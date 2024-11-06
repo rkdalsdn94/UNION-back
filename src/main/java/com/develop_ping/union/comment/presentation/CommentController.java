@@ -54,17 +54,6 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
-//    // 개발 확인용 API (단일 댓글 내용 조회)
-//    @GetMapping("/comment/{commentId}")
-//    public ResponseEntity<CommentDetailResponse> getComment(@PathVariable("commentId") Long commentId) {
-//        log.info("[ CALL: CommentController.getComment() ] with commentId: {}", commentId);
-//
-//        CommentInfo info = commentService.getComment(commentId);
-//        CommentDetailResponse response = CommentDetailResponse.from(info);
-//
-//        return ResponseEntity.ok(response);
-//    }
-
     @GetMapping("/comments/{postId}")
     public ResponseEntity<CommentListResponse> getCommentsByPostId(@PathVariable("postId") Long postId,
                                                                    @AuthenticationPrincipal User user) {
@@ -79,9 +68,21 @@ public class CommentController {
 
     @PostMapping("/comment/like/{commentId}")
     public ResponseEntity<Boolean> likeComment(@PathVariable("commentId") Long commentId,
-                                            @AuthenticationPrincipal User user) {
+                                               @AuthenticationPrincipal User user) {
         log.info("[ CALL: CommentController.likeComment() ] with commentId: {}", commentId);
 
         return ResponseEntity.ok(commentService.likeComment(CommentCommand.of(commentId, user)));
+    }
+
+    @GetMapping("/comment/best/{postId}")
+    public ResponseEntity<CommentBestResponse> getBestComment(@PathVariable("postId") Long postId,
+                                                                @AuthenticationPrincipal User user) {
+        log.info("[ CALL: CommentController.getBestComment() ] with postId: {}", postId);
+
+        CommentCommand command = CommentCommand.getOf(postId, user);
+        CommentInfo info = commentService.getBestComment(command);
+        CommentBestResponse response = CommentBestResponse.from(info);
+
+        return ResponseEntity.ok(response);
     }
 }

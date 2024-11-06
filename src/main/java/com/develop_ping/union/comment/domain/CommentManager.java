@@ -11,4 +11,5 @@ public interface CommentManager {
     List<Comment> findByPostIdAndParentIsNull(Long postId);
     List<Comment> findByPostId(Long postId);
     long countByPostId(Long postId);
+    Comment findBestComment(Long postId);
 }

@@ -11,5 +11,6 @@ public interface CommentService {
     void deleteComment(CommentCommand command);
     List<CommentInfo> getCommentsByPostId(CommentCommand command);
     boolean likeComment(CommentCommand command);
+    CommentInfo getBestComment(CommentCommand command);
 
 }

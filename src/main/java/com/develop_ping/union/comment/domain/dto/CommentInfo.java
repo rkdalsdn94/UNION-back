@@ -55,6 +55,8 @@ public class CommentInfo {
     }
 
     public static CommentInfo of(Comment comment, long commentLikes, boolean isLiked) {
+        if (comment == null) { return null; }
+
         CommentInfo.CommentInfoBuilder builder = CommentInfo.builder()
                 .id(comment.getId())
                 .content(comment.getContent())

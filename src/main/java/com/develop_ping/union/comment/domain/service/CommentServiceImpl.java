@@ -42,20 +42,6 @@ public class CommentServiceImpl implements CommentService {
         return CommentInfo.from(comment);
     }
 
-//    @Override
-//    public CommentInfo getComment(Long commentId) {
-//        log.info("[ CommentService.getComment() ] comment id: {}", commentId);
-//
-//        Comment comment = commentManager.findById(commentId);
-//        long commentLikes = reactionManager.countLikesByComment(commentId);
-//        boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(
-//                comment.getUser().getId(),
-//                ReactionType.COMMENT,
-//                commentId);
-//
-//        return CommentInfo.of(comment, commentLikes, isLiked);
-//    }
-
     @Override
     @Transactional
     public CommentInfo updateComment(CommentCommand command) {
@@ -118,11 +104,29 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public boolean likeComment(CommentCommand command) {
         log.info("[ CommentService.likeComment() ] comment id: {}, user nickname: {}",
                 command.getId(), command.getUser().getNickname());
 
         return reactionManager.likeComment(command.getUser(), command.getId()) != null;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CommentInfo getBestComment(CommentCommand command) {
+        log.info("[ CommentService.getBestComment() ] post id: {}", command.getPostId());
+        Comment bestComment = commentManager.findBestComment(command.getPostId());
+
+        if (bestComment == null) { return null; }
+
+        long commentLikes = reactionManager.countLikesByComment(bestComment.getId());
+        boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(
+                bestComment.getUser().getId(),
+                ReactionType.COMMENT,
+                bestComment.getId());
+
+        return CommentInfo.of(bestComment, commentLikes, isLiked);
     }
 
     private void validateCommentOwner(User user, Comment comment) {
