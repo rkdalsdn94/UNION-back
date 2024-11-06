@@ -17,7 +17,6 @@ public class GatheringListInfo {
     private final String title;
     private final Integer maxMember;
     private final Integer currentMember;
-    private final String eupMyeonDong;
     private final ZonedDateTime gatheringDateTime;
     private final Long views;
     private final String thumbnail;
@@ -30,7 +29,6 @@ public class GatheringListInfo {
         String title,
         Integer maxMember,
         Integer currentMember,
-        String eupMyeonDong,
         ZonedDateTime gatheringDateTime,
         Long views,
         Place place,
@@ -41,7 +39,6 @@ public class GatheringListInfo {
         this.title = title;
         this.maxMember = maxMember;
         this.currentMember = currentMember;
-        this.eupMyeonDong = eupMyeonDong;
         this.gatheringDateTime = gatheringDateTime;
         this.views = views;
         this.place = place;
@@ -55,9 +52,6 @@ public class GatheringListInfo {
                                 .title(gathering.getTitle())
                                 .maxMember(gathering.getMaxMember())
                                 .currentMember(gathering.getCurrentMember())
-                                .eupMyeonDong(Optional.ofNullable(gathering.getPlace())
-                                                      .map(Place::getEupMyeonDong)
-                                                      .orElse(null))
                                 .gatheringDateTime(gathering.getGatheringDateTime())
                                 .views(gathering.getViews())
                                 .place(gathering.getPlace())
@@ -73,9 +67,6 @@ public class GatheringListInfo {
                                                             .title(gathering.getTitle())
                                                             .maxMember(gathering.getMaxMember())
                                                             .currentMember(gathering.getCurrentMember())
-                                                            .eupMyeonDong(Optional.ofNullable(gathering.getPlace())
-                                                                                  .map(Place::getEupMyeonDong)
-                                                                                  .orElse(null))
                                                             .gatheringDateTime(gathering.getGatheringDateTime())
                                                             .views(gathering.getViews())
                                                             .place(gathering.getPlace())

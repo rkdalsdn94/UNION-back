@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +24,11 @@ public class PartyManagerImpl implements PartyManager {
     private final PartyRepository partyRepository;
 
     @Override
-    public Party findByGatheringId(Long gatheringId) {
-        return partyRepository.findById(gatheringId)
-                              .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
+    public List<Party> findByGatheringId(Long gatheringId) {
+        log.info("파티 조회 요청 - gatheringId: {}", gatheringId);
+
+        return Optional.ofNullable(partyRepository.findByGatheringId(gatheringId))
+                .orElse(Collections.emptyList());
     }
 
     @Override
@@ -63,7 +66,7 @@ public class PartyManagerImpl implements PartyManager {
 
     @Override
     public Party validateOwner(Long userId, Long gatheringId) {
-        Party party = findByGatheringId(gatheringId);
+        Party party = findByGatheringIdAndUserID(gatheringId, userId);
 
         if (!party.getUser().getId().equals(userId)) {
             throw new GatheringPermissionDeniedException(gatheringId, userId);
@@ -75,5 +78,11 @@ public class PartyManagerImpl implements PartyManager {
     @Override
     public List<Party> findByUserId(Long userId) {
         return partyRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Party findByGatheringIdAndUserID(Long gatheringId, Long userId) {
+        return partyRepository.findByGatheringIdAndUserId(gatheringId, userId)
+                              .orElseThrow(() -> new GatheringPermissionDeniedException(gatheringId, userId));
     }
 }

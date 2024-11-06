@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface PartyManager {
 
-    Party findByGatheringId(Long gatheringId);
+    List<Party> findByGatheringId(Long gatheringId);
     PartyInfo createParty(Gathering gathering, User user);
     boolean existsByGatheringAndUser(Gathering gathering, User user);
 
@@ -24,4 +24,6 @@ public interface PartyManager {
     Party validateOwner(Long userId, Long gatheringId);
 
     List<Party> findByUserId(Long userId);
+
+    Party findByGatheringIdAndUserID(Long gatheringId, Long userId);
 }
