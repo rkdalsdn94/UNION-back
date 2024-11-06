@@ -34,7 +34,6 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class GatheringServiceImpl implements GatheringService {
 
     private final GatheringManager gatheringManager;
@@ -112,6 +111,7 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<GatheringListInfo> getGatheringList(GatheringListCommand command) {
         log.info("\n모임 리스트 getGatheringList 조회 ServiceImpl 클래스 : {}", command);
 
@@ -185,6 +185,7 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<GatheringListInfo> getMyGatheringList(User user, Pageable pageable) {
         log.info("\n내가 생성한 모임 리스트 조회 getMyGatheringList ServiceImpl 클래스 : userId {}, pageable {}", user.getId(), pageable);
 
@@ -193,6 +194,7 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<GatheringListInfo> getUserGatheringList(String userToken, Pageable pageable) {
         log.info("\n특정 사용자의 모임 리스트 조회 getUserGatheringList ServiceImpl 클래스 : userToken {}, pageable {}", userToken, pageable);
 
@@ -213,5 +215,12 @@ public class GatheringServiceImpl implements GatheringService {
 
         log.info("\n모임 모집 완료 처리 완료 : true: 모집 완료, false: 모집 중 {}", gathering.getRecruited());
         return GatheringInfo.of(gathering);
+    }
+
+    @Override
+    public void kickOutUser(String userToken, Long gatheringId, User user) {
+        log.info("\n모임 멤버 추방 kickOutUser ServiceImpl 클래스 : userToken {}, gatheringId {}, user {}", userToken, gatheringId, user.getId());
+
+        gatheringManager.kickOutUser(userToken, gatheringId, user);
     }
 }

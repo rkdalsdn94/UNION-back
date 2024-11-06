@@ -154,4 +154,16 @@ public class GatheringController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("{gatheringId}/{userToken}/kick-out")
+    public ResponseEntity<Void> kickOutUser(
+        @AuthenticationPrincipal User user,
+        @PathVariable("userToken") String userToken,
+        @PathVariable("gatheringId") Long gatheringId
+    ) {
+        log.info("모임 멤버 추방 요청 - gatheringId: {}, userToken: {}, user: {}", gatheringId, userToken, user);
+
+        gatheringService.kickOutUser(userToken, gatheringId, user);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -20,6 +20,8 @@ public interface GatheringManager {
 
     Slice<Gathering> getUserGatheringList(String userToken, Pageable pageable);
 
+    void kickOutUser(String userToken, Long gatheringId, User user);
+
     // 유저 탈퇴시
     //  이 유저가 가입된 모임 목록을 조회
     //    유저의 권한이 회원 (파티 나가기)

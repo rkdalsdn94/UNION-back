@@ -10,6 +10,7 @@ import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
+import com.develop_ping.union.party.exception.ParticipationNotFoundException;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.exception.UserNotFoundException;
@@ -91,5 +92,26 @@ public class GatheringManagerImpl implements GatheringManager {
         log.info("\n사용자 토큰으로 유저 조회 완료 : User: {}", findByTokenUserResult);
 
         return gatheringRepository.findByUserAsOwner(findByTokenUserResult, pageable);
+    }
+
+    @Override
+    @Transactional
+    public void kickOutUser(String userToken, Long gatheringId, User user) {
+        log.info("\n유저 추방 ManagerImpl 클래스 : userToken: {}, gatheringId: {}, user: {}", userToken, gatheringId, user.getId());
+
+        User targetUser = userManager.findByToken(userToken);
+        log.info("\n추방 대상 유저 조회 완료 : User: {}", targetUser);
+
+        Gathering gathering = gatheringRepository.findById(gatheringId)
+                                                 .orElseThrow(() -> new GatheringNotFoundException(gatheringId));
+        gathering.validateOwner(user);
+
+        Party party = partyManager.findByGatheringAndUser(gathering, targetUser)
+                                  .orElseThrow(() -> new ParticipationNotFoundException("참가자를 찾을 수 없습니다."));
+
+        log.info("추방 시킬 유저 ID = {}", party.getUser().getId());
+        gathering.getParties().remove(party);
+        gathering.decrementCurrentMember();
+        gatheringRepository.save(gathering);
     }
 }

@@ -24,4 +24,6 @@ public interface GatheringService {
     Slice<GatheringListInfo> getUserGatheringList(String userToken, Pageable pageable);
 
     GatheringInfo recruitedGathering(Long gatheringId, User user);
+
+    void kickOutUser(String userToken, Long gatheringId, User user);
 }
