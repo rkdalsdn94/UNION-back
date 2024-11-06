@@ -6,6 +6,7 @@ import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
 import com.develop_ping.union.user.domain.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PartyManager {
@@ -21,4 +22,6 @@ public interface PartyManager {
     Optional<Party> findOwnerByGatheringIdAndRole(Long gatheringId, PartyRole partyRole);
 
     Party validateOwner(Long userId, Long gatheringId);
+
+    List<Party> findByUserId(Long userId);
 }

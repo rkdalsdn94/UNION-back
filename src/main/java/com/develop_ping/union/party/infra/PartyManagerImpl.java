@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -69,5 +70,10 @@ public class PartyManagerImpl implements PartyManager {
         }
 
         return party;
+    }
+
+    @Override
+    public List<Party> findByUserId(Long userId) {
+        return partyRepository.findByUserId(userId);
     }
 }

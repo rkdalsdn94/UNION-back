@@ -39,4 +39,14 @@ public class Party extends AuditingFields {
         this.gathering = gathering;
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "Party{" +
+            "gathering=" + gathering +
+            ", id=" + id +
+            ", user=" + user +
+            ", role=" + role +
+            '}';
+    }
 }
