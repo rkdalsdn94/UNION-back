@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -53,7 +54,7 @@ public class ChatManagerImpl implements ChatManager {
     public void addUserEnterMessage(Long gatheringId, User user) {
         log.info("유저가 모임 채팅방에 입장 : 유저 ID - {}, 모임 ID - {}", user.getId(), gatheringId);
         Chat chat = Chat.ofSystem(gatheringId, user.getNickname() + "님이 채팅방에 입장하셨습니다.");
-        save(chat);
+        chatRepository.save(chat);
     }
 
     @Override
@@ -61,6 +62,6 @@ public class ChatManagerImpl implements ChatManager {
     public void addUserExitMessage(Long gatheringId, User user) {
         log.info("유저가 모임 채팅방을 나감 : 유저 ID - {}, 모임 ID - {}", user.getId(), gatheringId);
         Chat chat = Chat.ofSystem(gatheringId, user.getNickname() + "님이 채팅방에서 나가셨습니다.");
-        save(chat);
+        chatRepository.save(chat);
     }
 }

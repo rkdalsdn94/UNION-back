@@ -1,5 +1,6 @@
 package com.develop_ping.union.gathering.domain.service;
 
+import com.develop_ping.union.chat.domain.ChatManager;
 import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
 import com.develop_ping.union.gathering.domain.GatheringSortStrategyFactory;
@@ -41,6 +42,7 @@ public class GatheringServiceImpl implements GatheringService {
     private final ReactionManager reactionManager;
     private final GatheringSortStrategyFactory strategyFactory;
     private final PhotoManager photoManager;
+    private final ChatManager chatManager;
 
     @Transactional
     public GatheringInfo createGathering(GatheringCommand command, User user) {
@@ -153,6 +155,7 @@ public class GatheringServiceImpl implements GatheringService {
         }
 
         gatheringManager.save(gathering);
+        chatManager.addUserEnterMessage(gatheringId, party.getUser());
     }
 
     @Override
@@ -178,6 +181,7 @@ public class GatheringServiceImpl implements GatheringService {
 
         gathering.getParties().remove(party);
         gatheringManager.save(gathering);
+        chatManager.addUserExitMessage(gatheringId, user);
     }
 
     @Override
