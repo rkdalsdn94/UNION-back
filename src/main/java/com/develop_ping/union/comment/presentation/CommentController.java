@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -52,16 +54,16 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
-    // 개발 확인용 API (단일 댓글 내용 조회)
-    @GetMapping("/comment/{commentId}")
-    public ResponseEntity<CommentDetailResponse> getComment(@PathVariable("commentId") Long commentId) {
-        log.info("[ CALL: CommentController.getComment() ] with commentId: {}", commentId);
-
-        CommentInfo info = commentService.getComment(commentId);
-        CommentDetailResponse response = CommentDetailResponse.from(info);
-
-        return ResponseEntity.ok(response);
-    }
+//    // 개발 확인용 API (단일 댓글 내용 조회)
+//    @GetMapping("/comment/{commentId}")
+//    public ResponseEntity<CommentDetailResponse> getComment(@PathVariable("commentId") Long commentId) {
+//        log.info("[ CALL: CommentController.getComment() ] with commentId: {}", commentId);
+//
+//        CommentInfo info = commentService.getComment(commentId);
+//        CommentDetailResponse response = CommentDetailResponse.from(info);
+//
+//        return ResponseEntity.ok(response);
+//    }
 
     @GetMapping("/comments/{postId}")
     public ResponseEntity<CommentListResponse> getCommentsByPostId(@PathVariable("postId") Long postId,
@@ -69,7 +71,7 @@ public class CommentController {
         log.info("[ CALL: CommentController.getCommentsByPostId() ] with postId: {}", postId);
 
         CommentCommand command = CommentCommand.getOf(postId, user);
-        CommentListInfo listInfo = commentService.getCommentsByPostId(command);
+        List<CommentInfo> listInfo = commentService.getCommentsByPostId(command);
         CommentListResponse response = CommentListResponse.from(listInfo);
 
         return ResponseEntity.ok(response);

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,7 +19,10 @@ public class CommentDetailResponse {
     private Long parentId;
     private String parentNickname;
     private ZonedDateTime createdAt;
+    private long commentLikes;
+    private boolean isLiked;
     private CommenterResponse commenter;
+    private List<CommentDetailResponse> children;
 
     @Builder
     public CommentDetailResponse(Long id,
@@ -27,14 +31,20 @@ public class CommentDetailResponse {
                                  Long parentId,
                                  String parentNickname,
                                  ZonedDateTime createdAt,
-                                 CommenterResponse commenter) {
+                                 long commentLikes,
+                                 boolean isLiked,
+                                 CommenterResponse commenter,
+                                 List<CommentDetailResponse> children) {
         this.id = id;
         this.content = content;
         this.postId = postId;
         this.parentId = parentId;
         this.parentNickname = parentNickname;
         this.createdAt = createdAt;
+        this.commentLikes = commentLikes;
+        this.isLiked = isLiked;
         this.commenter = commenter;
+        this.children = children != null ? children : new ArrayList<>();
     }
 
     public static CommentDetailResponse from(CommentInfo info) {
@@ -45,7 +55,10 @@ public class CommentDetailResponse {
                 .parentId(info.getParentId())
                 .parentNickname(info.getParentNickname())
                 .createdAt(info.getCreatedAt())
+                .commentLikes(info.getCommentLikes())
+                .isLiked(info.isLiked())
                 .commenter(CommenterResponse.from(info))
+                .children(new ArrayList<>())
                 .build();
     }
 

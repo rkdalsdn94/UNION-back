@@ -1,12 +1,13 @@
 package com.develop_ping.union.comment.presentation.dto.response;
 
-import com.develop_ping.union.comment.domain.dto.CommentListInfo;
+import com.develop_ping.union.comment.domain.dto.CommentInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -21,14 +22,27 @@ public class CommentListResponse {
         this.commentCount = commentCount;
     }
 
-    public static CommentListResponse from(CommentListInfo listInfo) {
-        List<CommentDetailResponse> responseList = listInfo.getComments().stream()
+    public static CommentListResponse from(List<CommentInfo> infos) {
+        // commentInfo -> CommentDetailResponse
+        Map<Long, CommentDetailResponse> responseMap = infos.stream()
                 .map(CommentDetailResponse::from)
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(CommentDetailResponse::getId, response -> response));
+
+        // 부모 댓글에 자식 댓글 추가
+        responseMap.values().forEach(response -> {
+            Long parentId = response.getParentId();
+            if (parentId != null) {
+                responseMap.get(parentId).getChildren().add(response);
+            }
+        });
+
+        List<CommentDetailResponse> topLevelComments = responseMap.values().stream()
+                .filter(response -> response.getParentId() == null)
+                .toList();
 
         return CommentListResponse.builder()
-                .comments(responseList)
-                .commentCount(listInfo.getCommentCount())
+                .comments(topLevelComments)
+                .commentCount(infos.size())
                 .build();
     }
 }

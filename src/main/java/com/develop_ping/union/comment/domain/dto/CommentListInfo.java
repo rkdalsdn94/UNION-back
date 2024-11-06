@@ -18,9 +18,9 @@ public class CommentListInfo {
         this.commentCount = commentCount;
     }
 
-    public static CommentListInfo of(List<Comment> rootComments, long commentCount) {
-        List<CommentInfo> commentInfos = rootComments.stream()
-                .map(CommentInfo::of)
+    public static CommentListInfo of(List<Comment> comments, long commentCount) {
+        List<CommentInfo> commentInfos = comments.stream()
+                .map(CommentInfo::from)
                 .collect(Collectors.toList());
 
         return CommentListInfo.builder()
