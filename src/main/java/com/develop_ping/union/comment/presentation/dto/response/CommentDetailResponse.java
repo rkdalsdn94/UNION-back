@@ -19,7 +19,6 @@ public class CommentDetailResponse {
     private String parentNickname;
     private ZonedDateTime createdAt;
     private CommenterResponse commenter;
-    private List<CommentDetailResponse> children;
 
     @Builder
     public CommentDetailResponse(Long id,
@@ -28,8 +27,7 @@ public class CommentDetailResponse {
                                  Long parentId,
                                  String parentNickname,
                                  ZonedDateTime createdAt,
-                                 CommenterResponse commenter,
-                                 List<CommentDetailResponse> children) {
+                                 CommenterResponse commenter) {
         this.id = id;
         this.content = content;
         this.postId = postId;
@@ -37,14 +35,9 @@ public class CommentDetailResponse {
         this.parentNickname = parentNickname;
         this.createdAt = createdAt;
         this.commenter = commenter;
-        this.children = children;
     }
 
     public static CommentDetailResponse from(CommentInfo info) {
-        List<CommentDetailResponse> childResponse = info.getChildren().stream()
-                .map(CommentDetailResponse::from)
-                .toList();
-
         return CommentDetailResponse.builder()
                 .id(info.getId())
                 .content(info.getContent())
@@ -53,7 +46,6 @@ public class CommentDetailResponse {
                 .parentNickname(info.getParentNickname())
                 .createdAt(info.getCreatedAt())
                 .commenter(CommenterResponse.from(info))
-                .children(childResponse)
                 .build();
     }
 

@@ -21,7 +21,7 @@ public class ReactionManagerImpl implements ReactionManager {
     // 좋아요 기능
     @Override
     public boolean existsByUserIdAndTypeAndId(Long userId, ReactionType type, Long gatheringId) {
-        return reactionRepository.existsByUserIdAndTypeAndId(userId, type, gatheringId);
+        return reactionRepository.existsByUserIdAndTypeAndTargetId(userId, type, gatheringId);
     }
 
     @Override

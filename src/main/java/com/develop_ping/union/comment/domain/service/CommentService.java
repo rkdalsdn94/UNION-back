@@ -8,4 +8,6 @@ public interface CommentService {
     CommentInfo updateComment(CommentCommand command);
     void deleteComment(CommentCommand command);
     CommentListInfo getCommentsByPostId(CommentCommand command);
+    boolean likeComment(CommentCommand command);
+
 }

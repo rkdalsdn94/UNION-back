@@ -38,6 +38,11 @@ public class CommentManagerImpl implements CommentManager {
     }
 
     @Override
+    public List<Comment> findByPostId(Long postId) {
+        return commentRepository.findByPostId(postId);
+    }
+
+    @Override
     public long countByPostId(Long postId) {
         return commentRepository.countByPostId(postId);
     }

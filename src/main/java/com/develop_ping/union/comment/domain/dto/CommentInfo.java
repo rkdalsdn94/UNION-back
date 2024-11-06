@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Getter
 public class CommentInfo {
@@ -19,7 +18,6 @@ public class CommentInfo {
     private final String nickname;
     private final String profileImage;
     private final String univName;
-    private final List<CommentInfo> children;
 
     @Builder
     private CommentInfo(Long id,
@@ -31,8 +29,7 @@ public class CommentInfo {
                         String token,
                         String nickname,
                         String profileImage,
-                        String univName,
-                        List<CommentInfo> children) {
+                        String univName) {
         this.id = id;
         this.content = content;
         this.postId = postId;
@@ -43,7 +40,6 @@ public class CommentInfo {
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.univName = univName;
-        this.children = children;
     }
 
     public static CommentInfo of(Comment comment) {
@@ -58,11 +54,6 @@ public class CommentInfo {
                 .nickname(comment.getUser().getNickname())
                 .profileImage(comment.getUser().getProfileImage())
                 .univName(comment.getUser().getUnivName());
-
-        // 모든 댓글에 대해 자식 리스트를 설정
-        List<Comment> childComments = comment.getChildren();
-        builder.children(childComments.isEmpty() ? List.of() :
-                childComments.stream().map(CommentInfo::of).toList());
 
         return builder.build();
     }

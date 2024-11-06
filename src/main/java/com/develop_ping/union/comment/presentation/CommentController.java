@@ -47,7 +47,7 @@ public class CommentController {
                                               @AuthenticationPrincipal User user) {
         log.info("[ CALL: CommentController.deleteComment() ] with commentId: {}", commentId);
 
-        commentService.deleteComment(CommentCommand.deletionOf(commentId, user));
+        commentService.deleteComment(CommentCommand.of(commentId, user));
 
         return ResponseEntity.noContent().build();
     }
@@ -73,5 +73,13 @@ public class CommentController {
         CommentListResponse response = CommentListResponse.from(listInfo);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/comment/like/{commentId}")
+    public ResponseEntity<Boolean> likeComment(@PathVariable("commentId") Long commentId,
+                                            @AuthenticationPrincipal User user) {
+        log.info("[ CALL: CommentController.likeComment() ] with commentId: {}", commentId);
+
+        return ResponseEntity.ok(commentService.likeComment(CommentCommand.of(commentId, user)));
     }
 }

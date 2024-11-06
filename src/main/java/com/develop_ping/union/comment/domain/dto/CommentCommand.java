@@ -28,7 +28,7 @@ public class CommentCommand {
         this.parentNickname = parentNickname;
     }
 
-    public static CommentCommand deletionOf(Long id, User user) {
+    public static CommentCommand of(Long id, User user) {
         return CommentCommand.builder()
                 .id(id)
                 .user(user)

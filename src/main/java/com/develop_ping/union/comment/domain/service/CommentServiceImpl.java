@@ -7,6 +7,7 @@ import com.develop_ping.union.comment.exception.CommentPermissionDeniedException
 import com.develop_ping.union.comment.exception.CommenterMismatchException;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.entity.Post;
+import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentManager commentManager;
     private final PostManager postManager;
     private final BlockUserManager blockUserManager;
+    private final ReactionManager reactionManager;
 
     @Override
     @Transactional
@@ -89,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
         log.info("[ CommentService.getCommentsByPostId() ] post id: {}", command.getPostId());
 
         Post post = postManager.findById(command.getPostId());
-        List<Comment> rootComments = commentManager.findByPostIdAndParentIsNull(post.getId());
+        List<Comment> rootComments = commentManager.findByPostId(post.getId());
 
         List<User> blockUsers = blockUserManager.findAllBlockedOrBlockingUser(command.getUser());
 
@@ -99,6 +101,14 @@ public class CommentServiceImpl implements CommentService {
 
         log.info("[ Comments Retrieval Completed! ]");
         return CommentListInfo.of(rootComments, count);
+    }
+
+    @Override
+    public boolean likeComment(CommentCommand command) {
+        log.info("[ CommentService.likeComment() ] comment id: {}, user nickname: {}",
+                command.getId(), command.getUser().getNickname());
+
+        return reactionManager.likeComment(command.getUser(), command.getId()) != null;
     }
 
     private void validateCommentOwner(User user, Comment comment) {
