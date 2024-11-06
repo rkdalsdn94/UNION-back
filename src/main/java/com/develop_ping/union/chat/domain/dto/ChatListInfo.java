@@ -52,4 +52,15 @@ public class ChatListInfo {
                 .createdAt(chat.getCreatedAt())
                 .build();
     }
+
+    public static ChatListInfo ofNoChat (Gathering gathering) {
+        return ChatListInfo.builder()
+                .title(gathering.getTitle())
+                .profileImage(gathering.getThumbnail())
+                .chatroomId(gathering.getId())
+                .chatroomType(ChatroomType.GATHERING)
+                .content("")
+                .createdAt(null)
+                .build();
+    }
 }

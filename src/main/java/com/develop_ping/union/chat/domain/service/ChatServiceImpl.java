@@ -11,6 +11,7 @@ import com.develop_ping.union.chat.domain.entity.ChatroomType;
 import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.party.domain.PartyManager;
+import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
@@ -19,10 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -96,7 +94,9 @@ public class ChatServiceImpl implements ChatService {
         Set<String> blockingUserTokens = getBlockingUserTokens(user);
 
         // 사용자 참여 채팅방의 최신 메시지 조회
-        List<Chatroom> chatrooms = chatroomManager.findAllChatroomUserInvolved(user);
+        List<Long> chatrooms = chatroomManager.findAllChatroomUserInvolved(user)
+                .stream().map(Chatroom::getId).toList();
+
         List<Chat> chats = chatManager.findLatestChatInAllChatroom(chatrooms, ChatroomType.PRIVATE);
 
         return getPrivateChatList(user, chats, blockingUserTokens);
@@ -113,7 +113,35 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public List<ChatListInfo> readGatheringChatroomList(User user) {
         log.info("모임 채팅방 목록 불러오기: 유저 ID - {}", user.getId());
+        List<Party> parties  = partyManager.findByUserId(user.getId());
 
+        List<Gathering> gatherings = parties.stream()
+                .map(Party::getGathering)
+                .toList();
+
+        List<Long> gatheringIds = gatherings.stream()
+                .map(Gathering::getId)
+                .toList();
+
+        List<Chat> chats = chatManager.findLatestChatInAllChatroom(gatheringIds, ChatroomType.GATHERING);
+
+        // 최신 Chat을 Gathering ID로 매핑 (chats에 없는 경우 기본값 설정)
+        Map<Long, Chat> chatMap = chats.stream()
+                .collect(Collectors.toMap(Chat::getTargetId, chat -> chat));
+
+        // Gathering을 순회하며 ChatListInfo 생성
+        return gatherings.stream()
+                .map(gathering -> {
+                    Chat chat = chatMap.get(gathering.getId());
+                    if (chat != null) {
+                        // 최신 Chat이 있는 경우
+                        return ChatListInfo.of(gathering, chat);
+                    } else {
+                        // 최신 Chat이 없는 경우 기본값 생성
+                        return ChatListInfo.ofNoChat(gathering);
+                    }
+                })
+                .toList();
     }
 
     private Set<String> getBlockingUserTokens(User user) {

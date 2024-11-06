@@ -26,11 +26,11 @@ public interface ChatManager {
 
     /**
      * 주어진 채팅방 목록에서 각 채팅방의 최신 채팅 메시지를 조회합니다.
-     * @param chatrooms 조회할 채팅방 리스트
+     * @param targetIds 조회할 채팅방 아아디
      * @param chatroomType 조회할 채팅방의 타입 (개인 또는 모임)
      * @return 각 채팅방의 최신 Chat 객체 리스트
      */
-    List<Chat> findLatestChatInAllChatroom(List<Chatroom> chatrooms, ChatroomType chatroomType);
+    List<Chat> findLatestChatInAllChatroom(List<Long> targetIds, ChatroomType chatroomType);
 
     /**
      * 특정 모임 채팅방에 사용자가 들어온 메시지를 추가합니다.

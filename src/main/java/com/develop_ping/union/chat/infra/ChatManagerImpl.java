@@ -37,12 +37,12 @@ public class ChatManagerImpl implements ChatManager {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Chat> findLatestChatInAllChatroom(List<Chatroom> chatrooms, ChatroomType chatroomType) {
+    public List<Chat> findLatestChatInAllChatroom(List<Long> targetIds, ChatroomType chatroomType) {
         log.info("각 채팅방에서 마지막 채팅을 조회");
         List<Chat> latestChats = new ArrayList<>();
 
-        for (Chatroom chatroom : chatrooms) {
-            chatRepository.findTopByTargetIdAndChatroomTypeOrderByCreatedAtDesc(chatroom.getId(), chatroomType)
+        for (Long targetId : targetIds) {
+            chatRepository.findTopByTargetIdAndChatroomTypeOrderByCreatedAtDesc(targetId, chatroomType)
                     .ifPresent(latestChats::add);
         }
 
