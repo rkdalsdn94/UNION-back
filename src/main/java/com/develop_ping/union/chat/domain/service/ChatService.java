@@ -27,16 +27,22 @@ public interface ChatService {
     ChatInfo readGatheringChat (User user, Long gatheringId);
 
     /**
-     * 사용자가 참여한 모든 채팅방 목록을 조회합니다.
+     * 사용자가 참여한 모든 개인 채팅방 목록을 조회합니다.
      * @param user 요청을 보낸 사용자
-     * @param chatroomType 조회할 채팅방 타입 (개인 또는 모임)
      * @return 조회된 채팅방 목록을 담은 ChatListInfo 리스트
      */
-    List<ChatListInfo> readChatroomList (User user, ChatroomType chatroomType);
+    List<ChatListInfo> readPrivateChatroomList (User user);
 
     /**
      * 해당 채팅방을 삭제합니다.
      * @param chatroomId 채팅방 ID
      */
     void deleteChatroom (Long chatroomId);
+
+    /**
+     * 사용자가 참여한 모든 모임 채팅방 목록을 조회합니다.
+     * @param user 요청을 보낸 사용자
+     * @return 조회된 채팅방 목록을 담은 ChatListInfo 리스트
+     */
+    List<ChatListInfo> readGatheringChatroomList (User user);
 }

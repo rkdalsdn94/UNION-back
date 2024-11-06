@@ -10,6 +10,7 @@ import com.develop_ping.union.chat.domain.entity.Chatroom;
 import com.develop_ping.union.chat.domain.entity.ChatroomType;
 import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
@@ -33,6 +34,7 @@ public class ChatServiceImpl implements ChatService {
     private final ChatroomManager chatroomManager;
     private final GatheringManager gatheringManager;
     private final BlockUserManager blockUserManager;
+    private final PartyManager partyManager;
 
     @Override
     public ChatInfo readPrivateChat(String userToken, User user) {
@@ -87,26 +89,17 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<ChatListInfo> readChatroomList(User user, ChatroomType chatroomType) {
-        log.info("채팅방 목록 불러오기: 유저 ID - {}, 채팅방 타입 - {}", user.getId(), chatroomType);
+    public List<ChatListInfo> readPrivateChatroomList(User user) {
+        log.info("개인 채팅방 목록 불러오기: 유저 ID - {}", user.getId());
 
         // 차단된 사용자 토큰 수집
         Set<String> blockingUserTokens = getBlockingUserTokens(user);
 
         // 사용자 참여 채팅방의 최신 메시지 조회
         List<Chatroom> chatrooms = chatroomManager.findAllChatroomUserInvolved(user);
-        List<Chat> chats = chatManager.findLatestChatInAllChatroom(chatrooms, chatroomType);
+        List<Chat> chats = chatManager.findLatestChatInAllChatroom(chatrooms, ChatroomType.PRIVATE);
 
-        // 채팅방 타입에 따라 개인 채팅 목록 또는 모임 채팅 목록 반환
-        if (chatroomType == ChatroomType.PRIVATE) {
-            return getPrivateChatList(user, chats, blockingUserTokens);
-        }
-
-        if (chatroomType == ChatroomType.GATHERING) {
-            return getGatheringChatList(chats);
-        }
-
-        return Collections.emptyList();
+        return getPrivateChatList(user, chats, blockingUserTokens);
     }
 
     @Override
@@ -115,6 +108,12 @@ public class ChatServiceImpl implements ChatService {
         Chatroom chatroom = chatroomManager.findChatroomById(chatroomId);
         chatroomManager.deleteChatroom(chatroom);
         log.info("채팅방 삭제 완료");
+    }
+
+    @Override
+    public List<ChatListInfo> readGatheringChatroomList(User user) {
+        log.info("모임 채팅방 목록 불러오기: 유저 ID - {}", user.getId());
+
     }
 
     private Set<String> getBlockingUserTokens(User user) {
@@ -132,12 +131,6 @@ public class ChatServiceImpl implements ChatService {
                 })
                 .filter(Objects::nonNull) // null 값(논리 삭제된 사용자와의 채팅) 제외
                 .filter(chatInfo -> !blockingUserTokens.contains(chatInfo.getUserToken())) // 차단 유저 정보 제외
-                .toList();
-    }
-
-    private List<ChatListInfo> getGatheringChatList(List<Chat> chats) {
-        return chats.stream()
-                .map(chat -> ChatListInfo.of(gatheringManager.findById(chat.getTargetId()), chat))
                 .toList();
     }
 

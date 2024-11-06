@@ -52,7 +52,7 @@ public class ChatController {
     public ResponseEntity<List<ChatListResponse>> readPrivateChatroom (@AuthenticationPrincipal User user){
         log.info("개인 채팅방 목록 불러오기 확인");
 
-        List<ChatListInfo> chatListInfos = chatService.readChatroomList(user, ChatroomType.PRIVATE);
+        List<ChatListInfo> chatListInfos = chatService.readPrivateChatroomList(user);
         List<ChatListResponse> chatListResponses = chatListInfos.stream()
                 .map(ChatListResponse::from)
                 .toList();
@@ -65,7 +65,7 @@ public class ChatController {
     public ResponseEntity<List<ChatListResponse>> readGatheringChatroom (@AuthenticationPrincipal User user){
         log.info("모임 채팅방 목록 불러오기 확인");
 
-        List<ChatListInfo> chatListInfos = chatService.readChatroomList(user, ChatroomType.GATHERING);
+        List<ChatListInfo> chatListInfos = chatService.readGatheringChatroomList(user);
         List<ChatListResponse> chatListResponses = chatListInfos.stream()
                 .map(ChatListResponse::from)
                 .toList();
