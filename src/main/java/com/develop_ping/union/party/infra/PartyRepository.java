@@ -20,4 +20,6 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
     Optional<Party> findByGatheringIdAndUserId(Long gatheringId, Long userId);
 
     List<Party> findByGatheringId(Long gatheringId);
+
+    long countByUserIdAndRole(Long userId, PartyRole partyRole);
 }

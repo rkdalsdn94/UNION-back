@@ -18,4 +18,6 @@ public interface PostManager {
     Page<Post> searchByTypeAndKeyword(PostType type, String keyword, Pageable pageable);
     Page<Post> searchByKeyword(String keyword, Pageable pageable);
     Page<Post> findPopularPosts(Pageable pageable);
+    long countByUserId(Long userId);
+    long countPostsByUserComments(Long userId);
 }

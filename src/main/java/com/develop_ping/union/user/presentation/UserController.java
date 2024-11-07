@@ -1,12 +1,15 @@
 package com.develop_ping.union.user.presentation;
 
 import com.develop_ping.union.user.domain.dto.UserInfo;
+import com.develop_ping.union.user.domain.dto.UserStatCommand;
+import com.develop_ping.union.user.domain.dto.UserStatInfo;
 import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.domain.service.UserService;
 import com.develop_ping.union.user.presentation.dto.request.RegisterRequest;
 import com.develop_ping.union.user.presentation.dto.request.UpdateRequest;
 import com.develop_ping.union.user.presentation.dto.response.OtherUserResponse;
 import com.develop_ping.union.user.presentation.dto.response.UserResponse;
+import com.develop_ping.union.user.presentation.dto.response.UserStatResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -99,5 +102,17 @@ public class UserController {
     @GetMapping("/my")
     public ResponseEntity<UserResponse> readUserStatus (@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(UserResponse.from(user));
+    }
+
+    @GetMapping("/stats/{userToken}")
+    public ResponseEntity<UserStatResponse> readUserStat(@PathVariable String userToken,
+                                                         @AuthenticationPrincipal User user) {
+        log.info("[ CALL: UserController.readUserStat() ] with user token: {}", userToken);
+
+        UserStatCommand command = UserStatCommand.of(userToken, user);
+        UserStatInfo info = userService.readUserStat(command);
+        UserStatResponse response = UserStatResponse.from(info);
+
+        return ResponseEntity.ok(response);
     }
 }

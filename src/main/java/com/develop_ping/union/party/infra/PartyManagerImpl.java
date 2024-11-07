@@ -11,6 +11,7 @@ import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -84,5 +85,11 @@ public class PartyManagerImpl implements PartyManager {
     public Party findByGatheringIdAndUserID(Long gatheringId, Long userId) {
         return partyRepository.findByGatheringIdAndUserId(gatheringId, userId)
                               .orElseThrow(() -> new GatheringPermissionDeniedException(gatheringId, userId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countByUserIdAndRole(Long userId) {
+        return partyRepository.countByUserIdAndRole(userId, PartyRole.OWNER);
     }
 }

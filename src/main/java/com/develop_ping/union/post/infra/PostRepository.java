@@ -21,9 +21,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findPostsByUserComments(@Param("user") User user, Pageable pageable);
 
     @Query("""
-            SELECT p FROM Post p 
-            WHERE p.type = :type 
-              AND (LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) 
+            SELECT p FROM Post p
+            WHERE p.type = :type
+              AND (LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
                 OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%')))
     """)
     Page<Post> searchByTypeAndKeyword(
@@ -32,8 +32,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             Pageable pageable);
 
     @Query("""
-            SELECT p FROM Post p 
-            WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) 
+            SELECT p FROM Post p
+            WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
                OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
     """)
     Page<Post> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
@@ -48,4 +48,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findPopularPosts(@Param("reactionType") ReactionType reactionType,
                                 @Param("minLikes") long minLikes,
                                 Pageable pageable);
+
+    long countByUserId(Long userId);
+
+    @Query("SELECT COUNT(DISTINCT p) FROM Post p JOIN p.comments c WHERE c.user.id = :userId")
+    long countPostsByUserComments(@Param("userId") Long userId);
 }

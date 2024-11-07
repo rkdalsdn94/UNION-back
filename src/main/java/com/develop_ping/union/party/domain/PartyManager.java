@@ -26,4 +26,6 @@ public interface PartyManager {
     List<Party> findByUserId(Long userId);
 
     Party findByGatheringIdAndUserID(Long gatheringId, Long userId);
+
+    long countByUserIdAndRole(Long userId);
 }

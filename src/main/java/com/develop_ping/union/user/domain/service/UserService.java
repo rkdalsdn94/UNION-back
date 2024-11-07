@@ -2,6 +2,8 @@ package com.develop_ping.union.user.domain.service;
 
 import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.user.domain.dto.UserInfo;
+import com.develop_ping.union.user.domain.dto.UserStatCommand;
+import com.develop_ping.union.user.domain.dto.UserStatInfo;
 import com.develop_ping.union.user.domain.entity.User;
 
 import java.util.List;
@@ -20,4 +22,6 @@ public interface UserService {
     void unblockUser(User user, String userToken);
 
     List<UserInfo> readBlockedUsers (User user);
+
+    UserStatInfo readUserStat(UserStatCommand command);
 }

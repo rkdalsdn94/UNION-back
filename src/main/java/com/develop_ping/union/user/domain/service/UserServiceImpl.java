@@ -5,10 +5,14 @@ import com.develop_ping.union.auth.domain.OauthUserManager;
 import com.develop_ping.union.auth.domain.RefreshTokenManager;
 import com.develop_ping.union.auth.domain.TokenManager;
 import com.develop_ping.union.auth.domain.entity.OauthUser;
+import com.develop_ping.union.party.domain.PartyManager;
+import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.dto.UserCommand;
 import com.develop_ping.union.user.domain.dto.UserInfo;
+import com.develop_ping.union.user.domain.dto.UserStatCommand;
+import com.develop_ping.union.user.domain.dto.UserStatInfo;
 import com.develop_ping.union.user.domain.entity.User;
 import com.develop_ping.union.user.exception.DuplicateNicknameException;
 import com.develop_ping.union.user.exception.UserBlockedException;
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenManager refreshTokenManager;
     private final OAuthUnlinkManager oAuthUnlinkManager;
     private final BlockUserManager blockUserManager;
+    private final PostManager postManager;
+    private final PartyManager partyManager;
 
     @Override
     public UserInfo signUp(UserCommand command) {
@@ -146,5 +152,19 @@ public class UserServiceImpl implements UserService {
         return blockedUsers.stream()
                 .map(UserInfo::from) // User 객체를 UserInfo 객체로 변환
                 .toList();
+    }
+
+    @Override
+    public UserStatInfo readUserStat(UserStatCommand command) {
+        log.info("[ CALL: UserService.readUserStat() ]");
+        User targetUser = userManager.findByToken(command.getUserToken());
+        Long targetUserId = targetUser.getId();
+        log.info("target user nickname: {}", targetUser.getNickname());
+
+        long postCount = postManager.countByUserId(targetUserId);
+        long commentCount = postManager.countPostsByUserComments(targetUserId);
+        long gatheringCount = partyManager.countByUserIdAndRole(targetUserId);
+
+        return UserStatInfo.of(postCount, commentCount, gatheringCount);
     }
 }

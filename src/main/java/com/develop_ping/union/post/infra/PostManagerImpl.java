@@ -84,4 +84,16 @@ public class PostManagerImpl implements PostManager {
     public Page<Post> findPopularPosts(Pageable pageable) {
         return postRepository.findPopularPosts(ReactionType.POST, POPULAR_POST_REACTION_COUNT, pageable);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countByUserId(Long userId) {
+        return postRepository.countByUserId(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countPostsByUserComments(Long userId) {
+        return postRepository.countPostsByUserComments(userId);
+    }
 }
