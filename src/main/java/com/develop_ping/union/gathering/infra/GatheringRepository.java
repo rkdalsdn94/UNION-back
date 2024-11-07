@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -34,7 +35,7 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
     Slice<Gathering> findByOrderByCreatedAtDesc(Pageable pageable);
 
     /**
-     * 하버사인(Haversine) 공식을 이용, 관련된 글은 PR 또는 이슈 참고
+     * 하버사인(Haversine) 공식 이용, 관련된 글은 PR 또는 이슈 참고
      * 위도, 경도를 기준으로 모임 게시글 정렬
      * @param latitude 위도
      * @param longitude 경도
@@ -80,8 +81,11 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
 
     // FETCH JOIN을 이용하여 모임 게시글과 파티 정보를 함께 조회(N + 1 문제 해결)
     @Query("""
-    SELECT g FROM Gathering g JOIN FETCH g.parties p
-    WHERE p.user = :user AND p.role = 'owner' ORDER BY g.id DESC
+        SELECT g FROM Gathering g JOIN FETCH g.parties p
+        WHERE p.user = :user AND p.role = 'owner' ORDER BY g.id DESC
     """)
     Slice<Gathering> findByUserAsOwner(@Param("user") User user, Pageable pageable);
+
+    @Query("SELECT g FROM Gathering g JOIN FETCH g.parties p WHERE p.user.id = :userId ORDER BY g.id DESC")
+    List<Gathering> findGatheringsByUserId(@Param("userId") Long userId);
 }

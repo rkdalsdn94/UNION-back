@@ -8,7 +8,7 @@ import lombok.Getter;
 import org.springframework.data.domain.Slice;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
+import java.util.List;
 
 @Getter
 public class GatheringListInfo {
@@ -60,8 +60,7 @@ public class GatheringListInfo {
                                 .build();
     }
 
-    // Slice<Gathering>을 받아 Slice<GatheringListInfo>로 변환하는 메서드
-    public static Slice<GatheringListInfo> of(Slice<Gathering> gatherings) {
+    public static Slice<GatheringListInfo> fromSlice(Slice<Gathering> gatherings) {
         return gatherings.map(gathering -> GatheringListInfo.builder()
                                                             .id(gathering.getId())
                                                             .title(gathering.getTitle())
@@ -73,5 +72,21 @@ public class GatheringListInfo {
                                                             .user(gathering.getOwner())
                                                             .thumbnail(gathering.getThumbnail())
                                                             .build());
+    }
+
+    public static List<GatheringListInfo> fromList(List<Gathering> gatherings) {
+        return gatherings.stream()
+            .map(gathering -> GatheringListInfo.builder()
+                                               .id(gathering.getId())
+                                               .title(gathering.getTitle())
+                                               .maxMember(gathering.getMaxMember())
+                                               .currentMember(gathering.getCurrentMember())
+                                               .gatheringDateTime(gathering.getGatheringDateTime())
+                                               .views(gathering.getViews())
+                                               .place(gathering.getPlace())
+                                               .user(gathering.getUser())
+                                               .thumbnail(gathering.getThumbnail())
+                                               .build())
+            .toList();
     }
 }

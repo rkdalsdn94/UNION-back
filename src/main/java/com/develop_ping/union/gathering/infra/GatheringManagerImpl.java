@@ -21,6 +21,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Component
 @Transactional(readOnly = true)
@@ -113,5 +115,12 @@ public class GatheringManagerImpl implements GatheringManager {
         gathering.getParties().remove(party);
         gathering.decrementCurrentMember();
         gatheringRepository.save(gathering);
+    }
+
+    @Override
+    public List<Gathering> getParticipatedGatheringList(User user) {
+        log.info("\n참여한 모임 리스트 조회 ManagerImpl 클래스 : {}", user.getId());
+
+        return gatheringRepository.findGatheringsByUserId(user.getId());
     }
 }

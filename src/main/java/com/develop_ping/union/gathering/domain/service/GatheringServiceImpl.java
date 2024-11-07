@@ -190,7 +190,7 @@ public class GatheringServiceImpl implements GatheringService {
         log.info("\n내가 생성한 모임 리스트 조회 getMyGatheringList ServiceImpl 클래스 : userId {}, pageable {}", user.getId(), pageable);
 
         Slice<Gathering> gatheringList = gatheringManager.getMyGatheringList(user, pageable);
-        return GatheringListInfo.of(gatheringList);
+        return GatheringListInfo.fromSlice(gatheringList);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class GatheringServiceImpl implements GatheringService {
         log.info("\n특정 사용자의 모임 리스트 조회 getUserGatheringList ServiceImpl 클래스 : userToken {}, pageable {}", userToken, pageable);
 
         Slice<Gathering> gatheringList = gatheringManager.getUserGatheringList(userToken, pageable);
-        return GatheringListInfo.of(gatheringList);
+        return GatheringListInfo.fromSlice(gatheringList);
     }
 
     @Override
@@ -222,5 +222,13 @@ public class GatheringServiceImpl implements GatheringService {
         log.info("\n모임 멤버 추방 kickOutUser ServiceImpl 클래스 : userToken {}, gatheringId {}, user {}", userToken, gatheringId, user.getId());
 
         gatheringManager.kickOutUser(userToken, gatheringId, user);
+    }
+
+    @Override
+    public List<GatheringListInfo> getParticipatedGatheringList(User user) {
+        log.info("\n내가 참여한 모임 리스트 조회 getParticipatedGatheringList ServiceImpl 클래스 : userId {}", user.getId());
+
+        List<Gathering> participatedGatheringList = gatheringManager.getParticipatedGatheringList(user);
+        return GatheringListInfo.fromList(participatedGatheringList);
     }
 }

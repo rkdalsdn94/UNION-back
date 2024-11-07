@@ -109,6 +109,13 @@ public class Gathering extends AuditingFields {
                       .orElseThrow(() -> new IllegalStateException("주최자가 존재하지 않습니다."));
     }
 
+    public User getUser() {
+        return parties.stream()
+                      .map(Party::getUser)
+                      .findFirst()
+                      .orElseThrow(() -> new IllegalStateException("참가자가 존재하지 않습니다."));
+    }
+
     public String getOwnerNickname() {
         return parties.stream()
                       .filter(party -> party.getRole() == PartyRole.OWNER)

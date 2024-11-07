@@ -21,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -142,7 +144,7 @@ public class GatheringController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("{gatheringId}/recruited")
+    @PostMapping("/{gatheringId}/recruited")
     public ResponseEntity<GatheringResponse> recruitedGathering(
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
@@ -155,7 +157,7 @@ public class GatheringController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("{gatheringId}/{userToken}/kick-out")
+    @PostMapping("/{gatheringId}/{userToken}/kick-out")
     public ResponseEntity<Void> kickOutUser(
         @AuthenticationPrincipal User user,
         @PathVariable("userToken") String userToken,
@@ -165,5 +167,13 @@ public class GatheringController {
 
         gatheringService.kickOutUser(userToken, gatheringId, user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/my/participated")
+    public List<GatheringListResponse> getParticipatedGatheringList(@AuthenticationPrincipal User user) {
+        log.info("\n내가 참여한 모임 리스트 조회 getParticipatedGatheringList ServiceImpl 클래스 : userId {}", user.getId());
+
+        List<GatheringListInfo> participatedGatheringList = gatheringService.getParticipatedGatheringList(user);
+        return participatedGatheringList.stream().map(GatheringListResponse::from).toList();
     }
 }
