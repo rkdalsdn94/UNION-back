@@ -95,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
         return comments.stream().map(comment -> {
             long commentLikes = reactionManager.countLikesByComment(comment.getId());
             boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(
-                    comment.getUser().getId(),
+                    command.getUser().getId(),
                     ReactionType.COMMENT,
                     comment.getId());
 
