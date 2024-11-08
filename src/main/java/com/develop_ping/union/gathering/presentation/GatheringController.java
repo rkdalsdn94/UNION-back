@@ -1,6 +1,7 @@
 package com.develop_ping.union.gathering.presentation;
 
 import com.develop_ping.union.gathering.domain.SortType;
+import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
@@ -176,5 +177,15 @@ public class GatheringController {
 
         List<GatheringListInfo> participatedGatheringList = gatheringService.getParticipatedGatheringList(user);
         return participatedGatheringList.stream().map(GatheringListResponse::from).toList();
+    }
+
+    @PostMapping("/like/{gatheringId}")
+    public ResponseEntity<Long> likeGathering(
+        @AuthenticationPrincipal User user,
+        @PathVariable("gatheringId") Long gatheringId
+    ) {
+        log.info("모임 좋아요 요청 - gatheringId: {}", gatheringId);
+
+        return ResponseEntity.ok(gatheringService.likeGathering(gatheringId, user));
     }
 }

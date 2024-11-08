@@ -226,4 +226,14 @@ public class GatheringServiceImpl implements GatheringService {
         List<Gathering> participatedGatheringList = gatheringManager.getParticipatedGatheringList(user);
         return GatheringListInfo.fromList(participatedGatheringList);
     }
+
+    @Override
+    @Transactional
+    public Long likeGathering(Long gatheringId, User user) {
+        log.info("\n모임 좋아요 likeGathering ServiceImpl 클래스 : gatheringId {}, user {}", gatheringId, user.getId());
+
+        Gathering gathering = gatheringManager.findById(gatheringId);
+
+        return reactionManager.likeGathering(user, gathering.getId());
+    }
 }

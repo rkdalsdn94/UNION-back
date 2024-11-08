@@ -30,4 +30,6 @@ public interface GatheringService {
     void kickOutUser(String userToken, Long gatheringId, User user);
 
     List<GatheringListInfo> getParticipatedGatheringList(User user);
+
+    Long likeGathering(Long gatheringId, User user);
 }
