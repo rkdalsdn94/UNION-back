@@ -29,6 +29,7 @@ public enum ErrorCode {
     BLOCK_RELATIONSHIP_NOT_FOUND("BLOCK_RELATIONSHIP_NOT_FOUND", "차단된 유저가 아닙니다.", 404),
     PARTICIPATION_NOT_FOUND("PARTICIPATION_NOT_FOUND", "참여하지 않은 모임입니다.", 404),
     CHATROOM_NOT_FOUND("CHATROOM_NOT_FOUND", "해당 채팅방을 찾을 수 없습니다.", 404),
+    NO_MATCHING_RESULTS("NO_MATCHING_RESULTS", "일치하는 결과가 없습니다.", 404),
 
     // 409 Conflict
     DUPLICATE_NICKNAME("DUPLICATE_NICKNAME", "이미 존재하는 닉네임입니다.", 409),

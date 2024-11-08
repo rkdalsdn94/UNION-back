@@ -2,8 +2,6 @@ package com.develop_ping.union.gathering.domain.service;
 
 import com.develop_ping.union.chat.domain.ChatManager;
 import com.develop_ping.union.gathering.domain.GatheringManager;
-import com.develop_ping.union.gathering.domain.GatheringSortStrategy;
-import com.develop_ping.union.gathering.domain.GatheringSortStrategyFactory;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
@@ -39,7 +37,6 @@ public class GatheringServiceImpl implements GatheringService {
     private final GatheringManager gatheringManager;
     private final PartyManager partyManager;
     private final ReactionManager reactionManager;
-    private final GatheringSortStrategyFactory strategyFactory;
     private final PhotoManager photoManager;
     private final ChatManager chatManager;
 
@@ -115,9 +112,7 @@ public class GatheringServiceImpl implements GatheringService {
     public Slice<GatheringListInfo> getGatheringList(GatheringListCommand command) {
         log.info("\n모임 리스트 getGatheringList 조회 ServiceImpl 클래스 : {}", command);
 
-        GatheringSortStrategy strategy = strategyFactory.getStrategy(command.getSortType());
-
-        return gatheringManager.getGatheringList(strategy, command);
+        return gatheringManager.getGatheringList(command);
     }
 
     @Override

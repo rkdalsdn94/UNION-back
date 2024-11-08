@@ -231,4 +231,13 @@ public class ErrorHandlingController {
         log.error("message: {}", e.getMessage());
         return buildError(ErrorCode.RECRUITMENT_ALREADY_COMPLETED);
     }
+
+    @ExceptionHandler(NoMatchingResultsException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ErrorResponse handleNoMatchingResultsException(NoMatchingResultsException e) {
+        log.error("해당 검색 결과를 찾을 수 없습니다.");
+        log.error("message: {}", e.getMessage());
+
+        return buildError(ErrorCode.NO_MATCHING_RESULTS);
+    }
 }

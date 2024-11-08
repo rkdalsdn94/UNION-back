@@ -32,6 +32,7 @@ public class GatheringManagerImpl implements GatheringManager {
     private final GatheringRepository gatheringRepository;
     private final PartyManager partyManager;
     private final UserManager userManager;
+    private final GatheringSortStrategy dynamicSortStrategy;
 
     @Override
     public GatheringInfo save(Gathering gathering) {
@@ -42,16 +43,16 @@ public class GatheringManagerImpl implements GatheringManager {
     }
 
     @Override
-    public Slice<GatheringListInfo> getGatheringList(
-        GatheringSortStrategy strategy, GatheringListCommand command
-    ) {
+    public Slice<GatheringListInfo> getGatheringList(GatheringListCommand command) {
         log.info("\n모임 리스트 조회 ManagerImpl 클래스 : {}", command);
 
-        Slice<Gathering> gatheringList = strategy.applySort(gatheringRepository, command, command.getPageable());
+        // DynamicSortStrategy를 사용해 정렬과 검색 쿼리 실행 (동적 쿼리 사용, QueryDSL 사용)
+        Slice<Gathering> gatheringList = dynamicSortStrategy.applySort(gatheringRepository, command, command.getPageable());
 
         return gatheringList.map(gathering -> {
-            Party owner = partyManager.findOwnerByGatheringIdAndRole(gathering.getId(), PartyRole.OWNER)
-                                      .orElseThrow(() -> new UserNotFoundException("Owner not found"));
+            Party owner = partyManager
+                .findOwnerByGatheringIdAndRole(gathering.getId(), PartyRole.OWNER)
+                .orElseThrow(() -> new UserNotFoundException(("오너를 찾을 수 없습니다.")));
             return GatheringListInfo.from(gathering, owner.getUser());
         });
     }

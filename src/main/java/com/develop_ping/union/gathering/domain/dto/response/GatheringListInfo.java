@@ -15,6 +15,7 @@ public class GatheringListInfo {
 
     private final Long id;
     private final String title;
+    private final String content;
     private final Integer maxMember;
     private final Integer currentMember;
     private final ZonedDateTime gatheringDateTime;
@@ -27,6 +28,7 @@ public class GatheringListInfo {
     private GatheringListInfo(
         Long id,
         String title,
+        String content,
         Integer maxMember,
         Integer currentMember,
         ZonedDateTime gatheringDateTime,
@@ -37,6 +39,7 @@ public class GatheringListInfo {
     ) {
         this.id = id;
         this.title = title;
+        this.content = content;
         this.maxMember = maxMember;
         this.currentMember = currentMember;
         this.gatheringDateTime = gatheringDateTime;
@@ -50,6 +53,7 @@ public class GatheringListInfo {
         return GatheringListInfo.builder()
                                 .id(gathering.getId())
                                 .title(gathering.getTitle())
+                                .content(gathering.getContent())
                                 .maxMember(gathering.getMaxMember())
                                 .currentMember(gathering.getCurrentMember())
                                 .gatheringDateTime(gathering.getGatheringDateTime())
@@ -64,6 +68,7 @@ public class GatheringListInfo {
         return gatherings.map(gathering -> GatheringListInfo.builder()
                                                             .id(gathering.getId())
                                                             .title(gathering.getTitle())
+                                                            .content(gathering.getContent())
                                                             .maxMember(gathering.getMaxMember())
                                                             .currentMember(gathering.getCurrentMember())
                                                             .gatheringDateTime(gathering.getGatheringDateTime())
@@ -79,6 +84,7 @@ public class GatheringListInfo {
             .map(gathering -> GatheringListInfo.builder()
                                                .id(gathering.getId())
                                                .title(gathering.getTitle())
+                                               .content(gathering.getContent())
                                                .maxMember(gathering.getMaxMember())
                                                .currentMember(gathering.getCurrentMember())
                                                .gatheringDateTime(gathering.getGatheringDateTime())

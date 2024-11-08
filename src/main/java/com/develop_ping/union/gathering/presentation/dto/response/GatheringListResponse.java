@@ -13,6 +13,7 @@ public class GatheringListResponse {
 
     private final Long id;
     private final String title;
+    private final String content;
     private final Integer maxMember;
     private final Integer currentMember;
     private final String eupMyeonDong;
@@ -27,6 +28,7 @@ public class GatheringListResponse {
     private GatheringListResponse(
         Long id,
         String title,
+        String content,
         Integer maxMember,
         Integer currentMember,
         String eupMyeonDong,
@@ -39,6 +41,7 @@ public class GatheringListResponse {
     ) {
         this.id = id;
         this.title = title;
+        this.content = content;
         this.maxMember = maxMember;
         this.currentMember = currentMember;
         this.eupMyeonDong = eupMyeonDong;
@@ -55,6 +58,7 @@ public class GatheringListResponse {
         return GatheringListResponse.builder()
                                     .id(gatheringListInfo.getId())
                                     .title(gatheringListInfo.getTitle())
+                                    .content(gatheringListInfo.getContent())
                                     .maxMember(gatheringListInfo.getMaxMember())
                                     .currentMember(gatheringListInfo.getCurrentMember())
                                     .gatheringDateTime(gatheringListInfo.getGatheringDateTime())
