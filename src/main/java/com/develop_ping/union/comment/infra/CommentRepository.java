@@ -21,9 +21,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         LEFT JOIN reactions r ON c.id = r.target_id AND r.type = :reactionType
         WHERE c.post_id = :postId
         GROUP BY c.id
+        HAVING COUNT(r.id) >= :minLikes
         ORDER BY COUNT(r.id) DESC, c.created_at ASC
         LIMIT 1
         """, nativeQuery = true)
     Optional<Comment> findTopByPostIdAndReactionType(@Param("postId") Long postId,
-                                                     @Param("reactionType") String reactionType);
+                                                     @Param("reactionType") String reactionType,
+                                                     @Param("minLikes") long minLikes);
 }

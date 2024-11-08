@@ -15,6 +15,8 @@ import java.util.Optional;
 public class CommentManagerImpl implements CommentManager {
     private final CommentRepository commentRepository;
 
+    private final static long BEST_COMMENT_REACTION_COUNT = 2;
+
     @Override
     @Transactional
     public Comment save(Comment comment) {
@@ -50,7 +52,10 @@ public class CommentManagerImpl implements CommentManager {
 
     @Override
     public Comment findBestComment(Long postId) {
-        Optional<Comment> comment = commentRepository.findTopByPostIdAndReactionType(postId, "COMMENT");
+        Optional<Comment> comment = commentRepository.findTopByPostIdAndReactionType(
+                postId,
+                "COMMENT",
+                BEST_COMMENT_REACTION_COUNT);
         return comment.orElse(null);
     }
 }
