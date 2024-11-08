@@ -9,6 +9,7 @@ import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.reaction.domain.ReactionManager;
 import com.develop_ping.union.reaction.domain.entity.ReactionType;
+import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class PostServiceImpl implements PostService {
     private final PhotoManager photoManager;
     private final CommentManager commentManager;
     private final ReactionManager reactionManager;
+    private final BlockUserManager blockUserManager;
 
     @Override
     @Transactional
@@ -145,26 +147,32 @@ public class PostServiceImpl implements PostService {
                 command.getSize(),
                 Sort.by(Sort.Direction.DESC, "createdAt"));
 
+        List<Long> blockedUserIds = blockUserManager.findAllBlockedOrBlockingUser(command.getUser())
+                .stream()
+                .map(User::getId)
+                .toList();
+
         return
             switch (command.getCriterion()) {
-                case BOARD -> postManager.findByPostType(command.getPostType(), pageable);
-                case MY -> postManager.findByUser(command.getUser(), pageable);
-                case MY_COMMENT -> postManager.findByUserComments(command.getUser(), pageable);
+                case BOARD -> postManager.findByPostType(command.getPostType(), pageable, blockedUserIds);
+                case MY -> postManager.findByUser(command.getUser(), pageable, blockedUserIds);
+                case MY_COMMENT -> postManager.findByUserComments(command.getUser(), pageable, blockedUserIds);
                 case USER -> {
                     User user = userManager.findByToken(command.getUserToken());
-                    yield postManager.findByUser(user, pageable);
+                    yield postManager.findByUser(user, pageable, blockedUserIds);
                 }
                 case USER_COMMENT -> {
                     User user = userManager.findByToken(command.getUserToken());
-                    yield postManager.findByUserComments(user, pageable);
+                    yield postManager.findByUserComments(user, pageable, blockedUserIds);
                 }
                 case BOARD_SEARCH -> {
                     if (command.getPostType() == PostType.ALL) {
-                        yield postManager.searchByKeyword(command.getKeyword(), pageable);
+                        yield postManager.searchByKeyword(command.getKeyword(), pageable, blockedUserIds);
                     }
-                    yield postManager.searchByTypeAndKeyword(command.getPostType(), command.getKeyword(), pageable);
+                    yield postManager.searchByTypeAndKeyword(
+                            command.getPostType(), command.getKeyword(), pageable, blockedUserIds);
                 }
-                case HOME -> postManager.findPopularPosts(pageable);
+                case HOME -> postManager.findPopularPosts(pageable, blockedUserIds);
             };
     }
 }

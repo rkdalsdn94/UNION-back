@@ -59,11 +59,13 @@ public class PostListCommand {
                 .build();
     }
 
-    public static PostListCommand userOf(int page,
+    public static PostListCommand userOf(User user,
+                                         int page,
                                          int size,
                                          String userToken,
                                          Criterion criterion) {
         return PostListCommand.builder()
+                .user(user)
                 .page(page)
                 .size(size)
                 .userToken(userToken)

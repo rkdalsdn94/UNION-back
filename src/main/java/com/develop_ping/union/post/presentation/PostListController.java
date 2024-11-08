@@ -71,13 +71,14 @@ public class PostListController {
     @GetMapping("/user/{userToken}/posts")
     public Page<PostListResponse> getUserPostList(@PathVariable("userToken") String userToken,
                                                   @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "3") int size) {
+                                                  @RequestParam(defaultValue = "3") int size,
+                                                  @AuthenticationPrincipal User user) {
         log.info("[ CALL: PostListController.getUserPostList() ]");
 
         // 특정 유저 기준으로 조회
         Criterion criterion = Criterion.USER;
 
-        PostListCommand command = PostListCommand.userOf(page, size, userToken, criterion);
+        PostListCommand command = PostListCommand.userOf(user, page, size, userToken, criterion);
         Page<PostListInfo> postListInfoPage = postService.getPosts(command);
 
         return postListInfoPage.map(PostListResponse::from);
@@ -86,13 +87,14 @@ public class PostListController {
     @GetMapping("/user/{userToken}/comments")
     public Page<PostListResponse> getUserCommentedPostList(@PathVariable("userToken") String userToken,
                                                            @RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "3") int size) {
+                                                           @RequestParam(defaultValue = "3") int size,
+                                                           @AuthenticationPrincipal User user) {
         log.info("[ CALL: PostListController.getUserCommentedPostList() ]");
 
         // 특정 유저가 댓글을 단 게시글 조회
         Criterion criterion = Criterion.USER_COMMENT;
 
-        PostListCommand command = PostListCommand.userOf(page, size, userToken, criterion);
+        PostListCommand command = PostListCommand.userOf(user, page, size, userToken, criterion);
         Page<PostListInfo> postListInfoPage = postService.getPosts(command);
 
         return postListInfoPage.map(PostListResponse::from);

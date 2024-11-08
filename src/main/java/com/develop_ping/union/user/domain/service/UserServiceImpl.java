@@ -161,8 +161,13 @@ public class UserServiceImpl implements UserService {
         Long targetUserId = targetUser.getId();
         log.info("target user nickname: {}", targetUser.getNickname());
 
+        List<Long> blockedUserIds = blockUserManager.findAllBlockedOrBlockingUser(command.getUser())
+                .stream()
+                .map(User::getId)
+                .toList();
+
         long postCount = postManager.countByUserId(targetUserId);
-        long commentCount = postManager.countPostsByUserComments(targetUserId);
+        long commentCount = postManager.countPostsByUserComments(targetUserId, blockedUserIds);
         long gatheringCount = partyManager.countByUserIdAndRole(targetUserId);
 
         return UserStatInfo.of(postCount, commentCount, gatheringCount);

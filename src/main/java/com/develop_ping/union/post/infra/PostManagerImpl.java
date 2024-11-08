@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -44,19 +46,19 @@ public class PostManagerImpl implements PostManager {
     }
 
     @Override
-    public Page<Post> findByPostType(PostType postType, Pageable pageable) {
+    public Page<Post> findByPostType(PostType postType, Pageable pageable, List<Long> blockedUserIds) {
         log.info("[ CALL: PostManager.findByPostType() ] postType: {}", postType);
-        return postRepository.findByType(postType, pageable);
+        return postRepository.findByType(postType, blockedUserIds, pageable);
     }
 
     @Override
-    public Page<Post> findByUser(User user, Pageable pageable) {
+    public Page<Post> findByUser(User user, Pageable pageable, List<Long> blockedUserIds) {
         return postRepository.findByUser(user, pageable);
     }
 
     @Override
-    public Page<Post> findByUserComments(User user, Pageable pageable) {
-        return postRepository.findPostsByUserComments(user, pageable);
+    public Page<Post> findByUserComments(User user, Pageable pageable, List<Long> blockedUserIds) {
+        return postRepository.findPostsByUserComments(user, blockedUserIds, pageable);
     }
 
     @Override
@@ -71,18 +73,25 @@ public class PostManagerImpl implements PostManager {
     }
 
     @Override
-    public Page<Post> searchByTypeAndKeyword(PostType type, String keyword, Pageable pageable) {
-        return postRepository.searchByTypeAndKeyword(type, keyword, pageable);
+    public Page<Post> searchByTypeAndKeyword(PostType type,
+                                             String keyword,
+                                             Pageable pageable,
+                                             List<Long> blockedUserIds) {
+        return postRepository.searchByTypeAndKeyword(type, keyword, blockedUserIds, pageable);
     }
 
     @Override
-    public Page<Post> searchByKeyword(String keyword, Pageable pageable) {
-        return  postRepository.searchByKeyword(keyword, pageable);
+    public Page<Post> searchByKeyword(String keyword, Pageable pageable, List<Long> blockedUserIds) {
+        return  postRepository.searchByKeyword(keyword, blockedUserIds, pageable);
     }
 
     @Override
-    public Page<Post> findPopularPosts(Pageable pageable) {
-        return postRepository.findPopularPosts(ReactionType.POST, POPULAR_POST_REACTION_COUNT, pageable);
+    public Page<Post> findPopularPosts(Pageable pageable, List<Long> blockedUserIds) {
+        return postRepository.findPopularPosts(
+                ReactionType.POST,
+                POPULAR_POST_REACTION_COUNT,
+                blockedUserIds,
+                pageable);
     }
 
     @Override
@@ -93,7 +102,7 @@ public class PostManagerImpl implements PostManager {
 
     @Override
     @Transactional(readOnly = true)
-    public long countPostsByUserComments(Long userId) {
-        return postRepository.countPostsByUserComments(userId);
+    public long countPostsByUserComments(Long userId, List<Long> blockedUserIds) {
+        return postRepository.countPostsByUserComments(userId, blockedUserIds);
     }
 }
