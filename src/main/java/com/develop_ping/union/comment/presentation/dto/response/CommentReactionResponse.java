@@ -10,18 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentReactionResponse {
     private long commentLikes;
-    private boolean isLiked;
+    private boolean liked;
 
     @Builder
-    private CommentReactionResponse(long commentLikes, boolean isLiked) {
+    private CommentReactionResponse(long commentLikes, boolean liked) {
         this.commentLikes = commentLikes;
-        this.isLiked = isLiked;
+        this.liked = liked;
     }
 
     public static CommentReactionResponse from(CommentReactionInfo info) {
         return CommentReactionResponse.builder()
                 .commentLikes(info.getCommentLikes())
-                .isLiked(info.isLiked())
+                .liked(info.isLiked())
                 .build();
     }
 }

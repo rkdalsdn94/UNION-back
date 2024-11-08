@@ -25,6 +25,18 @@ public class ReactionManagerImpl implements ReactionManager {
     }
 
     @Override
+    public boolean existsPostLikeByUserId(Long userId, Long postId) {
+        ReactionType type = ReactionType.POST;
+        return reactionRepository.existsByUserIdAndTypeAndTargetId(userId, type, postId);
+    }
+
+    @Override
+    public boolean existsCommentLikeByUserId(Long userId, Long commentId) {
+        ReactionType type = ReactionType.COMMENT;
+        return reactionRepository.existsByUserIdAndTypeAndTargetId(userId, type, commentId);
+    }
+
+    @Override
     public Long likePost(User user, Long postId) {
         ReactionType type = ReactionType.POST;
         return toggleReaction(user, postId, type);

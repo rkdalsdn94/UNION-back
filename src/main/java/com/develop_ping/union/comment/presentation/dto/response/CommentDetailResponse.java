@@ -20,7 +20,8 @@ public class CommentDetailResponse {
     private String parentNickname;
     private ZonedDateTime createdAt;
     private long commentLikes;
-    private boolean isLiked;
+    private boolean liked;
+    private boolean deleted;
     private CommenterResponse commenter;
     private List<CommentDetailResponse> children;
 
@@ -32,7 +33,8 @@ public class CommentDetailResponse {
                                  String parentNickname,
                                  ZonedDateTime createdAt,
                                  long commentLikes,
-                                 boolean isLiked,
+                                 boolean liked,
+                                 boolean deleted,
                                  CommenterResponse commenter,
                                  List<CommentDetailResponse> children) {
         this.id = id;
@@ -42,7 +44,8 @@ public class CommentDetailResponse {
         this.parentNickname = parentNickname;
         this.createdAt = createdAt;
         this.commentLikes = commentLikes;
-        this.isLiked = isLiked;
+        this.liked = liked;
+        this.deleted = deleted;
         this.commenter = commenter;
         this.children = children != null ? children : new ArrayList<>();
     }
@@ -56,7 +59,8 @@ public class CommentDetailResponse {
                 .parentNickname(info.getParentNickname())
                 .createdAt(info.getCreatedAt())
                 .commentLikes(info.getCommentLikes())
-                .isLiked(info.isLiked())
+                .liked(info.isLiked())
+                .deleted(info.isDeleted())
                 .commenter(CommenterResponse.from(info))
                 .children(new ArrayList<>())
                 .build();

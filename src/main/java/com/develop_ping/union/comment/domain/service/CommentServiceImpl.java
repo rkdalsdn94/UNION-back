@@ -8,7 +8,6 @@ import com.develop_ping.union.comment.exception.CommenterMismatchException;
 import com.develop_ping.union.post.domain.PostManager;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.reaction.domain.ReactionManager;
-import com.develop_ping.union.reaction.domain.entity.ReactionType;
 import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +60,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public void deleteComment(CommentCommand command) {
         log.info("[ CommentService.deleteComment() ] comment id: {}", command.getId());
 
@@ -70,11 +68,20 @@ public class CommentServiceImpl implements CommentService {
 
         validateCommentOwner(user, comment);
 
-        // TODO: 삭제하려는 댓글이 부모 댓글일 경우 정보 바꾸기!!!!!!!! soft delete 적용 ㅎㅎ~
-        // TODO: 근데 자식 댓글인 경우에는 그냥 삭제하기 -> hard delete??? 되나..?
+        if (comment.getChildren().isEmpty()) {
+            // 자식 댓글이 없는 경우 hard delete
+            commentManager.delete(comment);
+            log.info("[ Comment Hard Delete Completed! ]");
 
-        commentManager.delete(comment);
-        log.info("[ Comment Delete Completed! ]");
+            // 부모 댓글이 soft delete 되어 있고, 자식 댓글이 없는 경우 부모 댓글 삭제
+            if (comment.getParent() != null)
+                checkAndDeleteParentComment(comment.getParent());
+        } else {
+            // 자식 댓글이 있는 경우 soft delete
+            comment.softDelete();
+            commentManager.save(comment);
+            log.info("[ Comment Soft Delete Completed! ]");
+        }
     }
 
     @Override
@@ -85,22 +92,14 @@ public class CommentServiceImpl implements CommentService {
         Post post = postManager.findById(command.getPostId());
         List<Comment> comments = commentManager.findByPostId(post.getId());
 
-        List<User> blockUsers = blockUserManager.findAllBlockedOrBlockingUser(command.getUser());
-
-        // TODO: rootComments 랑 children 을 각각 for문이나 stream 돌려서 User deleted 확인 + blockUsers 확인해서 제외(null처리)해주기
-
-        long count = commentManager.countByPostId(post.getId());
+        List<Long> blockedUserIds = blockUserManager.findAllBlockedOrBlockingUser(command.getUser())
+                .stream()
+                .map(User::getId)
+                .toList();
 
         log.info("[ Comments Retrieval Completed! ]");
-        return comments.stream().map(comment -> {
-            long commentLikes = reactionManager.countLikesByComment(comment.getId());
-            boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(
-                    command.getUser().getId(),
-                    ReactionType.COMMENT,
-                    comment.getId());
-
-            return CommentInfo.of(comment, commentLikes, isLiked);
-        }).toList();
+        return comments.stream().map(comment ->
+                getCommentInfo(comment, blockedUserIds, command.getUser())).toList();
     }
 
     @Override
@@ -120,13 +119,24 @@ public class CommentServiceImpl implements CommentService {
 
         if (bestComment == null) { return null; }
 
+        List<Long> blockedUserIds = blockUserManager.findAllBlockedOrBlockingUser(command.getUser())
+                .stream()
+                .map(User::getId)
+                .toList();
+
+        return getCommentInfo(bestComment, blockedUserIds, bestComment.getUser());
+    }
+
+    private CommentInfo getCommentInfo(Comment bestComment, List<Long> blockedUserIds, User user) {
+        boolean isBlocked = blockedUserIds.contains(bestComment.getUser().getId());
+        if (isBlocked) { return CommentInfo.blockedFrom(bestComment); }
+
         long commentLikes = reactionManager.countLikesByComment(bestComment.getId());
-        boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(
-                bestComment.getUser().getId(),
-                ReactionType.COMMENT,
+        boolean liked = reactionManager.existsCommentLikeByUserId(
+                user.getId(),
                 bestComment.getId());
 
-        return CommentInfo.of(bestComment, commentLikes, isLiked);
+        return CommentInfo.of(bestComment, commentLikes, liked);
     }
 
     private void validateCommentOwner(User user, Comment comment) {
@@ -151,6 +161,15 @@ public class CommentServiceImpl implements CommentService {
         log.info("[ validateParentNickname() ]");
         if (!user.getNickname().equals(parentNickname)) {
             throw new CommenterMismatchException(parentNickname);
+        }
+    }
+
+    // 부모 댓글이 soft delete 되어 있고, 자식 댓글이 없는 경우 부모 댓글 삭제
+    private void checkAndDeleteParentComment(Comment parent) {
+        log.info("[ checkAndDeleteParentComment() ]");
+        if (parent.isDeleted() && parent.getChildren().isEmpty()) {
+            commentManager.delete(parent);
+            log.info("[ Parent Comment Hard Delete Completed! ]");
         }
     }
 }

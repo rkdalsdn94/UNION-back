@@ -10,6 +10,8 @@ import java.util.List;
 public interface ReactionManager {
 
     boolean existsByUserIdAndTypeAndId(Long userId, ReactionType type, Long gatheringId);
+    boolean existsPostLikeByUserId(Long userId, Long postId);
+    boolean existsCommentLikeByUserId(Long userId, Long commentId);
 
     Long likePost(User user, Long postId);
     Long likeGathering(User user, Long gatheringId);

@@ -8,7 +8,6 @@ import com.develop_ping.union.post.domain.dto.info.*;
 import com.develop_ping.union.post.domain.entity.Post;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.reaction.domain.ReactionManager;
-import com.develop_ping.union.reaction.domain.entity.ReactionType;
 import com.develop_ping.union.user.domain.BlockUserManager;
 import com.develop_ping.union.user.domain.UserManager;
 import com.develop_ping.union.user.domain.entity.User;
@@ -130,9 +129,8 @@ public class PostServiceImpl implements PostService {
         log.info("[ CALL: PostService.getPostLikes() ] post id: {}", command.getId());
 
         long likes = reactionManager.countLikesByPost(command.getId());
-        boolean isLiked = reactionManager.existsByUserIdAndTypeAndId(
+        boolean isLiked = reactionManager.existsPostLikeByUserId(
                 command.getUser().getId(),
-                ReactionType.POST,
                 command.getId()
         );
 

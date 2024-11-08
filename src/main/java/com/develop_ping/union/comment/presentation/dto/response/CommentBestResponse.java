@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,7 +18,8 @@ public class CommentBestResponse {
     private String parentNickname;
     private ZonedDateTime createdAt;
     private long commentLikes;
-    private boolean isLiked;
+    private boolean liked;
+    private boolean deleted;
     private CommenterResponse commenter;
 
     @Builder
@@ -31,7 +30,8 @@ public class CommentBestResponse {
                                String parentNickname,
                                ZonedDateTime createdAt,
                                long commentLikes,
-                               boolean isLiked,
+                               boolean liked,
+                               boolean deleted,
                                CommenterResponse commenter) {
         this.id = id;
         this.content = content;
@@ -40,7 +40,8 @@ public class CommentBestResponse {
         this.parentNickname = parentNickname;
         this.createdAt = createdAt;
         this.commentLikes = commentLikes;
-        this.isLiked = isLiked;
+        this.liked = liked;
+        this.deleted = deleted;
         this.commenter = commenter;
     }
 
@@ -57,7 +58,8 @@ public class CommentBestResponse {
                 .parentNickname(info.getParentNickname())
                 .createdAt(info.getCreatedAt())
                 .commentLikes(info.getCommentLikes())
-                .isLiked(info.isLiked())
+                .liked(info.isLiked())
+                .deleted(info.isDeleted())
                 .commenter(CommenterResponse.from(info))
                 .build();
     }

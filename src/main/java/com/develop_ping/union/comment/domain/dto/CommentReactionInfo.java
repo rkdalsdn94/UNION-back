@@ -6,18 +6,18 @@ import lombok.Getter;
 @Getter
 public class CommentReactionInfo {
     private final long commentLikes;
-    private final boolean isLiked;
+    private final boolean liked;
 
     @Builder
-    private CommentReactionInfo(long commentLikes, boolean isLiked) {
+    private CommentReactionInfo(long commentLikes, boolean liked) {
         this.commentLikes = commentLikes;
-        this.isLiked = isLiked;
+        this.liked = liked;
     }
 
-    public static CommentReactionInfo of(long commentLikes, boolean isLiked) {
+    public static CommentReactionInfo of(long commentLikes, boolean liked) {
         return CommentReactionInfo.builder()
                 .commentLikes(commentLikes)
-                .isLiked(isLiked)
+                .liked(liked)
                 .build();
     }
 }

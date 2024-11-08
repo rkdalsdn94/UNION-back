@@ -118,18 +118,18 @@ VALUES
 
 -- 댓글 더미 데이터
 INSERT INTO comments
-(content, post_id, user_id, parent_id, parent_nickname, created_at, updated_at)
+(content, post_id, user_id, parent_id, parent_nickname, created_at, updated_at, deleted)
 VALUES
-    ('첫 번째 게시글의 첫 번째 댓글입니다.', 1, 1, NULL, NULL, NOW(), NOW()),
-    ('첫 번째 게시글의 두 번째 댓글입니다.', 1, 2, NULL, NULL, NOW(), NOW()),
-    ('첫 번째 게시글의 첫 번째 댓글에 대한 대댓글입니다.', 1, 3, 1, 'user1nick', NOW(), NOW()),
-    ('두 번째 게시글의 첫 번째 댓글입니다.', 2, 4, NULL, NULL, NOW(), NOW()),
-    ('세 번째 게시글의 첫 번째 댓글입니다.', 3, 2, NULL, NULL, NOW(), NOW()),
-    ('네 번째 게시글의 첫 번째 댓글입니다.', 4, 5, NULL, NULL, NOW(), NOW()),
-    ('네 번째 게시글의 첫 번째 댓글에 대한 대댓글입니다.', 4, 3, 6, 'user5nick', NOW(), NOW()),
-    ('다섯 번째 게시글의 첫 번째 댓글입니다.', 5, 4, NULL, NULL, NOW(), NOW()),
-    ('여섯 번째 게시글의 첫 번째 댓글입니다.', 6, 1, NULL, NULL, NOW(), NOW()),
-    ('일곱 번째 게시글의 첫 번째 댓글입니다.', 7, 2, NULL, NULL, NOW(), NOW());
+    ('첫 번째 게시글의 첫 번째 댓글입니다.', 1, 1, NULL, NULL, NOW(), NOW(), false),
+    ('첫 번째 게시글의 두 번째 댓글입니다.', 1, 2, NULL, NULL, NOW(), NOW(), false),
+    ('첫 번째 게시글의 첫 번째 댓글에 대한 대댓글입니다.', 1, 3, 1, 'user1nick', NOW(), NOW(), false),
+    ('두 번째 게시글의 첫 번째 댓글입니다.', 2, 4, NULL, NULL, NOW(), NOW(), false),
+    ('세 번째 게시글의 첫 번째 댓글입니다.', 3, 2, NULL, NULL, NOW(), NOW(), false),
+    ('네 번째 게시글의 첫 번째 댓글입니다.', 4, 5, NULL, NULL, NOW(), NOW(), false),
+    ('네 번째 게시글의 첫 번째 댓글에 대한 대댓글입니다.', 4, 3, 6, 'user5nick', NOW(), NOW(), false),
+    ('다섯 번째 게시글의 첫 번째 댓글입니다.', 5, 4, NULL, NULL, NOW(), NOW(), false),
+    ('여섯 번째 게시글의 첫 번째 댓글입니다.', 6, 1, NULL, NULL, NOW(), NOW(), false),
+    ('일곱 번째 게시글의 첫 번째 댓글입니다.', 7, 2, NULL, NULL, NOW(), NOW(), false);
 
 -- 댓글 좋아요 더미 데이터
 INSERT INTO reactions

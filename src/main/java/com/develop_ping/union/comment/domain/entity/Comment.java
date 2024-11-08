@@ -18,8 +18,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comments")
 public class Comment extends AuditingFields {
-    // TODO: deletedAt 필드 추가해서 삭제된 댓글 표시하기
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -42,8 +40,12 @@ public class Comment extends AuditingFields {
     @Column(nullable = true)
     private String parentNickname;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 지금은 부모 댓글 삭제되면 전체 삭제하기
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("createdAt ASC")
     private List<Comment> children = new ArrayList<>();
+
+    @Column(nullable = false)
+    private boolean deleted;
 
     @Builder
     private Comment(String content,
@@ -74,5 +76,13 @@ public class Comment extends AuditingFields {
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void softDelete() {
+        this.deleted = true;
+    }
+
+    public boolean isDeleted() {
+        return this.deleted;
     }
 }
