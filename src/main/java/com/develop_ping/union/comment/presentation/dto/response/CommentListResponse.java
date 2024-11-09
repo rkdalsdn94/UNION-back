@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,7 +27,12 @@ public class CommentListResponse {
         // commentInfo -> CommentDetailResponse
         Map<Long, CommentDetailResponse> responseMap = infos.stream()
                 .map(CommentDetailResponse::from)
-                .collect(Collectors.toMap(CommentDetailResponse::getId, response -> response));
+                .collect(Collectors.toMap(
+                        CommentDetailResponse::getId,
+                        response -> response,
+                        (existing, replacement) -> existing,
+                        LinkedHashMap::new  // LinkedHashMap으로 순서 보장
+                ));
 
         // 부모 댓글에 자식 댓글 추가
         responseMap.values().forEach(response -> {

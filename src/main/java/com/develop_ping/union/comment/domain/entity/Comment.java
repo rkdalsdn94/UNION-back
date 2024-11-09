@@ -41,7 +41,6 @@ public class Comment extends AuditingFields {
     private String parentNickname;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @OrderBy("createdAt ASC")
     private List<Comment> children = new ArrayList<>();
 
     @Column(nullable = false)
