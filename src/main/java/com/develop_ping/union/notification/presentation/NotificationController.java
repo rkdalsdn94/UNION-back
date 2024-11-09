@@ -9,6 +9,7 @@ import com.develop_ping.union.notification.presentation.dto.request.Notification
 import com.develop_ping.union.notification.presentation.dto.request.NotificationCreationForPostRequest;
 import com.develop_ping.union.notification.presentation.dto.response.*;
 import com.develop_ping.union.user.domain.entity.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/post")
-    public ResponseEntity<NotificationCreationForPostResponse> createNotificationForPost(@RequestBody NotificationCreationForPostRequest request, @AuthenticationPrincipal User user){
+    public ResponseEntity<NotificationCreationForPostResponse> createNotificationForPost(@RequestBody @Valid NotificationCreationForPostRequest request, @AuthenticationPrincipal User user){
         log.info("[ CALL: NotificationController.createNotificationForPost() ] user id: {}", user.getId());
         NotificationCommand command = request.toCommand(user);
         NotificationInfo info = notificationService.createNotificationForPost(command);
@@ -35,7 +36,7 @@ public class NotificationController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @PostMapping("/comment")
-    public ResponseEntity<NotificationCreationForCommentResponse> createNotificationForComment(@RequestBody NotificationCreationForCommentRequest request, @AuthenticationPrincipal User user){
+    public ResponseEntity<NotificationCreationForCommentResponse> createNotificationForComment(@RequestBody @Valid NotificationCreationForCommentRequest request, @AuthenticationPrincipal User user){
         log.info("[ CALL: NotificationController.createNotificationForComment() ] user id: {}", user.getId());
         NotificationCommand command = request.toCommand(user);
         NotificationInfo info = notificationService.createNotificationForComment(command);
@@ -44,7 +45,7 @@ public class NotificationController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @PostMapping("/gathering")
-    public ResponseEntity<NotificationCreationForGatheringResponse> createNotificationForGathering(@RequestBody NotificationCreationForGatheringRequest request, @AuthenticationPrincipal User user){
+    public ResponseEntity<NotificationCreationForGatheringResponse> createNotificationForGathering(@RequestBody @Valid NotificationCreationForGatheringRequest request, @AuthenticationPrincipal User user){
         log.info("[ CALL: NotificationController.createNotificationForGathering() ] user id: {}", user.getId());
         NotificationCommand command = request.toCommand(user);
         NotificationInfo info = notificationService.createNotificationForGathering(command);
