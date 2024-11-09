@@ -24,6 +24,7 @@ public class NotificationListInfo {
             result.add(NotificationInfo.builder()
                     .id(notification.getId())
                     .type(notification.getType())
+                    .typeId(notification.getTypeId())
                     .nickname(notification.getNickname())
                     .title(notification.getTitle())
                     .content(notification.getContent())

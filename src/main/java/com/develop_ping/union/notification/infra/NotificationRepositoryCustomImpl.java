@@ -16,14 +16,13 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
     @PersistenceContext
     EntityManager em;
 
-
     @Override
     public List<NotificationReadForService> findAllOrderById(Long page, Long size, User user) {
         String queryForRead = """
                 select *
                 from(
                 -- post
-                select N.id, N.type, U.nickname, P.title, C.content, N.created_at, N.is_read
+                select N.id, N.type, U.nickname, P.title, C.content, N.created_at, N.is_read, P.id as post_id
                 from (select *
                     from notifications
                     where 1=1
@@ -39,7 +38,7 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
                 union all
                 
                 -- comment
-                select N.id, N.type, U.nickname, C1.content, C.content, N.created_at, N.is_read
+                select N.id, N.type, U.nickname, C1.content, C.content, N.created_at, N.is_read, C1.id as comment_id
                 from (select *
                     from notifications
                     where 1=1
@@ -55,7 +54,7 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
                 union all
                 
                 -- gathering
-                select N.id, N.type, U.nickname, G.title, 0, N.created_at, N.is_read
+                select N.id, N.type, U.nickname, G.title, 0, N.created_at, N.is_read, G.id as gathering_id
                 from (select *
                     from notifications
                     where 1=1
@@ -90,8 +89,9 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
             ZonedDateTime createdAt = timestamp.toInstant().atZone(ZoneId.systemDefault());
 
             Boolean isRead = (Boolean) result[6];
+            Long typeId = ((Number) result[7]).longValue();
 
-            NotificationReadForService notification = new NotificationReadForService(id, type, nickname, title, content, createdAt, isRead);
+            NotificationReadForService notification = new NotificationReadForService(id, type, typeId, nickname, title, content, createdAt, isRead);
             notificationList.add(notification);
         }
 

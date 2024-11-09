@@ -19,6 +19,7 @@ import java.util.List;
 public class NotificationInfo {
     private Long id;
     private NotiType type;
+    private Long typeId;
     private Long creatorTypeId;
     private Long attendeeTypeId;
     private ZonedDateTime createdAt;

@@ -24,6 +24,7 @@ public class NotificationReadForResponseList {
             notifications.add(NotificationReadForResponse.builder()
                             .id(notify.getId())
                             .type(notify.getType())
+                            .typeId(notify.getTypeId())
                             .nickname(notify.getNickname())
                             .title(notify.getTitle())
                             .content(notify.getContent())

@@ -15,6 +15,7 @@ import java.time.ZonedDateTime;
 public class NotificationReadForService {
     private Long id;
     private NotiType type;
+    private Long typeId;
     private String nickname;
     private String title;
     private String content;

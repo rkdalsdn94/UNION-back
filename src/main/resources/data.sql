@@ -147,3 +147,24 @@ VALUES
     (4, 6, 'COMMENT', NOW(), NOW()),
     (5, 7, 'COMMENT', NOW(), NOW());
 
+-- notification test
+INSERT INTO notifications (id, type, creator_type_id, attendee_type_id, is_read, creator_id, attendee_id, created_at, updated_at)
+VALUES (1, 'POST', 1, 2, false, 1, 3, '2024-11-08 10:00:00', '2024-11-08 10:00:00');
+
+INSERT INTO notifications (id, type, creator_type_id, attendee_type_id, is_read, creator_id, attendee_id, created_at, updated_at)
+VALUES (6, 'POST', 1, 3, false, 1, 4, '2024-11-08 11:00:00', '2024-11-08 11:00:00');
+
+INSERT INTO notifications (id, type, creator_type_id, attendee_type_id, is_read, creator_id, attendee_id, created_at, updated_at)
+VALUES (2, 'COMMENT', 1, 2, false, 1, 2, '2024-11-08 10:00:00', '2024-11-08 10:00:00');
+
+INSERT INTO notifications (id, type, creator_type_id, attendee_type_id, is_read, creator_id, attendee_id, created_at, updated_at)
+VALUES (3, 'COMMENT', 1, 3, false, 1, 3, '2024-11-08 10:00:00', '2024-11-08 10:00:00');
+
+INSERT INTO notifications (id, type, creator_type_id, attendee_type_id, is_read, creator_id, attendee_id, created_at, updated_at)
+VALUES (5, 'COMMENT', 2, 3, false, 1, 4, '2024-11-08 10:00:00', '2024-11-08 10:00:00');
+
+INSERT INTO notifications (id, type, creator_type_id, attendee_type_id, is_read, creator_id, attendee_id, created_at, updated_at)
+VALUES (4, 'GATHERING', 1, 3, false, 1, 1, '2024-11-08 10:00:00', '2024-11-08 10:00:00');
+
+INSERT INTO notifications (id, type, creator_type_id, attendee_type_id, is_read, creator_id, attendee_id, created_at, updated_at)
+VALUES (7, 'GATHERING', 1, 2, false, 1, 1, '2024-11-08 10:00:00', '2024-11-08 10:00:00');
