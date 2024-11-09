@@ -7,6 +7,7 @@ import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
+import com.develop_ping.union.gathering.infra.response.GatheringWithLikes;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.entity.Party;
 import com.develop_ping.union.party.domain.entity.PartyRole;
@@ -33,6 +34,9 @@ public class GatheringManagerImpl implements GatheringManager {
     private final PartyManager partyManager;
     private final UserManager userManager;
     private final GatheringSortStrategy dynamicSortStrategy;
+
+    private final static long POPULAR_GATHERING_REACTION_COUNT = 2;
+    private final HotGatheringQuery hotGatheringQuery;
 
     @Override
     public GatheringInfo save(Gathering gathering) {
@@ -123,5 +127,12 @@ public class GatheringManagerImpl implements GatheringManager {
         log.info("\n참여한 모임 리스트 조회 ManagerImpl 클래스 : {}", user.getId());
 
         return gatheringRepository.findGatheringsByUserId(user.getId());
+    }
+
+    @Override
+    public Slice<GatheringWithLikes> getHotGatheringList(Pageable pageable) {
+        log.info("\n인기 모임 리스트 조회 ManagerImpl 클래스");
+
+        return hotGatheringQuery.findHotGatheringList(POPULAR_GATHERING_REACTION_COUNT, pageable);
     }
 }

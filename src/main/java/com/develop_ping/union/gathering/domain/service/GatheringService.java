@@ -3,6 +3,7 @@ package com.develop_ping.union.gathering.domain.service;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringHotListInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.user.domain.entity.User;
@@ -32,4 +33,6 @@ public interface GatheringService {
     List<GatheringListInfo> getParticipatedGatheringList(User user);
 
     Long likeGathering(Long gatheringId, User user);
+
+    Slice<GatheringHotListInfo> getHotGatheringList(Pageable pageable);
 }

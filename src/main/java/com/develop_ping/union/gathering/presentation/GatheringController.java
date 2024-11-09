@@ -4,11 +4,13 @@ import com.develop_ping.union.gathering.domain.SortType;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringHotListInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
+import com.develop_ping.union.gathering.presentation.dto.response.GatheringHotListResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringListResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringResponse;
 import com.develop_ping.union.user.domain.entity.User;
@@ -187,5 +189,17 @@ public class GatheringController {
         log.info("모임 좋아요 요청 - gatheringId: {}", gatheringId);
 
         return ResponseEntity.ok(gatheringService.likeGathering(gatheringId, user));
+    }
+
+    @GetMapping("hot")
+    public ResponseEntity<Slice<GatheringHotListResponse>> getHotGatheringList(
+        @PageableDefault(size = 5) Pageable pageable
+    ) {
+        log.info("인기 모임 리스트 조회 요청 - pageable: {}", pageable);
+
+        Slice<GatheringHotListInfo> gatheringList = gatheringService.getHotGatheringList(pageable);
+        Slice<GatheringHotListResponse> response = gatheringList.map(GatheringHotListResponse::from);
+
+        return ResponseEntity.ok(response);
     }
 }

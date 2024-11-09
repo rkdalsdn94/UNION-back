@@ -4,6 +4,7 @@ import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
+import com.develop_ping.union.gathering.infra.response.GatheringWithLikes;
 import com.develop_ping.union.user.domain.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -25,6 +26,8 @@ public interface GatheringManager {
     void kickOutUser(String userToken, Long gatheringId, User user);
 
     List<Gathering> getParticipatedGatheringList(User user);
+
+    Slice<GatheringWithLikes> getHotGatheringList(Pageable pageable);
 
     // 유저 탈퇴시
     //  이 유저가 가입된 모임 목록을 조회

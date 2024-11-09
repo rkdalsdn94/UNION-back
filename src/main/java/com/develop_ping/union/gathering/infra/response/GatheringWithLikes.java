@@ -2,17 +2,15 @@ package com.develop_ping.union.gathering.infra.response;
 
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class GatheringWithDistance {
+public class GatheringWithLikes {
 
     private final Gathering gathering;
-    private final Double distance;
+    private final Long likes;
 
-    public GatheringWithDistance(Gathering gathering, Double distance) {
+    public GatheringWithLikes(Gathering gathering, Long likes) {
         this.gathering = gathering;
-        this.distance = distance;
+        this.likes = likes;
     }
 }

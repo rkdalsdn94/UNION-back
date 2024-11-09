@@ -168,3 +168,20 @@ VALUES (4, 'GATHERING', 1, 3, false, 1, 1, '2024-11-08 10:00:00', '2024-11-08 10
 
 INSERT INTO notifications (id, type, creator_type_id, attendee_type_id, is_read, creator_id, attendee_id, created_at, updated_at)
 VALUES (7, 'GATHERING', 1, 2, false, 1, 1, '2024-11-08 10:00:00', '2024-11-08 10:00:00');
+
+-- 모임에 대한 리액션 더미 데이터 (좋아요)
+INSERT INTO reactions
+(user_id, target_id, type, created_at, updated_at)
+VALUES
+    (1, 1, 'GATHERING', NOW(), NOW()),
+    (2, 1, 'GATHERING', NOW(), NOW()),
+    (3, 2, 'GATHERING', NOW(), NOW()),
+    (4, 3, 'GATHERING', NOW(), NOW()),
+    (5, 3, 'GATHERING', NOW(), NOW()),
+    (1, 4, 'GATHERING', NOW(), NOW()),
+    (2, 4, 'GATHERING', NOW(), NOW()),
+    (3, 5, 'GATHERING', NOW(), NOW()),
+    (4, 5, 'GATHERING', NOW(), NOW()),
+    (5, 6, 'GATHERING', NOW(), NOW()),
+    (1, 7, 'GATHERING', NOW(), NOW()),
+    (2, 7, 'GATHERING', NOW(), NOW());

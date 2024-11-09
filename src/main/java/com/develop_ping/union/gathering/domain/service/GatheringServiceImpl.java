@@ -5,11 +5,13 @@ import com.develop_ping.union.gathering.domain.GatheringManager;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringHotListInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
 import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.exception.GatheringNotFoundException;
 import com.develop_ping.union.gathering.exception.OwnerCannotExitException;
+import com.develop_ping.union.gathering.infra.response.GatheringWithLikes;
 import com.develop_ping.union.party.domain.PartyManager;
 import com.develop_ping.union.party.domain.dto.PartyInfo;
 import com.develop_ping.union.party.domain.entity.Party;
@@ -217,6 +219,7 @@ public class GatheringServiceImpl implements GatheringService {
         log.info("\n모임 멤버 추방 kickOutUser ServiceImpl 클래스 : userToken {}, gatheringId {}, user {}", userToken, gatheringId, user.getId());
 
         gatheringManager.kickOutUser(userToken, gatheringId, user);
+        chatManager.addUserExitMessage(gatheringId, user);
     }
 
     @Override
@@ -235,5 +238,14 @@ public class GatheringServiceImpl implements GatheringService {
         Gathering gathering = gatheringManager.findById(gatheringId);
 
         return reactionManager.likeGathering(user, gathering.getId());
+    }
+
+    @Override
+    public Slice<GatheringHotListInfo> getHotGatheringList(Pageable pageable) {
+        log.info("\n인기 모임 리스트 조회 getHotGatheringList ServiceImpl 클래스 : pageable {}", pageable);
+
+        Slice<GatheringWithLikes> hotGatheringList = gatheringManager.getHotGatheringList(pageable);
+
+        return hotGatheringList.map(GatheringHotListInfo::from);
     }
 }
