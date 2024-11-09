@@ -65,6 +65,7 @@ VALUES
     (NOW(), NOW(), 'user4nick', 'User 4 description', 'https://example.com/user4.png', 'University 4', 'test4@test.com', 'token4', 'google', false),
     (NOW(), NOW(), 'user5nick', 'User 5 description', 'https://example.com/user5.png', 'University 5', 'test5@test.com', 'token5', 'google', false);
 
+
 -- 게시글 더미 데이터
 INSERT INTO posts
     (title, content, type, views, created_at, updated_at, user_id, thumbnail)
@@ -145,3 +146,4 @@ VALUES
     (3, 6, 'COMMENT', NOW(), NOW()),
     (4, 6, 'COMMENT', NOW(), NOW()),
     (5, 7, 'COMMENT', NOW(), NOW());
+
