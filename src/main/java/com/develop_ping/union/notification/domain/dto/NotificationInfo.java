@@ -2,6 +2,7 @@ package com.develop_ping.union.notification.domain.dto;
 
 import com.develop_ping.union.notification.domain.NotiType;
 import com.develop_ping.union.notification.domain.entity.Notification;
+import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class NotificationInfo {
     private Long id;
     private NotiType type;
     private Long typeId;
+    private PostType postType;
     private Long creatorTypeId;
     private Long attendeeTypeId;
     private ZonedDateTime createdAt;

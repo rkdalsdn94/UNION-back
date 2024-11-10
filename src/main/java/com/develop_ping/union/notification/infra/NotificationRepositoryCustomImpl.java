@@ -2,6 +2,7 @@ package com.develop_ping.union.notification.infra;
 
 import com.develop_ping.union.notification.domain.NotiType;
 import com.develop_ping.union.notification.infra.dto.NotificationReadForService;
+import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -22,7 +23,7 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
                 select *
                 from(
                 -- post
-                select N.id, N.type, U.nickname, P.title, C.content, N.created_at, N.is_read, P.id as post_id
+                select N.id, N.type, U.nickname, P.title, C.content, N.created_at, N.is_read, P.id as post_id, P.type as post_type1
                 from (select *
                     from notifications
                     where 1=1
@@ -38,7 +39,7 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
                 union all
                 
                 -- comment
-                select N.id, N.type, U.nickname, C1.content, C.content, N.created_at, N.is_read, C1.id as comment_id
+                select N.id, N.type, U.nickname, C1.content, C.content, N.created_at, N.is_read, C1.id as comment_id, P.type as post_type1
                 from (select *
                     from notifications
                     where 1=1
@@ -47,6 +48,7 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
                     limit :size
                     offset :offset) N
                 join comments C1 on N.creator_type_id = C1.id
+                join posts P on P.id = C1.post_id
                 join comments C on N.attendee_type_id = C.id
                 join users U on N.attendee_id = U.id
                 where N.type = 'COMMENT'
@@ -54,7 +56,7 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
                 union all
                 
                 -- gathering
-                select N.id, N.type, U.nickname, G.title, 0, N.created_at, N.is_read, G.id as gathering_id
+                select N.id, N.type, U.nickname, G.title, 0, N.created_at, N.is_read, G.id as gathering_id, 'FREE'
                 from (select *
                     from notifications
                     where 1=1
@@ -78,8 +80,7 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
 
         for (Object[] result : results) {
             Long id = ((Number) result[0]).longValue();
-            String stringType = (String) result[1];
-            NotiType type = NotiType.valueOf(stringType);
+            NotiType type = NotiType.valueOf((String) result[1]);
             String nickname = (String) result[2];
             String title = (String) result[3];
             String content = (String) result[4];
@@ -91,7 +92,9 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
             Boolean isRead = (Boolean) result[6];
             Long typeId = ((Number) result[7]).longValue();
 
-            NotificationReadForService notification = new NotificationReadForService(id, type, typeId, nickname, title, content, createdAt, isRead);
+            PostType postType = PostType.valueOf((String) result[8]);
+
+            NotificationReadForService notification = new NotificationReadForService(id, type, typeId, nickname, title, content, createdAt, isRead, postType);
             notificationList.add(notification);
         }
 

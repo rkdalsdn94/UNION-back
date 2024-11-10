@@ -1,6 +1,7 @@
 package com.develop_ping.union.notification.infra.dto;
 
 import com.develop_ping.union.notification.domain.NotiType;
+import com.develop_ping.union.post.domain.entity.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,4 +22,5 @@ public class NotificationReadForService {
     private String content;
     private ZonedDateTime createdAt;
     private Boolean isRead;
+    private PostType postType;
 }

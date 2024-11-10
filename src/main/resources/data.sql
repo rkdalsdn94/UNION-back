@@ -70,7 +70,7 @@ VALUES
 INSERT INTO posts
     (title, content, type, views, created_at, updated_at, user_id, thumbnail)
 VALUES
-    ('첫 번째 게시글', '첫 번째 게시글 내용입니다.', 'FREE', 10, NOW(), NOW(), 1,
+    ('첫 번째 게시글', '첫 번째 게시글 내용입니다.', 'MARKET', 10, NOW(), NOW(), 1,
      'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
     ('두 번째 게시글', '두 번째 게시글 내용입니다.', 'MARKET', 20, NOW(), NOW(), 2,
      'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/userToken/44009c26-13fc-4912-a3db-7cac644e39c5.png'),
