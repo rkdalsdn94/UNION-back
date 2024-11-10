@@ -5,13 +5,17 @@ import com.develop_ping.union.common.base.AuditingFields;
 import com.develop_ping.union.notification.domain.NotiType;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.aspectj.weaver.ast.Not;
 
 @Entity
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "notifications")
 public class Notification extends AuditingFields {
     @Id
@@ -26,10 +30,10 @@ public class Notification extends AuditingFields {
     private Long attendeeTypeId;
     @Column(nullable = false)
     private Boolean isRead;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
     private User creator;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attendee_id")
     private User attendee;
 

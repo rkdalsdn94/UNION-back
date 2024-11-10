@@ -27,10 +27,15 @@ public class NotificationManagerImpl implements NotificationManager {
     }
 
     @Override
-    public void updateAll(Long page, Long size, User user) {
-        log.info("[ CALL: NotificationManager.updateAll() ] user id: {}", user.getId());
-        notificationRepository.updateAll(page, size, user);
+    public Notification updateIsRead(Long id, User user) {
+        log.info("[ CALL: NotificationManager.updateIsRead() ] user id: {}", user.getId());
+        return notificationRepository.updateIsRead(id, user);
     }
 
+    @Override
+    public Boolean isExistNotification(Long id) {
+        log.info("[ CALL: NotificationManager.isExistNotification() ] notification id: {}", id);
+        return notificationRepository.existsById(id);
+    }
 }
 

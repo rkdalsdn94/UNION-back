@@ -1,6 +1,7 @@
 package com.develop_ping.union.notification.infra;
 
 import com.develop_ping.union.notification.domain.NotiType;
+import com.develop_ping.union.notification.domain.entity.Notification;
 import com.develop_ping.union.notification.infra.dto.NotificationReadForService;
 import com.develop_ping.union.post.domain.entity.PostType;
 import com.develop_ping.union.user.domain.entity.User;
@@ -102,27 +103,20 @@ public class NotificationRepositoryCustomImpl implements NotificationRepositoryC
     }
 
     @Override
-    public void updateAll(Long page, Long size, User user) {
+    public Notification updateIsRead(Long id, User user) {
         // update query
         String queryForUpdate = """
                 UPDATE notifications
                 SET is_read = true
-                WHERE id IN (
-                    SELECT temp.id FROM (
-                        SELECT notifications.id
-                        FROM notifications
-                        WHERE notifications.creator_id = :userId
-                        ORDER BY notifications.id DESC
-                        LIMIT :size OFFSET :offset
-                    ) AS temp
-                );
+                WHERE 1=1
+                AND id = :id;
                 """;
 
         em.createNativeQuery(queryForUpdate)
-                .setParameter("userId", user.getId())
-                .setParameter("size", size)
-                .setParameter("offset", page * size)
+                .setParameter("id", id)
                 .executeUpdate();
+
+        return em.find(Notification.class, id);
     }
 
 

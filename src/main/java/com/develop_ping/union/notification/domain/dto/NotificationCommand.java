@@ -1,6 +1,7 @@
 package com.develop_ping.union.notification.domain.dto;
 
 import com.develop_ping.union.notification.domain.NotiType;
+import com.develop_ping.union.notification.domain.entity.Notification;
 import com.develop_ping.union.notification.presentation.dto.request.NotificationCreationForPostRequest;
 import com.develop_ping.union.user.domain.entity.User;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class NotificationCommand {
     private Long page;
     private Long size;
     private User user;
+    private Long id;
 
     public static NotificationCommand readOf(Long page, Long size, User user){
         return NotificationCommand.builder()
@@ -29,5 +31,4 @@ public class NotificationCommand {
                 .user(user)
                 .build();
     }
-
 }

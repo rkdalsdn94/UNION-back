@@ -85,9 +85,14 @@ public class NotificationServiceImpl implements NotificationService{
 
     @Override
     @Transactional
-    public void updateNotification(NotificationCommand command) {
+    public NotificationInfo updateNotification(NotificationCommand command) {
         log.info("[ CALL: NotificationService.updateNotification() ] user id: {}", command.getUser().getId());
 
-        notificationManager.updateAll(command.getPage(), command.getSize(), command.getUser());
+        if (!notificationManager.isExistNotification(command.getId()))
+            throw new IllegalArgumentException("id와 일치하는 notification 없음");
+
+        Notification notification = notificationManager.updateIsRead(command.getId(), command.getUser());
+
+        return NotificationInfo.of(notification);
     }
 }

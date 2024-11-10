@@ -7,6 +7,7 @@ import com.develop_ping.union.notification.domain.service.NotificationService;
 import com.develop_ping.union.notification.presentation.dto.request.NotificationCreationForCommentRequest;
 import com.develop_ping.union.notification.presentation.dto.request.NotificationCreationForGatheringRequest;
 import com.develop_ping.union.notification.presentation.dto.request.NotificationCreationForPostRequest;
+import com.develop_ping.union.notification.presentation.dto.request.NotificationUpdateIsReadRequest;
 import com.develop_ping.union.notification.presentation.dto.response.*;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.validation.Valid;
@@ -16,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ResourceBundle;
 
 @RestController
 @RequestMapping("/notification")
@@ -63,11 +62,12 @@ public class NotificationController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @PutMapping("/read")
-    public ResponseEntity<HttpStatus> createNotificationIsRead(@RequestParam("page") Long page, @RequestParam("size") Long size, @AuthenticationPrincipal User user){
-        log.info("[ CALL: NotificationController.createNotificationIsRead() ] user id: {}", user.getId());
-        NotificationCommand command = NotificationCommand.readOf(page, size, user);
-        notificationService.updateNotification(command);
+    public ResponseEntity<NotificationUpdateIsReadResponse> updateNotificationIsRead(@RequestBody @Valid NotificationUpdateIsReadRequest request, @AuthenticationPrincipal User user){
+        log.info("[ CALL: NotificationController.updateNotificationIsRead() ] user id: {}", user.getId());
+        NotificationCommand command = request.toCommand(user);
+        NotificationInfo info = notificationService.updateNotification(command);
+        NotificationUpdateIsReadResponse response = NotificationUpdateIsReadResponse.from(info);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

@@ -10,5 +10,5 @@ public interface NotificationService {
     NotificationInfo createNotificationForComment(NotificationCommand command);
     NotificationInfo createNotificationForGathering(NotificationCommand command);
     NotificationListInfo readNotification(NotificationCommand command);
-    void updateNotification(NotificationCommand command);
+    NotificationInfo updateNotification(NotificationCommand command);
 }

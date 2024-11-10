@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface NotificationRepositoryCustom {
     List<NotificationReadForService> findAllOrderById(Long page, Long size, User user);
-    void updateAll(Long page, Long size, User user);
+    Notification updateIsRead(Long id, User user);
 }
