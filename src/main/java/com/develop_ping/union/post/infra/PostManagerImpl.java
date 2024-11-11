@@ -22,7 +22,7 @@ import java.util.List;
 public class PostManagerImpl implements PostManager {
     private final PostRepository postRepository;
 
-    private final static long POPULAR_POST_REACTION_COUNT = 2;
+    private final static long POPULAR_POST_REACTION_COUNT = 5;
 
     @Override
     public Post saveAndFlush(Post post) {

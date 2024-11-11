@@ -5,4 +5,9 @@ public enum PostType {
     MARKET,
     INFO,
     ALL,
+    HUMANITIES,
+    SCIENCES,
+    ENGINEERING,
+    ARTS,
+    MEDICINE,
 }
