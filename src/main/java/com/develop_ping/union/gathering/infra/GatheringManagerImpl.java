@@ -47,11 +47,11 @@ public class GatheringManagerImpl implements GatheringManager {
     }
 
     @Override
-    public Slice<GatheringListInfo> getGatheringList(GatheringListCommand command) {
+    public Slice<GatheringListInfo> getGatheringList(GatheringListCommand command, User user) {
         log.info("\n모임 리스트 조회 ManagerImpl 클래스 : {}", command);
 
         // DynamicSortStrategy를 사용해 정렬과 검색 쿼리 실행 (동적 쿼리 사용, QueryDSL 사용)
-        Slice<Gathering> gatheringList = dynamicSortStrategy.applySort(gatheringRepository, command, command.getPageable());
+        Slice<Gathering> gatheringList = dynamicSortStrategy.applySort(gatheringRepository, user, command, command.getPageable());
 
         return gatheringList.map(gathering -> {
             Party owner = partyManager

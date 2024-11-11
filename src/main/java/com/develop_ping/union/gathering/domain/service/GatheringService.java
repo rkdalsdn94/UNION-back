@@ -16,7 +16,7 @@ public interface GatheringService {
     GatheringInfo createGathering(GatheringCommand command, User user);
     GatheringDetailInfo getGatheringDetail(Long gatheringId, User user);
     void updateGathering(Long gatheringId, GatheringCommand command, User user);
-    Slice<GatheringListInfo> getGatheringList(GatheringListCommand request);
+    Slice<GatheringListInfo> getGatheringList(GatheringListCommand request, User user);
     void deleteGathering(Long gatheringId, User user);
     void joinGathering(Long gatheringId, User user);
 

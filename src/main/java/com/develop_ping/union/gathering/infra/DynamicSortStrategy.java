@@ -5,7 +5,10 @@ import com.develop_ping.union.gathering.domain.SortType;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.domain.entity.QGathering;
-import com.develop_ping.union.gathering.exception.NoMatchingResultsException;
+import com.develop_ping.union.party.domain.entity.PartyRole;
+import com.develop_ping.union.party.domain.entity.QParty;
+import com.develop_ping.union.user.domain.entity.QBlockUser;
+import com.develop_ping.union.user.domain.entity.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -29,32 +32,53 @@ public class DynamicSortStrategy implements GatheringSortStrategy {
 
     @Override
     public Slice<Gathering> applySort(
-        GatheringRepository repository, GatheringListCommand command, Pageable pageable
+        GatheringRepository repository, User user, GatheringListCommand command, Pageable pageable
     ) {
         QGathering gathering = QGathering.gathering;
-        BooleanBuilder builder = new BooleanBuilder();
+        QParty party = QParty.party;
+        QBlockUser blockUser = QBlockUser.blockUser;
+        BooleanBuilder baseBuilder = new BooleanBuilder();
+        BooleanBuilder includeUserGatherings = new BooleanBuilder();
 
-        // 검색어가 있는 경우에만 조건 추가
         if (command.getKeyword() != null) {
-            builder.and(gathering.title.containsIgnoreCase(command.getKeyword()))
-                   .or(gathering.content.containsIgnoreCase(command.getKeyword()));
+            baseBuilder.and(gathering.title.containsIgnoreCase(command.getKeyword()))
+                       .or(gathering.content.containsIgnoreCase(command.getKeyword()));
         }
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 
-        // keyword 조건으로 검색 결과 확인
-        List<Gathering> keywordResults = queryFactory.selectFrom(gathering)
-                                                     .where(builder)
+        // 차단된 유저와 관련된 gathering ID 조회
+        List<Long> blockedGatheringIds = queryFactory.select(party.gathering.id)
+                                                     .from(party)
+                                                     .join(blockUser)
+                                                     .on(party.user.id.eq(blockUser.blockedUser.id)
+                                                                      .or(party.user.id.eq(blockUser.blockingUser.id)))
+                                                     .where(blockUser.blockingUser.id.eq(user.getId())
+                                                                                     .or(blockUser.blockedUser.id.eq(user.getId())))
                                                      .fetch();
 
-        // 검색어에 일치하는 데이터가 없는 경우 예외 발생
-        if (command.getKeyword() != null && keywordResults.isEmpty()) {
-            throw new NoMatchingResultsException("일치하는 항목이 없습니다.");
+        // 본인이 참여한 gathering ID 조회
+        List<Long> userGatheringIds = queryFactory.select(party.gathering.id)
+                                                  .from(party)
+                                                  .where(party.user.id.eq(user.getId())
+                                                                      .and(party.role.eq(PartyRole.OWNER)))
+                                                  .fetch();
+
+        if (!blockedGatheringIds.isEmpty()) {
+            baseBuilder.and(gathering.id.notIn(blockedGatheringIds));
         }
 
-        // 기본 필터, 정렬 조건 적용하여 쿼리 재작성
+        if (!userGatheringIds.isEmpty()) {
+            includeUserGatherings.or(gathering.id.in(userGatheringIds));
+        }
+
+        baseBuilder.or(includeUserGatherings);
+
+        // 최종 쿼리에서 페치 조인을 사용하여 N+1 문제를 방지
         JPAQuery<Gathering> query = queryFactory.selectFrom(gathering)
-                                                .where(builder)
+                                                .leftJoin(gathering.parties, party).fetchJoin()
+                                                .leftJoin(party.user).fetchJoin()
+                                                .where(baseBuilder)
                                                 .offset(pageable.getOffset())
                                                 .limit(pageable.getPageSize());
 

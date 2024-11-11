@@ -111,10 +111,10 @@ public class GatheringServiceImpl implements GatheringService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<GatheringListInfo> getGatheringList(GatheringListCommand command) {
+    public Slice<GatheringListInfo> getGatheringList(GatheringListCommand command, User user) {
         log.info("\n모임 리스트 getGatheringList 조회 ServiceImpl 클래스 : {}", command);
 
-        return gatheringManager.getGatheringList(command);
+        return gatheringManager.getGatheringList(command, user);
     }
 
     @Override

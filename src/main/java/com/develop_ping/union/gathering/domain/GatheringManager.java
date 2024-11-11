@@ -14,7 +14,7 @@ import java.util.List;
 public interface GatheringManager {
 
     GatheringInfo save(Gathering gathering);
-    Slice<GatheringListInfo> getGatheringList(GatheringListCommand command);
+    Slice<GatheringListInfo> getGatheringList(GatheringListCommand command, User user);
     Gathering findById(Long gatheringId);
     void deleteGathering(Gathering gathering);
     Gathering findWithPessimisticLockById(Long gatheringId);

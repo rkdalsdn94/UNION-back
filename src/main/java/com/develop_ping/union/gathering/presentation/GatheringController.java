@@ -40,13 +40,14 @@ public class GatheringController {
         @RequestParam(value = "latitude", defaultValue = "37.556016") Double latitude,
         @RequestParam(value = "longitude", defaultValue = "126.972355") Double longitude,
         @RequestParam(value = "keyword", required = false) String keyword,
-        @PageableDefault(size = 3) Pageable pageable
+        @PageableDefault(size = 3) Pageable pageable,
+        @AuthenticationPrincipal User user
     ) {
         log.info("모임 리스트 조회 요청 - sortType: {}, latitude: {}, longitude: {}, pageable: {}", sortType, latitude, longitude, pageable);
 
         Slice<GatheringListInfo> gatheringList =
             gatheringService
-                .getGatheringList(GatheringListCommand.of(sortType, latitude, longitude, keyword, pageable));
+                .getGatheringList(GatheringListCommand.of(sortType, latitude, longitude, keyword, pageable), user);
 
         Slice<GatheringListResponse> responses = gatheringList.map(GatheringListResponse::from);
 
