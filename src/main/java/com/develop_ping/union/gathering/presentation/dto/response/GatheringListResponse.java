@@ -56,7 +56,6 @@ public class GatheringListResponse {
         this.createdAt = createdAt;
     }
 
-    // GatheringListInfo를 GatheringListResponse로 변환하는 정적 메서드
     public static GatheringListResponse from(GatheringListInfo gatheringListInfo) {
         return GatheringListResponse.builder()
                                     .id(gatheringListInfo.getId())

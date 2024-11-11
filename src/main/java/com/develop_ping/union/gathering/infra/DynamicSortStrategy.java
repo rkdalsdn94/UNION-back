@@ -5,7 +5,7 @@ import com.develop_ping.union.gathering.domain.SortType;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
 import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.domain.entity.QGathering;
-import com.develop_ping.union.party.domain.entity.PartyRole;
+import com.develop_ping.union.gathering.exception.NoMatchingResultsException;
 import com.develop_ping.union.party.domain.entity.QParty;
 import com.develop_ping.union.user.domain.entity.QBlockUser;
 import com.develop_ping.union.user.domain.entity.User;
@@ -38,12 +38,6 @@ public class DynamicSortStrategy implements GatheringSortStrategy {
         QParty party = QParty.party;
         QBlockUser blockUser = QBlockUser.blockUser;
         BooleanBuilder baseBuilder = new BooleanBuilder();
-        BooleanBuilder includeUserGatherings = new BooleanBuilder();
-
-        if (command.getKeyword() != null) {
-            baseBuilder.and(gathering.title.containsIgnoreCase(command.getKeyword()))
-                       .or(gathering.content.containsIgnoreCase(command.getKeyword()));
-        }
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 
@@ -56,23 +50,23 @@ public class DynamicSortStrategy implements GatheringSortStrategy {
                                                      .where(blockUser.blockingUser.id.eq(user.getId())
                                                                                      .or(blockUser.blockedUser.id.eq(user.getId())))
                                                      .fetch();
-
-        // 본인이 참여한 gathering ID 조회
-        List<Long> userGatheringIds = queryFactory.select(party.gathering.id)
-                                                  .from(party)
-                                                  .where(party.user.id.eq(user.getId())
-                                                                      .and(party.role.eq(PartyRole.OWNER)))
-                                                  .fetch();
-
         if (!blockedGatheringIds.isEmpty()) {
             baseBuilder.and(gathering.id.notIn(blockedGatheringIds));
         }
 
-        if (!userGatheringIds.isEmpty()) {
-            includeUserGatherings.or(gathering.id.in(userGatheringIds));
-        }
+        // 검색어가 존재할 경우 검색 조건 추가
+        if (command.getKeyword() != null && !command.getKeyword().isBlank()) {
+            BooleanBuilder keywordBuilder = new BooleanBuilder();
+            keywordBuilder.and(gathering.title.containsIgnoreCase(command.getKeyword()))
+                          .or(gathering.content.containsIgnoreCase(command.getKeyword()));
+            baseBuilder.and(keywordBuilder);
 
-        baseBuilder.or(includeUserGatherings);
+            // 키워드로 필터링된 결과가 없으면 예외 발생
+            long count = queryFactory.selectFrom(gathering).where(baseBuilder).fetchCount();
+            if (count == 0) {
+                throw new NoMatchingResultsException("일치하는 모임을 찾을 수 없습니다.");
+            }
+        }
 
         // 최종 쿼리에서 페치 조인을 사용하여 N+1 문제를 방지
         JPAQuery<Gathering> query = queryFactory.selectFrom(gathering)
@@ -84,10 +78,12 @@ public class DynamicSortStrategy implements GatheringSortStrategy {
 
         // 하버사인 공식, 거리 계산 및 정렬 조건 적용
         NumberExpression<Double> distanceExpression = Expressions.numberTemplate(Double.class,
-            "6371 * acos(cos(radians({0})) * cos(radians({1})) * cos(radians({2}) - radians({3})) + sin(radians({0})) * sin(radians({1})))",
+            "case when {1} is null or {2} is null then 9999999 " +
+                "else 6371 * acos(cos(radians({0})) * cos(radians({1})) * cos(radians({2}) - radians({3})) + sin(radians({0})) * sin(radians({1}))) end",
             command.getLatitude(), gathering.place.latitude, gathering.place.longitude, command.getLongitude()
         );
 
+        // 정렬 조건 적용
         if (command.getSortType() == SortType.LATEST) {
             query.orderBy(gathering.createdAt.desc());
         } else if (command.getSortType() == SortType.DISTANCE) {
