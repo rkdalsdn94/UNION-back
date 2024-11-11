@@ -1,12 +1,12 @@
 INSERT INTO gatherings
 (current_member, latitude, longitude, max_member, recruited, created_at, gathering_date_time, updated_at, views, address, content, eup_myeon_dong, thumbnail, title)
 VALUES
-    (1, 37.52709079431217, 126.93247240527026, 10, 0x00, '2024-11-11 07:01:39.741795', '2024-11-16 01:00:00.000000', '2024-11-11 08:12:38.761383', 28, '서울 영등포구 여의도동 84-4', '이번주 날씨가 좋아서 한강에서 달리기 하실 분 찾아요~~\n3km ~ 10km 정도 생각하고 있습니다~\n\n위치 : 여의나루역 2번출구', '여의도동', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token5/97983c69-093b-40e9-bf5d-3fbd15a1460b.webp', '달리기 모임 하실분'),
+    (1, 37.52709079431217, 126.93247240527026, 10, 0x00, '2024-11-11 07:01:39.741795', '2024-11-16 01:00:00.000000', '2024-11-11 08:12:38.761383', 28, '서울 영등포구 여의도동 84-4', '이번주 날씨가 좋아서 한강에서 달리기 하실 분 찾아요~~\n3km ~ 10km 정도 생각하고 있습니다~\n\n위치 : 여의나루역 2번출구', '여의도동', '', '달리기 모임 하실분'),
     (1, 37.577613288258206, 126.97689786832184, 10, 0x01, '2024-11-11 07:33:56.302195', '2024-11-17 01:00:00.000000', '2024-11-11 08:20:31.806284', 9, '서울 종로구 세종로 1-1', '날도 좋은데 경복궁 놀러 갈 사람 구해요\n\n장소 : 경복궁', '세종로', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token5/4a8a361a-388f-4948-badb-6b2092d3edfd.webp', '경복궁 여행 갈 사람'),
     (1, 37.4852956017567, 127.019140058377, 8, 0x00, '2024-11-11 07:42:48.427133', '2024-11-14 01:00:00.000000', '2024-11-11 08:12:42.690840', 8, '서울 서초구 서초동 1443-28', '코바늘 또는 대바늘 뜨개질 함께 하실 분~ ^^', '서초동', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token5/9e263d51-3577-4a1f-ae49-0bcba0f83dbe.jpg', '뜨개질 모임'),
     (1, NULL, NULL, 2, 0x00, '2024-11-11 07:43:50.223591', '2024-11-13 15:00:00.000000', '2024-11-11 08:14:34.240712', 5, NULL, 'ㅎㅇ', NULL, NULL, 'ㅎㅇ'),
     (1, 35.1543499962694, 129.060715839655, 4, 0x00, '2024-11-11 07:45:48.600642', '2024-11-14 07:30:00.000000', '2024-11-11 08:14:14.683383', 8, '부산 부산진구 부전동 215-1', 'sdfdsf', '부전동', NULL, 'sdf'),
-    (1, 33.4996213, 126.5311884, 10, 0x00, '2024-11-11 09:01:39.741795', '2024-11-13 18:30:00.000000', '2024-11-11 10:12:38.761383', 102, '제주 제주시 연동 128', '제주도 여행하며 자연 속에서 힐링할 분 모집합니다!', '연동', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token5/a318d84a-1ea8-4156-9bb9-5332a21c06be.webp', '제주도 힐링 여행'),
+    (1, 33.4996213, 126.5311884, 10, 0x00, '2024-11-11 09:01:39.741795', '2024-11-13 18:30:00.000000', '2024-11-11 10:12:38.761383', 102, '제주 제주시 연동 128', '제주도 여행하며 자연 속에서 힐링할 분 모집합니다!', '연동', NULL, '제주도 힐링 여행'),
     (1, 37.566535, 126.9779692, 8, 0x00, '2024-11-11 09:02:40.741795', '2024-11-13 19:00:00.000000', '2024-11-11 10:20:00.261383', 57, '서울 종로구 청진동 200', '북촌 한옥마을 산책과 카페 탐방 하실 분', '청진동', NULL, '북촌 산책 모임'),
     (1, 35.1795543, 129.0756416, 5, 0x00, '2024-11-11 09:05:50.241795', '2024-11-14 19:30:00.000000', '2024-11-11 10:30:18.731383', 65, '부산 중구 남포동 3가 42', '부산 광안리 해변 산책과 맛집 탐방!', '남포동', NULL, '부산 해변 산책'),
     (1, 36.3504119, 127.3845475, 10, 0x00, '2024-11-11 09:10:20.731795', '2024-11-14 20:00:00.000000', '2024-11-11 10:40:38.761383', 34, '대전 중구 대흥동 73', '대전의 숨은 명소 탐방하실 분 환영합니다!', '대흥동', NULL, '대전 명소 탐방'),
@@ -24,7 +24,7 @@ VALUES
     (1, 37.320736, 127.123833, 7, 0x00, '2024-11-11 10:16:30.741795', '2024-11-20 18:30:00.000000', '2024-11-11 12:18:38.761383', 54, '경기 성남시 분당구 정자동 82-3', '정자동 카페거리 카페 탐방!', '정자동', NULL, '카페 투어'),
     (1, 37.672967, 126.695735, 10, 0x00, '2024-11-11 10:20:40.741795', '2024-11-20 19:00:00.000000', '2024-11-11 12:22:38.761383', 49, '경기 고양시 덕양구 행신동 52-2', '행신동 공원에서 가벼운 산책과 사진 촬영', '행신동', NULL, '산책과 사진 모임'),
     (1, 37.524123, 126.857201, 10, 0x00, '2024-11-11 10:30:45.741795', '2024-11-21 18:00:00.000000', '2024-11-11 12:25:38.761383', 68, '서울 양천구 목동 923-7', '목동 주변 공원에서 가을 단풍 산책', '목동', NULL, '가을 단풍 산책'),
-    (1, 37.642581, 127.016679, 8, 0x00, '2024-11-11 10:35:22.741795', '2024-11-21 19:30:00.000000', '2024-11-11 12:30:38.761383', 78, '서울 성북구 정릉동 1-1', '정릉동 역사 탐방과 문화 이야기', '정릉동', NULL, '정릉 문화 탐방'),
+    (1, 37.642581, 127.016679, 8, 0x00, '2024-11-11 10:35:22.741795', '2024-11-21 19:30:00.000000', '2024-11-11 12:30:38.761383', 78, '서울 성북구 정릉동 1-1', '정릉동 역사 탐방과 문화 이야기', '정릉동', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token5/845e38f4-414b-49df-a023-4d19ed2cd48a.webp', '정릉 문화 탐방'),
     (1, 35.991755, 129.371794, 10, 0x00, '2024-11-11 10:40:55.741795', '2024-11-22 18:30:00.000000', '2024-11-11 12:34:38.761383', 112, '경북 포항시 남구 대도동 100', '포항 바다에서 조개잡이 체험', '대도동', NULL, '조개잡이 체험 모임'),
     (1, 37.251215, 127.072022, 10, 0x00, '2024-11-11 10:45:50.741795', '2024-11-22 19:00:00.000000', '2024-11-11 12:40:38.761383', 90, '경기 수원시 영통구 영통동 96-10', '수원 화성에서 역사와 사진 모임', '영통동', NULL, '화성 역사 모임'),
     (1, 37.756689, 126.501693, 8, 0x00, '2024-11-11 10:50:45.741795', '2024-11-23 18:00:00.000000', '2024-11-11 12:48:38.761383', 101, '경기 파주시 금촌동 82-2', '금촌에서 저녁 산책과 야경 촬영', '금촌동', NULL, '야경 촬영 모임');
@@ -72,7 +72,7 @@ VALUES
 
 -- 유저 더미 데이터
 INSERT INTO users
-    (created_at, updated_at, nickname, description, profile_image, univ_name, email, token, provider, deleted)
+(created_at, updated_at, nickname, description, profile_image, univ_name, email, token, provider, deleted)
 VALUES
     (NOW(), NOW(), '호박고구마', '호박고구마호박고구마호박고구마', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/39d84192-bc29-4827-9e5d-b156e8d8e115.jpg', '가천대학교', 'test1@test.com',  'token1', 'google', false),
     (NOW(), NOW(), '커피콩', null, 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/107046a9-e84e-4dcd-90f0-8ca3bcb6ef4e.jpg', '단국대학교', 'test2@test.com', 'token2', 'google', false),
@@ -108,7 +108,7 @@ VALUES
 
 -- 게시글 더미 데이터
 INSERT INTO posts
-    (title, content, type, views, created_at, updated_at, user_id, thumbnail)
+(title, content, type, views, created_at, updated_at, user_id, thumbnail)
 VALUES
     ('저메추', '뭐먹지 추천받음', 'FREE', 10, NOW(), NOW(), 6, NULL),
     ('부산대 지갑 분실물', '지갑 주인을 찾습니다! DM 주시면 지갑 위치 알려드릴게요', 'FREE', 43, NOW(), NOW(), 8,
@@ -119,7 +119,7 @@ VALUES
     ('넷플 추천', '어둠 속의 미사 개꿀잼 추천합니다 잘 만든 드라마임', 'FREE', 34, NOW(), NOW(), 4,
      'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/0829d93b-62ac-4bce-858f-8a3a1fe3f6f0.jpg'),
     ('친구가 자꾸 돈을 빌려 가는데... 말하는 게 맞을까요?', '몇 번 빌려주긴 했는데 갈수록 불편해져요. 다들 이런 경우 어떻게 대처하시나요?', 'FREE', 185, NOW(), NOW(), 5, NULL),
-    ('ㅎㅎ고양이 보고가', '이름은 댕댕이야', 'FREE', 211, NOW(), NOW(), 6,
+    ('ㅎㅎ고양이 발바닥 보고가', '이름은 댕댕이야', 'FREE', 211, NOW(), NOW(), 11,
      'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/237543cc-db65-4fd2-8719-eeb4bb1ebcd7.jpg'),
     ('카페 알바생한테 번호 줬는데 연락이 없어ㅠㅠ', '용기 내서 번호 줬는데 연락이 없음... 괜히 준 건가 싶음... ㅠㅠ 진짜 존잘이었는데....', 'FREE', 93, NOW(), NOW(), 6, NULL),
     ('레전드 진상 썰 푼다', '진짜 알바하면서 별 진상을 다 봤지만 이거만큼 황당한 건 처음임ㅋㅋ 점심시간에 손님 엄청 몰리는데, 어떤 커플이 와서 앉더라고. 근데 주문할 때부터 느낌이 쎄했어. 손님이 메뉴판 한참 보더니 여기 모든 메뉴 다 설명 좀 해줘요~ 이러는 거임.. ㅠㅠ 바빠서 진짜 힘들었지만 친절하게 하나하나 설명해줬지.', 'FREE', 154, NOW(), NOW(), 7, NULL),
@@ -128,41 +128,41 @@ VALUES
     ('다들 취준할때 급여가 1순위야?', '화사 규모나 이미지는 a가 더 좋은데 b가 급여 더 쎄면 b로 가?', 'FREE', 99, NOW(), NOW(), 10, NULL),
     ('아 역대급 수업 듣기싫다', '졸려 집 가고 싶어', 'FREE', 12, NOW(), NOW(), 11,
      'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/15b303af-7de0-4290-a394-cef2b7294afa.jpeg'),
-    ('컴포즈vs메가 붙어있으면 어디가?', '난 컴포즈..\\n컴포즈가 더 맛있는거 같음', 'FREE', 57, NOW(), NOW(), 12, NULL),
-    ('상한 거 먹으면 어지뤄워?', '어제부터 갑자기 어지러운데\\n원인 의심되는게 좀 오래된 반찬이랑 샌드위치밖에 없음\\n냉털하려고 걍 먹었거든...', 'FREE', 26, NOW(), NOW(), 13, NULL),
+    ('컴포즈vs메가 붙어있으면 어디가?', '난 컴포즈..컴포즈가 더 맛있는거 같음', 'FREE', 57, NOW(), NOW(), 12, NULL),
+    ('상한 거 먹으면 어지뤄워?', '어제부터 갑자기 어지러운데\n원인 의심되는게 좀 오래된 반찬이랑 샌드위치밖에 없음\n냉털하려고 걍 먹었거든...', 'FREE', 26, NOW(), NOW(), 13, NULL),
     ('허니콤보', '먹고 싶다..... 제발.....!......!!', 'FREE', 48, NOW(), NOW(), 14, NULL),
     ('오늘', '날씨 어때??? 후집 입으면 추울까.....??', 'FREE', 62, NOW(), NOW(), 15, NULL),
-    ('필기', '어떤거 사용해??\\n한컴오피스 노타빌리티 등', 'FREE', 42, NOW(), NOW(), 16, NULL),
+    ('필기', '어떤거 사용해??\n한컴오피스 노타빌리티 등', 'FREE', 42, NOW(), NOW(), 16, NULL),
     ('애플 이번에 m4 나온거 봤냐??', '개쩔던데.. 가격도 완전 싸게 나와서 이번에 바꿀까 생각 중이야', 'ENGINEERING', 57, NOW(), NOW(), 17,
      'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/d3e6c318-68ba-440c-92fc-530e693df4aa.jpg'),
     ('코딩할때 쓰는 인공지능', '챗지피티 유료로 결재해서 쓰는게 가장 좋은가요?? 이미지 인식기능 어떤가요?', 'ENGINEERING', 74, NOW(), NOW(), 18, NULL),
-    ('19, 20학번 이공계 여자들 취업 어케 됐어?', '19학번 남자들은 아직 졸업 시즌 아니고\\n19, 20학번 여자들 취업 잘 했어??', 'ENGINEERING', 91, NOW(), NOW(), 19, NULL),
+    ('19, 20학번 이공계 여자들 취업 어케 됐어?', '19학번 남자들은 아직 졸업 시즌 아니고\n19, 20학번 여자들 취업 잘 했어??', 'ENGINEERING', 91, NOW(), NOW(), 19, NULL),
     ('건축 실습할건데 스파게티 면으로 다리 지을사람?', '마시멜로도 쓸거임 어때? 같이 할 생각 있어?', 'ENGINEERING', 78, NOW(), NOW(), 20, NULL),
     ('반도체 전공하는 애들아', '너네 전공 따라갈만해?? 난 아무래도 전공 선택을 잘못한것같아..', 'ENGINEERING', 45, NOW(), NOW(), 21, NULL),
     ('학부연구생 어때?', '학부연구생 하려고 고민 중인데 실제로 어떤 일 하는지 궁금해! 일하면서 느낀 점이나 연구실 분위기 같은 것도 알려주면 좋겠어~ 연구실 생활 꿀팁도 환영!', 'ENGINEERING', 94, NOW(), NOW(), 22, NULL),
     ('원래 공부는 혼자하는거다', '공부는 혼자해라..', 'ENGINEERING', 73, NOW(), NOW(), 23, NULL),
     ('C#', '한번도 안해봤는데 추천할만한 책이나 강의 있을까?', 'ENGINEERING', 92, NOW(), NOW(), 24, NULL),
     ('학기 중 공모전 참여하는거 현실적으로 가능할까?', '학기 중에 공모전까지 하면 스케줄 관리가 진짜 힘들까…? 전공 과목도 빡세서 고민 중인데 다들 학기 중 공모전 참여 경험 어땠어? 준비 팁이나 시간 관리 방법 있으면 알려줘!', 'ENGINEERING', 88, NOW(), NOW(), 25, NULL),
-    ('안드로이드스큐디오 쓰면서', '내 노트북 이제 바꿔야할 때가 왔구나 새삼 생각했다..\\n\\n걍 킬때부터 느리고 에뮬레이터 켜지지도 않아서 수업 따라가기도 힘들었음..', 'ENGINEERING', 36, NOW(), NOW(), 9, NULL),
+    ('안드로이드스큐디오 쓰면서', '내 노트북 이제 바꿔야할 때가 왔구나 새삼 생각했다..\n\n걍 킬때부터 느리고 에뮬레이터 켜지지도 않아서 수업 따라가기도 힘들었음..', 'ENGINEERING', 36, NOW(), NOW(), 9, NULL),
     ('다들 엽떡앱 들어가서 쿠폰 다운받아~','ㅈㄱㄴ','FREE', 220, NOW(), NOW(), 25,
      'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/742453ee-4bbd-423f-8d04-87007c8a526a.jpeg'),
     ('파트라슈...','나 점점 잠이 와... 아직 0.5회독밖에 안했는데...','FREE', 194, NOW(), NOW(), 26,
      'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/b6dd16ef-e2cb-427e-872a-8fbf74184a6c.jpeg');
 
--- 게시글 사진 더미 데이터
+-- 사진 더미 데이터
 INSERT INTO photos
-    (target_id, target_type, url, created_at, updated_at)
+(target_id, target_type, url, created_at, updated_at)
 VALUES
     (2, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/43e172a3-ad81-4fb3-bd81-e94cd269e931.jpg', NOW(), NOW()),
     (6, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/0829d93b-62ac-4bce-858f-8a3a1fe3f6f0.jpg', NOW(), NOW()),
     (8, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/237543cc-db65-4fd2-8719-eeb4bb1ebcd7.jpg', NOW(), NOW()),
-    (8, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/7b474117-9377-40a5-b554-750609f90a14.jpg', NOW(), NOW()),
-    (8, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/78e5fb1b-8702-4683-9b5f-86d7bfee69d4.jpg', NOW(), NOW()),
-    (8, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/a16e1a61-af6f-4e7a-8aee-562edebb2541.jpg', NOW(), NOW()),
     (14, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/15b303af-7de0-4290-a394-cef2b7294afa.jpeg', NOW(), NOW()),
     (20, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/d3e6c318-68ba-440c-92fc-530e693df4aa.jpg', NOW(), NOW()),
     (30, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/742453ee-4bbd-423f-8d04-87007c8a526a.jpeg', NOW(), NOW()),
-    (31, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/b6dd16ef-e2cb-427e-872a-8fbf74184a6c.jpeg''', NOW(), NOW());
+    (31, 'POST', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token1/b6dd16ef-e2cb-427e-872a-8fbf74184a6c.jpeg', NOW(), NOW()),
+    (24, 'GATHERING', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token5/845e38f4-414b-49df-a023-4d19ed2cd48a.webp', NOW(), NOW()),
+    (2, 'GATHERING', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token5/4a8a361a-388f-4948-badb-6b2092d3edfd.webp', NOW(), NOW()),
+    (3, 'GATHERING', 'https://union-image-bucket.s3.ap-northeast-2.amazonaws.com/token5/9e263d51-3577-4a1f-ae49-0bcba0f83dbe.jpg', NOW(), NOW());
 
 -- 게시글 좋아요 더미 데이터
 INSERT INTO reactions
@@ -378,7 +378,7 @@ VALUES
 
 -- 댓글 좋아요 더미 데이터
 INSERT INTO reactions
-    (user_id, target_id, type, created_at, updated_at)
+(user_id, target_id, type, created_at, updated_at)
 VALUES
     (1, 2, 'COMMENT', NOW(), NOW()),
     (2, 2, 'COMMENT', NOW(), NOW()),
