@@ -25,6 +25,7 @@ public class GatheringHotListResponse {
     private final AuthorResponse author;
     private final String thumbnail;
     private final Long likes;
+    private final ZonedDateTime createdAt;
 
     @Builder
     private GatheringHotListResponse(
@@ -40,7 +41,8 @@ public class GatheringHotListResponse {
         Double longitude,
         AuthorResponse author,
         String thumbnail,
-        Long likes
+        Long likes,
+        ZonedDateTime createdAt
     ) {
         this.id = id;
         this.title = title;
@@ -55,6 +57,7 @@ public class GatheringHotListResponse {
         this.author = author;
         this.thumbnail = thumbnail;
         this.likes = likes;
+        this.createdAt = createdAt;
     }
 
     public static GatheringHotListResponse from(GatheringHotListInfo gatheringHotListInfo) {
@@ -72,6 +75,7 @@ public class GatheringHotListResponse {
                                        .author(AuthorResponse.from(gatheringHotListInfo))
                                        .thumbnail(gatheringHotListInfo.getThumbnail())
                                        .likes(gatheringHotListInfo.getLikes())
+                                        .createdAt(gatheringHotListInfo.getCreatedAt())
                                        .build();
     }
 

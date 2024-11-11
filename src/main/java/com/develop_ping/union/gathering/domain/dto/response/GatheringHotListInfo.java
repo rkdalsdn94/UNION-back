@@ -25,6 +25,7 @@ public class GatheringHotListInfo {
     private final Place place;
     private final User user;
     private final Long likes;
+    private final ZonedDateTime createdAt;
 
     @Builder
     private GatheringHotListInfo(
@@ -38,7 +39,8 @@ public class GatheringHotListInfo {
         Place place,
         User user,
         String thumbnail,
-        Long likes
+        Long likes,
+        ZonedDateTime createdAt
     ) {
         this.id = id;
         this.title = title;
@@ -51,6 +53,7 @@ public class GatheringHotListInfo {
         this.user = user;
         this.thumbnail = thumbnail;
         this.likes = likes;
+        this.createdAt = createdAt;
     }
 
     public static GatheringHotListInfo from(GatheringWithLikes gatheringWithLikes) {
@@ -69,6 +72,7 @@ public class GatheringHotListInfo {
                                    .user(gathering.getOwner())
                                    .thumbnail(gathering.getThumbnail())
                                    .likes(likes)
+                                   .createdAt(gathering.getCreatedAt())
                                    .build();
     }
 }

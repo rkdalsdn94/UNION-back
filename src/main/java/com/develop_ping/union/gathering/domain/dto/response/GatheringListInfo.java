@@ -23,6 +23,7 @@ public class GatheringListInfo {
     private final String thumbnail;
     private final Place place;
     private final User user;
+    private final ZonedDateTime createdAt;
 
     @Builder
     private GatheringListInfo(
@@ -35,7 +36,8 @@ public class GatheringListInfo {
         Long views,
         Place place,
         User user,
-        String thumbnail
+        String thumbnail,
+        ZonedDateTime createdAt
     ) {
         this.id = id;
         this.title = title;
@@ -47,6 +49,7 @@ public class GatheringListInfo {
         this.place = place;
         this.user = user;
         this.thumbnail = thumbnail;
+        this.createdAt = createdAt;
     }
 
     public static GatheringListInfo from(Gathering gathering, User user) {
@@ -61,6 +64,7 @@ public class GatheringListInfo {
                                 .place(gathering.getPlace())
                                 .user(user)
                                 .thumbnail(gathering.getThumbnail())
+                                .createdAt(gathering.getCreatedAt())
                                 .build();
     }
 
@@ -76,6 +80,7 @@ public class GatheringListInfo {
                                                             .place(gathering.getPlace())
                                                             .user(gathering.getOwner())
                                                             .thumbnail(gathering.getThumbnail())
+                                                            .createdAt(gathering.getCreatedAt())
                                                             .build());
     }
 
@@ -92,6 +97,7 @@ public class GatheringListInfo {
                                                .place(gathering.getPlace())
                                                .user(gathering.getUser())
                                                .thumbnail(gathering.getThumbnail())
+                                               .createdAt(gathering.getCreatedAt())
                                                .build())
             .toList();
     }

@@ -23,6 +23,7 @@ public class GatheringListResponse {
     private final Double longitude;
     private final AuthorResponse author;
     private final String thumbnail;
+    private final ZonedDateTime createdAt;
 
     @Builder
     private GatheringListResponse(
@@ -37,7 +38,8 @@ public class GatheringListResponse {
         Double latitude,
         Double longitude,
         AuthorResponse author,
-        String thumbnail
+        String thumbnail,
+        ZonedDateTime createdAt
     ) {
         this.id = id;
         this.title = title;
@@ -51,6 +53,7 @@ public class GatheringListResponse {
         this.longitude = longitude;
         this.author = author;
         this.thumbnail = thumbnail;
+        this.createdAt = createdAt;
     }
 
     // GatheringListInfo를 GatheringListResponse로 변환하는 정적 메서드
@@ -68,6 +71,7 @@ public class GatheringListResponse {
                                     .eupMyeonDong(gatheringListInfo.getPlace() != null ? gatheringListInfo.getPlace().getEupMyeonDong() : null)
                                     .author(AuthorResponse.from(gatheringListInfo))
                                     .thumbnail(gatheringListInfo.getThumbnail())
+                                    .createdAt(gatheringListInfo.getCreatedAt())
                                     .build();
     }
 
