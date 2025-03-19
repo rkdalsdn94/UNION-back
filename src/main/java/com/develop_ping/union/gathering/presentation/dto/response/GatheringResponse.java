@@ -1,10 +1,9 @@
 package com.develop_ping.union.gathering.presentation.dto.response;
 
-import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
+import com.develop_ping.union.gathering.domain.entity.Gathering;
+import java.time.ZonedDateTime;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.ZonedDateTime;
 
 @Getter
 public class GatheringResponse {
@@ -45,18 +44,18 @@ public class GatheringResponse {
         this.recruited = recruited;
     }
 
-    public static GatheringResponse from(GatheringInfo gathering) {
+    public static GatheringResponse of(Gathering gathering) {
         return GatheringResponse.builder()
                                 .id(gathering.getId())
                                 .title(gathering.getTitle())
                                 .content(gathering.getContent())
                                 .maxMember(gathering.getMaxMember())
                                 .currentMember(gathering.getCurrentMember())
-                                .address(gathering.getAddress())
-                                .latitude(gathering.getLatitude())
-                                .longitude(gathering.getLongitude())
+                                .address(gathering.getPlace().getAddress())
+                                .latitude(gathering.getPlace().getLatitude())
+                                .longitude(gathering.getPlace().getLongitude())
                                 .gatheringDateTime(gathering.getGatheringDateTime())
-                                .recruited(gathering.isRecruited())
+                                .recruited(gathering.getRecruited())
                                 .build();
     }
 }
