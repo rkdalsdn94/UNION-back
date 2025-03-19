@@ -1,6 +1,5 @@
 services:
   mysql:
-    container_name: union-fork
     image: 'mysql:8.0.36'
     environment:
       - 'MYSQL_DATABASE=mydatabase'
@@ -8,7 +7,7 @@ services:
       - 'MYSQL_ROOT_PASSWORD=verysecret'
       - 'MYSQL_USER=myuser'
     ports:
-      - '13307:3306'
+      - '13306:3306'
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci

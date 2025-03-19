@@ -1,9 +1,13 @@
 package com.develop_ping.union.gathering.presentation.dto.response;
 
-import com.develop_ping.union.gathering.domain.entity.Place;
-import java.time.ZonedDateTime;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringHotListInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.ZonedDateTime;
 
 @Getter
 public class GatheringHotListResponse {
@@ -13,13 +17,15 @@ public class GatheringHotListResponse {
     private final String content;
     private final Integer maxMember;
     private final Integer currentMember;
+    private final String eupMyeonDong;
     private final ZonedDateTime gatheringDateTime;
     private final Long views;
+    private final Double latitude;
+    private final Double longitude;
+    private final AuthorResponse author;
     private final String thumbnail;
     private final Long likes;
     private final ZonedDateTime createdAt;
-    private final String name;
-    private final Place place;
 
     @Builder
     private GatheringHotListResponse(
@@ -28,10 +34,12 @@ public class GatheringHotListResponse {
         String content,
         Integer maxMember,
         Integer currentMember,
+        String eupMyeonDong,
         ZonedDateTime gatheringDateTime,
         Long views,
-        Place place,
-        String name,
+        Double latitude,
+        Double longitude,
+        AuthorResponse author,
         String thumbnail,
         Long likes,
         ZonedDateTime createdAt
@@ -41,29 +49,62 @@ public class GatheringHotListResponse {
         this.content = content;
         this.maxMember = maxMember;
         this.currentMember = currentMember;
-        this.place = place;
+        this.eupMyeonDong = eupMyeonDong;
         this.gatheringDateTime = gatheringDateTime;
         this.views = views;
-        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.author = author;
         this.thumbnail = thumbnail;
         this.likes = likes;
         this.createdAt = createdAt;
     }
 
-    public static GatheringHotListResponse from(GatheringHotListResponse gatheringHotListResponse) {
+    public static GatheringHotListResponse from(GatheringHotListInfo gatheringHotListInfo) {
         return GatheringHotListResponse.builder()
-            .id(gatheringHotListResponse.getId())
-            .title(gatheringHotListResponse.getTitle())
-            .content(gatheringHotListResponse.getContent())
-            .maxMember(gatheringHotListResponse.getMaxMember())
-            .currentMember(gatheringHotListResponse.getCurrentMember())
-            .gatheringDateTime(gatheringHotListResponse.getGatheringDateTime())
-            .views(gatheringHotListResponse.getViews())
-            .place(gatheringHotListResponse.getPlace())
-            .name(gatheringHotListResponse.getName())
-            .thumbnail(gatheringHotListResponse.getThumbnail())
-            .likes(gatheringHotListResponse.getLikes())
-            .createdAt(gatheringHotListResponse.getCreatedAt())
-            .build();
+                                       .id(gatheringHotListInfo.getId())
+                                       .title(gatheringHotListInfo.getTitle())
+                                       .content(gatheringHotListInfo.getContent())
+                                       .maxMember(gatheringHotListInfo.getMaxMember())
+                                       .currentMember(gatheringHotListInfo.getCurrentMember())
+                                       .gatheringDateTime(gatheringHotListInfo.getGatheringDateTime())
+                                       .views(gatheringHotListInfo.getViews())
+                                       .latitude(gatheringHotListInfo.getPlace() != null ? gatheringHotListInfo.getPlace().getLatitude() : null)
+                                       .longitude(gatheringHotListInfo.getPlace() != null ? gatheringHotListInfo.getPlace().getLongitude() : null)
+                                       .eupMyeonDong(gatheringHotListInfo.getPlace() != null ? gatheringHotListInfo.getPlace().getEupMyeonDong() : null)
+                                       .author(AuthorResponse.from(gatheringHotListInfo))
+                                       .thumbnail(gatheringHotListInfo.getThumbnail())
+                                       .likes(gatheringHotListInfo.getLikes())
+                                        .createdAt(gatheringHotListInfo.getCreatedAt())
+                                       .build();
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AuthorResponse {
+        private String token;
+        private String nickname;
+        private String profileImage;
+        private String univName;
+
+        @Builder
+        private AuthorResponse(String token,
+                               String nickname,
+                               String profileImage,
+                               String univName) {
+            this.token = token;
+            this.nickname = nickname;
+            this.profileImage = profileImage;
+            this.univName = univName;
+        }
+
+        public static AuthorResponse from(GatheringHotListInfo info) {
+            return AuthorResponse.builder()
+                                 .token(info.getUser().getToken())
+                                 .nickname(info.getUser().getNickname())
+                                 .profileImage(info.getUser().getProfileImage())
+                                 .univName(info.getUser().getUnivName())
+                                 .build();
+        }
     }
 }

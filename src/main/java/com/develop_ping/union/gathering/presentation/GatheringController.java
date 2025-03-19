@@ -1,15 +1,20 @@
 package com.develop_ping.union.gathering.presentation;
 
 import com.develop_ping.union.gathering.domain.SortType;
+import com.develop_ping.union.gathering.domain.dto.request.GatheringCommand;
 import com.develop_ping.union.gathering.domain.dto.request.GatheringListCommand;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringDetailInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringHotListInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringInfo;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
 import com.develop_ping.union.gathering.domain.service.GatheringService;
 import com.develop_ping.union.gathering.presentation.dto.request.GatheringRequest;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringDetailResponse;
+import com.develop_ping.union.gathering.presentation.dto.response.GatheringHotListResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringListResponse;
 import com.develop_ping.union.gathering.presentation.dto.response.GatheringResponse;
 import com.develop_ping.union.user.domain.entity.User;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -17,15 +22,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,10 +45,13 @@ public class GatheringController {
     ) {
         log.info("모임 리스트 조회 요청 - sortType: {}, latitude: {}, longitude: {}, pageable: {}", sortType, latitude, longitude, pageable);
 
-        Slice<GatheringListResponse> gatheringList = gatheringService.getGatheringList(
-            GatheringListCommand.of(sortType, latitude, longitude, keyword, pageable), user);
+        Slice<GatheringListInfo> gatheringList =
+            gatheringService
+                .getGatheringList(GatheringListCommand.of(sortType, latitude, longitude, keyword, pageable), user);
 
-        return ResponseEntity.ok(gatheringList);
+        Slice<GatheringListResponse> responses = gatheringList.map(GatheringListResponse::from);
+
+        return ResponseEntity.ok(responses);
     }
 
     @PostMapping
@@ -57,7 +59,9 @@ public class GatheringController {
         @AuthenticationPrincipal User user,
         @Valid @RequestBody GatheringRequest request
     ) {
-        GatheringResponse gathering = gatheringService.createGathering(request.toCommand(), user);
+        log.info("모임 생성 요청 - userId: {}, request: {}", user.getId(), request);
+
+        GatheringInfo gathering = gatheringService.createGathering(request.toCommand(), user);
         return ResponseEntity.ok(gathering.getId());
     }
 
@@ -66,7 +70,12 @@ public class GatheringController {
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
-        return ResponseEntity.ok( gatheringService.getGatheringDetail(gatheringId, user));
+        log.info("모임 상세 조회 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
+
+        GatheringDetailInfo gatheringDetailInfo = gatheringService.getGatheringDetail(gatheringId, user);
+        GatheringDetailResponse response = GatheringDetailResponse.from(gatheringDetailInfo);
+
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{gatheringId}")
@@ -75,6 +84,8 @@ public class GatheringController {
         @PathVariable("gatheringId") Long gatheringId,
         @Valid @RequestBody GatheringRequest request
     ) {
+        log.info("모임 수정 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
+
         gatheringService.updateGathering(gatheringId, request.toCommand(), user);
         return ResponseEntity.ok().build();
     }
@@ -84,6 +95,8 @@ public class GatheringController {
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
+        log.info("모임 삭제 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
+
         gatheringService.deleteGathering(gatheringId, user);
         return ResponseEntity.noContent().build();
     }
@@ -93,6 +106,8 @@ public class GatheringController {
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
+        log.info("모임 가입 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
+
         gatheringService.joinGathering(gatheringId, user);
         return ResponseEntity.ok().build();
     }
@@ -102,6 +117,8 @@ public class GatheringController {
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
+        log.info("모임 나가기 요청 - gatheringId: {}, userId: {}", gatheringId, user.getId());
+
         gatheringService.exitGathering(gatheringId, user);
         return ResponseEntity.ok().build();
     }
@@ -111,15 +128,25 @@ public class GatheringController {
         @AuthenticationPrincipal User user,
         @PageableDefault(size = 5) Pageable pageable
     ) {
-        return ResponseEntity.ok( gatheringService.getMyGatheringList(user, pageable));
+        log.info("내가 생성한 모임 리스트 조회 요청 - userId: {}, pageable: {}", user.getId(), pageable);
+
+        Slice<GatheringListInfo> gatheringList = gatheringService.getMyGatheringList(user, pageable);
+        Slice<GatheringListResponse> response = gatheringList.map(GatheringListResponse::from);
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{userToken}")
     public ResponseEntity<Slice<GatheringListResponse>> getUserGatheringList(
-        @PathVariable("userId") Long userId,
+        @PathVariable("userToken") String userToken,
         @PageableDefault(size = 5) Pageable pageable
     ) {
-        return ResponseEntity.ok( gatheringService.getUserGatheringList(userId, pageable));
+        log.info("특정 사용자의 모임 리스트 조회 요청 - userToken: {}, pageable: {}", userToken, pageable);
+
+        Slice<GatheringListInfo> gatheringList = gatheringService.getUserGatheringList(userToken, pageable);
+        Slice<GatheringListResponse> response = gatheringList.map(GatheringListResponse::from);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{gatheringId}/recruited")
@@ -127,24 +154,53 @@ public class GatheringController {
         @AuthenticationPrincipal User user,
         @PathVariable("gatheringId") Long gatheringId
     ) {
-        return ResponseEntity.ok( gatheringService.recruitedGathering(gatheringId, user));
+        log.info("모임 모집 완료 요청 - gatheringId: {}", gatheringId);
+
+        GatheringInfo gatheringInfo = gatheringService.recruitedGathering(gatheringId, user);
+        GatheringResponse response = GatheringResponse.from(gatheringInfo);
+
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{gatheringId}/{userId}/kick-out")
+    @PostMapping("/{gatheringId}/{userToken}/kick-out")
     public ResponseEntity<Void> kickOutUser(
-        @PathVariable("userId") Long userId,
+        @AuthenticationPrincipal User user,
+        @PathVariable("userToken") String userToken,
         @PathVariable("gatheringId") Long gatheringId
     ) {
-        User user = User.builder()
-            .id(userId)
-            .build();
+        log.info("모임 멤버 추방 요청 - gatheringId: {}, userToken: {}, user: {}", gatheringId, userToken, user);
 
-        gatheringService.kickOutUser(userId, gatheringId, user);
+        gatheringService.kickOutUser(userToken, gatheringId, user);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/my/participated")
     public List<GatheringListResponse> getParticipatedGatheringList(@AuthenticationPrincipal User user) {
-        return gatheringService.getParticipatedGatheringList(user);
+        log.info("\n내가 참여한 모임 리스트 조회 getParticipatedGatheringList ServiceImpl 클래스 : userId {}", user.getId());
+
+        List<GatheringListInfo> participatedGatheringList = gatheringService.getParticipatedGatheringList(user);
+        return participatedGatheringList.stream().map(GatheringListResponse::from).toList();
+    }
+
+    @PostMapping("/like/{gatheringId}")
+    public ResponseEntity<Long> likeGathering(
+        @AuthenticationPrincipal User user,
+        @PathVariable("gatheringId") Long gatheringId
+    ) {
+        log.info("모임 좋아요 요청 - gatheringId: {}", gatheringId);
+
+        return ResponseEntity.ok(gatheringService.likeGathering(gatheringId, user));
+    }
+
+    @GetMapping("hot")
+    public ResponseEntity<Slice<GatheringHotListResponse>> getHotGatheringList(
+        @PageableDefault(size = 5) Pageable pageable
+    ) {
+        log.info("인기 모임 리스트 조회 요청 - pageable: {}", pageable);
+
+        Slice<GatheringHotListInfo> gatheringList = gatheringService.getHotGatheringList(pageable);
+        Slice<GatheringHotListResponse> response = gatheringList.map(GatheringHotListResponse::from);
+
+        return ResponseEntity.ok(response);
     }
 }

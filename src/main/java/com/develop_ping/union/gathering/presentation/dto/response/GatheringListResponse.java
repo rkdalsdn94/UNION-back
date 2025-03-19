@@ -1,11 +1,12 @@
 package com.develop_ping.union.gathering.presentation.dto.response;
 
-import com.develop_ping.union.gathering.domain.entity.Gathering;
-import java.time.ZonedDateTime;
-import java.util.List;
+import com.develop_ping.union.gathering.domain.dto.response.GatheringListInfo;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.domain.Slice;
+import lombok.NoArgsConstructor;
+
+import java.time.ZonedDateTime;
 
 @Getter
 public class GatheringListResponse {
@@ -20,7 +21,8 @@ public class GatheringListResponse {
     private final Long views;
     private final Double latitude;
     private final Double longitude;
-    private final String name;
+    private final AuthorResponse author;
+    private final String thumbnail;
     private final ZonedDateTime createdAt;
 
     @Builder
@@ -35,7 +37,8 @@ public class GatheringListResponse {
         Long views,
         Double latitude,
         Double longitude,
-        String name,
+        AuthorResponse author,
+        String thumbnail,
         ZonedDateTime createdAt
     ) {
         this.id = id;
@@ -48,39 +51,55 @@ public class GatheringListResponse {
         this.views = views;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.name = name;
+        this.author = author;
+        this.thumbnail = thumbnail;
         this.createdAt = createdAt;
     }
 
-    public static GatheringListResponse from(Gathering gathering, String name) {
-        return getBuild(gathering, name);
-    }
-
-    public static Slice<GatheringListResponse> fromSlice(Slice<Gathering> gatherings, String name) {
-        return gatherings.map(gathering -> getBuild(gathering, name));
-    }
-
-    public static List<GatheringListResponse> fromList(List<Gathering> gatherings, String name) {
-        return gatherings.stream()
-            .map(gathering -> getBuild(gathering, name))
-            .toList();
-    }
-
-    private static GatheringListResponse getBuild(Gathering gathering, String name) {
+    public static GatheringListResponse from(GatheringListInfo gatheringListInfo) {
         return GatheringListResponse.builder()
-            .id(gathering.getId())
-            .title(gathering.getTitle())
-            .content(gathering.getContent())
-            .maxMember(gathering.getMaxMember())
-            .currentMember(gathering.getCurrentMember())
-            .gatheringDateTime(gathering.getGatheringDateTime())
-            .views(gathering.getViews())
-            .latitude(gathering.getPlace() != null ? gathering.getPlace().getLatitude() : null)
-            .longitude(gathering.getPlace() != null ? gathering.getPlace().getLongitude() : null)
-            .eupMyeonDong(
-                gathering.getPlace() != null ? gathering.getPlace().getEupMyeonDong() : null)
-            .name(name)
-            .createdAt(gathering.getCreatedAt())
-            .build();
+                                    .id(gatheringListInfo.getId())
+                                    .title(gatheringListInfo.getTitle())
+                                    .content(gatheringListInfo.getContent())
+                                    .maxMember(gatheringListInfo.getMaxMember())
+                                    .currentMember(gatheringListInfo.getCurrentMember())
+                                    .gatheringDateTime(gatheringListInfo.getGatheringDateTime())
+                                    .views(gatheringListInfo.getViews())
+                                    .latitude(gatheringListInfo.getPlace() != null ? gatheringListInfo.getPlace().getLatitude() : null)
+                                    .longitude(gatheringListInfo.getPlace() != null ? gatheringListInfo.getPlace().getLongitude() : null)
+                                    .eupMyeonDong(gatheringListInfo.getPlace() != null ? gatheringListInfo.getPlace().getEupMyeonDong() : null)
+                                    .author(AuthorResponse.from(gatheringListInfo))
+                                    .thumbnail(gatheringListInfo.getThumbnail())
+                                    .createdAt(gatheringListInfo.getCreatedAt())
+                                    .build();
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AuthorResponse {
+        private String token;
+        private String nickname;
+        private String profileImage;
+        private String univName;
+
+        @Builder
+        private AuthorResponse(String token,
+                               String nickname,
+                               String profileImage,
+                               String univName) {
+            this.token = token;
+            this.nickname = nickname;
+            this.profileImage = profileImage;
+            this.univName = univName;
+        }
+
+        public static AuthorResponse from(GatheringListInfo info) {
+            return AuthorResponse.builder()
+                                 .token(info.getUser().getToken())
+                                 .nickname(info.getUser().getNickname())
+                                 .profileImage(info.getUser().getProfileImage())
+                                 .univName(info.getUser().getUnivName())
+                                 .build();
+        }
     }
 }

@@ -4,6 +4,13 @@ spring:
       enabled: ALWAYS
   profiles:
     active: local
+    include:
+      - aws
+      - oauth
+
+app:
+  token:
+    SECRET_KEY: ${SECRET_KEY:default_secret_key}
 
 ---
 spring:
@@ -12,10 +19,10 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:13307/mydatabase
+    url: jdbc:mysql://127.0.0.1:13306/mydatabase
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${MYSQL_USER:user}
-    password: ${MYSQL_PASSWORD:test}
+    username: ${MYSQL_USER:myuser}
+    password: ${MYSQL_PASSWORD:secret}
 
   jpa:
     hibernate:
@@ -28,7 +35,7 @@ spring:
 
   sql:
     init:
-      mode: never # data.sql 파일 적용 여부 (always: 적용, never: 미적용)
+      mode: always # data.sql 파일 적용
 
 ---
 spring:

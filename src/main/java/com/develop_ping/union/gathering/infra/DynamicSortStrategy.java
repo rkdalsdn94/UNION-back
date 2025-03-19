@@ -7,6 +7,7 @@ import com.develop_ping.union.gathering.domain.entity.Gathering;
 import com.develop_ping.union.gathering.domain.entity.QGathering;
 import com.develop_ping.union.gathering.exception.NoMatchingResultsException;
 import com.develop_ping.union.party.domain.entity.QParty;
+import com.develop_ping.union.user.domain.entity.QBlockUser;
 import com.develop_ping.union.user.domain.entity.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
@@ -15,11 +16,12 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 // TODO: 클래스 뭉치가 너무 커졌을 때는 어떻게? (ex: 패턴을 적용한다?)
 @Component
@@ -34,9 +36,23 @@ public class DynamicSortStrategy implements GatheringSortStrategy {
     ) {
         QGathering gathering = QGathering.gathering;
         QParty party = QParty.party;
+        QBlockUser blockUser = QBlockUser.blockUser;
         BooleanBuilder baseBuilder = new BooleanBuilder();
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
+        // 차단된 유저와 관련된 gathering ID 조회
+        List<Long> blockedGatheringIds = queryFactory.select(party.gathering.id)
+                                                     .from(party)
+                                                     .join(blockUser)
+                                                     .on(party.user.id.eq(blockUser.blockedUser.id)
+                                                                      .or(party.user.id.eq(blockUser.blockingUser.id)))
+                                                     .where(blockUser.blockingUser.id.eq(user.getId())
+                                                                                     .or(blockUser.blockedUser.id.eq(user.getId())))
+                                                     .fetch();
+        if (!blockedGatheringIds.isEmpty()) {
+            baseBuilder.and(gathering.id.notIn(blockedGatheringIds));
+        }
 
         // 검색어가 존재할 경우 검색 조건 추가
         if (command.getKeyword() != null && !command.getKeyword().isBlank()) {

@@ -33,7 +33,7 @@ public class PartyManagerImpl implements PartyManager {
     }
 
     @Override
-    public void createParty(Gathering gathering, User user) {
+    public PartyInfo createParty(Gathering gathering, User user) {
         Party savedParty = partyRepository.save(
             Party.builder()
                  .user(user)
@@ -41,7 +41,7 @@ public class PartyManagerImpl implements PartyManager {
                  .role(PartyRole.OWNER)
                  .build()
         );
-        PartyInfo.of(savedParty);
+        return PartyInfo.of(savedParty);
     }
 
     @Override

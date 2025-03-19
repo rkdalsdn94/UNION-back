@@ -31,7 +31,8 @@ public class Gathering extends AuditingFields {
         Integer maxMember,
         Integer currentMember,
         ZonedDateTime gatheringDateTime,
-        Place place
+        Place place,
+        String thumbnail
     ) {
         validateGatheringDateTime(gatheringDateTime);
         validateGatheringMemberCheck(maxMember);
@@ -45,6 +46,7 @@ public class Gathering extends AuditingFields {
         this.place = place;
         this.views = 0L;
         this.recruited = false;
+        this.thumbnail = thumbnail;
     }
 
     @Id
@@ -71,6 +73,9 @@ public class Gathering extends AuditingFields {
 
     @Column(name = "views", nullable = false)
     private Long views;
+
+    @Column(name = "thumbnail")
+    private String thumbnail;
 
     @Column(name = "recruited", nullable = false)
     private Boolean recruited;  // false 모집되지 않음, true 모집 완료
@@ -115,7 +120,7 @@ public class Gathering extends AuditingFields {
         return parties.stream()
                       .filter(party -> party.getRole() == PartyRole.OWNER)
                       .findFirst()
-                      .map(party -> party.getUser().getName())
+                      .map(party -> party.getUser().getNickname())
                       .orElse("Unknown Owner");
     }
 
