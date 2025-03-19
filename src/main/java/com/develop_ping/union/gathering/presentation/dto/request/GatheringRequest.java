@@ -34,7 +34,6 @@ public class GatheringRequest {
     private Double latitude;
     private Double longitude;
     private String eupMyeonDong;
-    private String thumbnail;
 
     @Builder
     private GatheringRequest(
@@ -46,8 +45,7 @@ public class GatheringRequest {
         String address,
         Double latitude,
         Double longitude,
-        String eupMyeonDong,
-        String thumbnail
+        String eupMyeonDong
     ) {
         this.title = title;
         this.content = content;
@@ -58,7 +56,6 @@ public class GatheringRequest {
         this.latitude = latitude;
         this.longitude = longitude;
         this.eupMyeonDong = eupMyeonDong;
-        this.thumbnail = thumbnail;
     }
 
     public GatheringCommand toCommand() {
@@ -72,7 +69,6 @@ public class GatheringRequest {
             .latitude(latitude)
             .longitude(longitude)
             .eupMyeonDong(eupMyeonDong)
-            .thumbnail(thumbnail)
             .build();
     }
 
@@ -88,7 +84,6 @@ public class GatheringRequest {
             ", latitude=" + latitude +
             ", longitude=" + longitude +
             ", eupMyeonDong=" + eupMyeonDong +
-            ", thumbnail='" + thumbnail + '\'' +
             '}';
     }
 }
